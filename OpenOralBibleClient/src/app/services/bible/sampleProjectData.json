@@ -1,0 +1,38 @@
+{
+    "name": "Yetfa",
+    "categrories": [{
+            "name": "New Testament",
+            "items": [{
+                "itemtype": "SubCatItem",
+                "name": "Genesis",
+                "content": [{
+
+                }]
+            }]
+        },
+        {
+            "name": "Old Testament",
+            "items": [{
+                "itemtype": "SubCatItem",
+                "name": "Lukas",
+                "content": [{
+                    "itemtype": "SubCatItem",
+                    "name": "Lukas 1",
+                    "content": [{
+                        "itemtype": "MediaItem",
+                        "name": "Lukas 1:1-4",
+                        "target": "Lukas 1_1-4.mp3"
+                    }]
+                }]
+            }]
+        },
+        {
+            "itemtype": "MediaItem",
+            "name": "Stories",
+            "items": [{
+                "name": "Dua Pohon",
+                "target": "Dua Pohon.mp3"
+            }]
+        }
+    ]
+}

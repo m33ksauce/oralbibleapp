@@ -1,0 +1,16 @@
+[{
+    "Languages": {"0": "English"},
+    "Categories": [
+        {"id": "0", "displayName": "Old Testmanent", "imageURI": "/assets/ot-card.jpg"},
+        {"id": "1", "displayName": "New Testament", "imageURI": "/assets/nt-card.jpg"}
+    ],
+    "Books": [],
+    "Chapters": [],
+    "Verses": []
+},
+
+{"Projects": {
+    "0": {
+
+    }
+}}]

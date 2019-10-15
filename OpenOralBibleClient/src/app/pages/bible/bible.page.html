@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Bible
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <a href="tabs/bible/scripture/">Go!</a>
+    <ion-card ion-item *ngFor="let item of items" (click)="launchTarget()">
+      <!-- <ion-img src={{cat.image}}></ion-img> -->
+      <ion-card-header>
+        <ion-card-title>{{item.displayName}}</ion-card-title>
+        <ion-img ngIf="{{item.imageURI}}" src="{{item.imageURI}}"></ion-img>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+</ion-content>
