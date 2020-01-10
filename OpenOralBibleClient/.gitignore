@@ -30,6 +30,8 @@ npm-debug.log*
 /plugins
 /www
 
+# cordova
+crypto/
 
 # OSX specific
 .DS_Store
