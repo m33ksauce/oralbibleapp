@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { Category, Subcategory } from '../../models/Category';
 import { Book } from '../../models/Book';
 import * as bibleData from './sampleProjectData.json';
-import { DisplayItem } from '../../models/DisplayItem';
+import { BibleSchema } from '../../models/BibleSchema';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class BibleService {
-  private bible: Object;
+  private bible: BibleSchema;
 
-  constructor() { this.loadTranslation("Sample"); }
+  constructor() { this.load("Sample"); }
 
   getAvailable(target?: String) {
     var items = new Array<Object>();
@@ -23,23 +23,14 @@ export class BibleService {
 
   parseBible(){};
 
-  loadTranslation(name: String) {
+  load(data: Object) {
     //Stub for loading a translation
-    this.bible = bibleData;
+    this.bible = data as BibleSchema;
+    return true;
   }
 
-  getAvailableCategories(): Array<Object> { 
-    return [
-      {
-        DisplayName: "Old Testament"
-      },
-      {
-        DisplayName: "New Testament"
-      },
-      {
-        DisplayName: "Stories"
-      }
-    ]
+  getAvailableCategories(): Array<Category> { 
+    return this.bible.categories
   }
 
   getAvailableBooks(cat: Category) {}

@@ -2,23 +2,35 @@ import { TestBed } from '@angular/core/testing';
 import { BibleService } from './bible.service';
 import { DisplayItem } from '../../models/DisplayItem';
 import * as bibleData from './bibleData.json';
+import { Category } from 'src/app/models/Category';
 
-describe('BibleService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe('Bible Service', () => {
+  describe('Given a json database with categories', () => {
+    beforeEach(() => TestBed.configureTestingModule({}));
+    var database = {'categories': [
+      {'name': 'A', 'subcategories': [], 'backgroundURI': ""},
+      {'name': 'B', 'subcategories': [], 'backgroundURI': ""},
+      {'name': 'C', 'subcategories': [], 'backgroundURI': ""},
+      {'name': 'D', 'subcategories': [], 'backgroundURI': ""}
+    ]};
 
-  it('should be created', () => {
-    const service: BibleService = TestBed.get(BibleService);
-    expect(service).toBeTruthy();
-  });
+    it('should load the database', () => {
+      const service: BibleService = TestBed.get(BibleService);
+      var status: boolean = service.load(database);
 
-  it('should return available categories', () => {
-    const service: BibleService = TestBed.get(BibleService);
-    var expectedCats: Array<DisplayItem> = [
-      new DisplayItem("Old Testament"),
-      new DisplayItem("New Testament"), 
-      new DisplayItem("Stories")
-    ]
-    expect(service).toBe(expectedCats)
+      expect(status).toBeTruthy();
+    })
 
-  });
-});
+    describe('When getCategories is called', () => {
+      it('should return the 3 categories', () => {
+        const service: BibleService = TestBed.get(BibleService);
+        service.load(database);
+
+        var categories: Array<Category> = service.getAvailableCategories()
+
+        expect(categories.length).toBe(database['categories'].length)
+        expect(categories).toEqual(<Array<Category>>database.categories)
+      })
+    })
+  })  
+})
