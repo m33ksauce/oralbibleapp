@@ -4,6 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-card *ngFor='let media of playlist'>
+      <ul><b>{{media.title}}</b><br />{{media.target}}</ul>
+    </ion-card>
+  </ion-list>
 </ion-content>

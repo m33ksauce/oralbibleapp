@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: '',
     component: PlayerPage
+  },
+  {
+    path: ':id',
+    component: PlayerPage
   }
 ];
 

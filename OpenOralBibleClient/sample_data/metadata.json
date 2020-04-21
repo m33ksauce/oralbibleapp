@@ -1,5 +1,5 @@
 {
-    "Categories": [
+    "Category": [
         {
             "id": "0",
             "type": "category",
@@ -23,6 +23,13 @@
             "type": "audiomedia",
             "title": "Lukas 2:42",
             "targetId": "2"
+        }
+    ],
+    "Media": [
+        {
+            "id": "111",
+            "title": "Lukas 2:42",
+            "target": "sample_data/audio/Lukas 2_42.mp3"
         }
     ]
 }

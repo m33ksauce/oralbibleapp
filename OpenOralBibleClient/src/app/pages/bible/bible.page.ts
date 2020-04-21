@@ -29,5 +29,3 @@ export class BiblePage {
     this.router.navigate([item.target]);
   }
 }
-
-//export class ScripturePage extends
