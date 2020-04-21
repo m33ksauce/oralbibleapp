@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Category, Subcategory } from '../../models/Category';
-import { Book } from '../../models/Book';
-import * as bibleData from './sampleProjectData.json';
+import { Category } from '../../models/Category';
 import { BibleSchema } from '../../models/BibleSchema';
 
 @Injectable({
@@ -9,21 +7,14 @@ import { BibleSchema } from '../../models/BibleSchema';
 })
 
 export class BibleService {
+  getAvailableSections(): Object[] {
+    return ["Scripture", "Stories"]
+  }
   private bible: BibleSchema;
 
-  constructor() { this.load("Sample"); }
+  constructor() {}
 
-  getAvailable(target?: String) {
-    var items = new Array<Object>();
-
-    items.push({"id": "0", "displayName": "Old Testmanent", "imageURI": "/assets/ot-card.jpg"});
-
-    return items;
-  }
-
-  parseBible(){};
-
-  load(data: Object) {
+  Load(data: Object) {
     //Stub for loading a translation
     this.bible = data as BibleSchema;
     return true;
@@ -32,13 +23,5 @@ export class BibleService {
   getAvailableCategories(): Array<Category> { 
     return this.bible.categories
   }
-
-  getAvailableBooks(cat: Category) {}
-
-  getAvailableChapters() {}
-
-  getAvailableVerses(book: Book) {}
-
-  getAvailableStories() {}
 
 }

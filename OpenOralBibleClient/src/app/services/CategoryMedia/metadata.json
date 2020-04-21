@@ -1,0 +1,28 @@
+{
+    "Categories": [
+        {
+            "id": "0",
+            "type": "category",
+            "title": "root",
+            "children": ["1"]
+        },
+        {
+            "id": "1",
+            "type": "category",
+            "title": "Lukas",
+            "children": ["11"]
+        },
+        {
+            "id": "11",
+            "type": "category",
+            "title": "Lukas 2",
+            "children": ["111"]
+        },
+        {
+            "id": "111",
+            "type": "audiomedia",
+            "title": "Lukas 2:42",
+            "targetId": "2"
+        }
+    ]
+}

@@ -8,12 +8,9 @@
 
 <ion-content>
   <ion-list>
-    <a href="tabs/bible/scripture/">Go!</a>
-    <ion-card ion-item *ngFor="let item of items" (click)="launchTarget()">
-      <!-- <ion-img src={{cat.image}}></ion-img> -->
+    <ion-card ion-item *ngFor="let item of items" (click)="launchTarget(item)">
       <ion-card-header>
-        <ion-card-title>{{item.displayName}}</ion-card-title>
-        <ion-img src="{{item.imageURI}}"></ion-img>
+        <ion-card-title>{{item.title}}</ion-card-title>
       </ion-card-header>
     </ion-card>
   </ion-list>

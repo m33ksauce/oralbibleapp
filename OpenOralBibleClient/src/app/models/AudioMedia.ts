@@ -1,10 +1,9 @@
 import { MediaItem } from './MediaItem';
 
-export class Category implements MediaItem {
+export class AudioMedia implements MediaItem {
     id: String;
     title: String;
-    children: String[];
-    type: String = "category";
+    type: String = "audiomedia";
     target: String;
 
     constructor(id: String, title: String) {

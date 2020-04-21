@@ -2,8 +2,8 @@ import {
   Component
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Category } from '../../models/Category';
-import { BibleService } from '../../services/bible/bible.service';
+import { CategoryMediaService } from '../../services/CategoryMedia/CategoryMedia.service';
+import { MediaItem } from 'src/app/models/MediaItem';
 
 @Component({
   selector: 'app-bible',
@@ -12,21 +12,20 @@ import { BibleService } from '../../services/bible/bible.service';
 })
 
 export class BiblePage {
-  items: Array<Object>;
+  items: MediaItem[];
 
-  constructor(private router: Router, public bibleService: BibleService, public route: ActivatedRoute) {
-    this.items = new Array<Object>();
+  constructor(private router: Router, public mediaService: CategoryMediaService, public route: ActivatedRoute) {
+    this.items = new Array<MediaItem>();
   }
 
   ngOnInit() {
-    this.items = this.bibleService.getAvailable();
     this.route.params.subscribe(
-        params => console.log(params)
+        params => this.items = this.mediaService.getAvailable(params.id)
       )
   }
 
   launchTarget(item) {
-    console.log("here");
+    console.log(item);
     this.router.navigate([item.target]);
   }
 }
