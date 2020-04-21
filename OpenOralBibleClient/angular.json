@@ -29,6 +29,11 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
+              },
+              {
+                "glob": "**/*.mp3",
+                "input": "sample_data",
+                "output": "sample_data"
               }
             ],
             "styles": [

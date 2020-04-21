@@ -5,9 +5,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list>
-    <ion-card *ngFor='let media of playlist'>
-      <ul><b>{{media.title}}</b><br />{{media.target}}</ul>
-    </ion-card>
-  </ion-list>
+  <ul><b>{{media.title}}</b></ul>
+  <audio controls src="{{media.target}}"></audio>
 </ion-content>

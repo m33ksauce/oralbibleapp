@@ -9,6 +9,7 @@ import { AudioMediaService } from 'src/app/services/AudioMedia/AudioMedia.servic
   styleUrls: ['./player.page.scss'],
 })
 export class PlayerPage implements OnInit {
+  media: AudioMedia;
   playlist: AudioMedia[] = new Array<AudioMedia>();
 
   constructor(public audioService: AudioMediaService, public route: ActivatedRoute) {  }
@@ -21,7 +22,10 @@ export class PlayerPage implements OnInit {
 
   setMedia(id?: String) {
     if (id != undefined) {
-      this.playlist.push(this.audioService.getMedia(id)); 
+      this.playlist.push(this.audioService.getMedia(id));
+      if (this.media == undefined) {
+        this.media = this.playlist.shift();
+      }
       console.log(this.playlist);
     }
   }
