@@ -4,6 +4,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 import { CategoryMediaService } from '../../services/CategoryMedia/CategoryMedia.service';
 import { MediaItem } from 'src/app/models/MediaItem';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-bible',
@@ -14,7 +15,7 @@ import { MediaItem } from 'src/app/models/MediaItem';
 export class BiblePage {
   items: MediaItem[];
 
-  constructor(private router: Router, public mediaService: CategoryMediaService, public route: ActivatedRoute) {
+  constructor(public navCtrl: NavController, public mediaService: CategoryMediaService, public route: ActivatedRoute) {
     this.items = new Array<MediaItem>();
   }
 
@@ -26,6 +27,6 @@ export class BiblePage {
 
   launchTarget(item) {
     console.log(item);
-    this.router.navigate([item.target]);
+    this.navCtrl.navigateForward(item.target, {animated: false});
   }
 }
