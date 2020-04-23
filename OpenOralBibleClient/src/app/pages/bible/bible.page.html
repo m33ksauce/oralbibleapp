@@ -8,10 +8,11 @@
 
 <ion-content>
   <ion-list>
-    <ion-card ion-item *ngFor="let item of items" (click)="launchTarget(item)">
-      <ion-card-header>
-        <ion-card-title>{{item.title}}</ion-card-title>
-      </ion-card-header>
-    </ion-card>
+    <li ion-item *ngFor="let item of items" (click)="launchTarget(item)">
+      <ul>
+        <span>{{item.title}}</span>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ul>
+    </li>
   </ion-list>
 </ion-content>

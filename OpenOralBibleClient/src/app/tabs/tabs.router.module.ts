@@ -8,15 +8,6 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'home',
-        children: [
-          {
-            path: '',
-            loadChildren: '../pages/home/home.module#HomePageModule'
-          }
-        ]
-      },
-      {
         path: 'bible',
         loadChildren: '../pages/bible/bible.module#BiblePageModule'
       },
@@ -40,14 +31,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/home',
+        redirectTo: '/tabs/bible',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/home',
+    redirectTo: '/tabs/bible',
     pathMatch: 'full'
   }
 ];
