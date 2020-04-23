@@ -1,0 +1,1 @@
+apksigner sign --key crypto/debug/encKey.pk8 --cert crypto/debug/certificate.crt --out /Users/chris/repo/OpenOralBible/OpenOralBibleClient/platforms/android/app/build/outputs/apk/release/app-release.apk /Users/chris/repo/OpenOralBible/OpenOralBibleClient/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
