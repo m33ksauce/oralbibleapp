@@ -26,7 +26,6 @@ export class PlayerPage implements OnInit {
       if (this.media == undefined) {
         this.media = this.playlist.shift();
       }
-      console.log(this.playlist);
     }
   }
 

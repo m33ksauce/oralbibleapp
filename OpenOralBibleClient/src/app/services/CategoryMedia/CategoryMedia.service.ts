@@ -9,18 +9,43 @@ import { AudioMedia } from 'src/app/models/AudioMedia';
 })
 
 export class CategoryMediaService {
-    getAvailable(id?: String): MediaItem[] {
+    getBreadcrumbs(id?: string): MediaItem[] {
+        var crumbs = new Array<MediaItem>();
+        if (id === undefined) {
+            id = "0";
+        }
+
+        var current = id;
+        while (current != "0") {
+            crumbs.push(this.getCategory(current));
+            current = this.getParent(current);
+        }
+
+        return crumbs.reverse();
+    }
+
+    getParent(id?: string): string {
+        return metadata.Category.find(c => c.children.includes(id)).id;
+    }
+
+    getAvailable(id?: string): MediaItem[] {
         if (id === undefined) {
             id = "0";
         }
         var category = metadata.Category.find(c => c.id == id);
         if (category != undefined) {
-            console.log(category.children.map(this.formatCategory))
             return category.children.map(this.formatCategory);
         }
     }
 
-    formatCategory(id: String): MediaItem {
+    getCategory(id?: string) {
+        if (id === undefined) {
+            id = "0";
+        }
+        return this.formatCategory(id);
+    }
+
+    formatCategory(id: string): MediaItem {
         var realData = metadata.Category.find(c => c.id == id);
         if (realData == undefined) { return undefined; }
         if (realData.type == Category.name.toLowerCase()) {
