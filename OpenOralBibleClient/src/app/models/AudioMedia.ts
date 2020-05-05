@@ -1,12 +1,12 @@
 import { MediaItem } from './MediaItem';
 
 export class AudioMedia implements MediaItem {
-    id: String;
-    title: String;
-    type: String = "audiomedia";
-    target: String;
+    id: string;
+    title: string;
+    type: string = "audiomedia";
+    target: string;
 
-    constructor(id: String, title: String) {
+    constructor(id: string, title: string) {
         this.id = id;
         this.title = title;
     }

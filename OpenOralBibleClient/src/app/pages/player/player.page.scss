@@ -1,0 +1,27 @@
+.controls {
+    display: flex;
+    width: 100%;
+}
+
+.player-controls {
+    display: flex;
+    justify-content: center;
+}
+
+.sm-control {
+    font-size: 2em;
+    background: inherit;
+    vertical-align: center;
+}
+
+.md-control {
+    font-size: 4em;
+    background: inherit;
+    vertical-align: center;
+}
+
+.lg-control {
+    font-size: 6em;
+    background: inherit;
+    vertical-align: center;
+}

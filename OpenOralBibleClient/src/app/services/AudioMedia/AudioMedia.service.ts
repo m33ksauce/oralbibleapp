@@ -7,7 +7,7 @@ import { AudioMedia } from 'src/app/models/AudioMedia';
 })
 
 export class AudioMediaService {
-    getMedia(id?: String): AudioMedia {
+    getMedia(id?: string): AudioMedia {
         if (id == undefined) {
             return;
         }

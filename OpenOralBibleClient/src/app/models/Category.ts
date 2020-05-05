@@ -1,13 +1,13 @@
 import { MediaItem } from './MediaItem';
 
 export class Category implements MediaItem {
-    id: String;
-    title: String;
-    children: String[];
-    type: String = "category";
-    target: String;
+    id: string;
+    title: string;
+    children: string[];
+    type: string = "category";
+    target: string;
 
-    constructor(id: String, title: String) {
+    constructor(id: string, title: string) {
         this.id = id;
         this.title = title;
     }

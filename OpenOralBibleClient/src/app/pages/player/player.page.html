@@ -4,7 +4,27 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ul><b>{{media.title}}</b></ul>
-  <audio controls autoplay="true" src="{{media.target}}"></audio>
+<ion-content class="content">
+  <div class="content-title">
+    <h3>{{media.title}}</h3>
+  </div>
+  <div class="content-time_remaining">
+    
+  </div>
+</ion-content>
+
+<ion-content class="conrols ion-padding">
+  <div class="player-controls">
+    <button class="md-control" (click)="prevTrack()">
+      <ion-icon name="play-skip-back-circle-outline"></ion-icon>
+    </button>
+    <button class="lg-control" (click)="togglePlay()" [ngSwitch]="playerState">
+      <ion-icon name="play-circle" *ngSwitchDefault></ion-icon>
+      <ion-icon name="play-circle" *ngSwitchCase="'paused'"></ion-icon>
+      <ion-icon name="pause-circle" *ngSwitchCase="'playing'"></ion-icon>
+    </button>
+    <button class="md-control" (click)="nextTrack()">
+      <ion-icon name="play-skip-forward-circle-outline"></ion-icon>
+    </button>
+  </div>
 </ion-content>

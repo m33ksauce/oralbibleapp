@@ -1,6 +1,6 @@
 export interface MediaItem {
-    id: String,
-    title: String,
-    type: String,
-    target: String
+    id: string,
+    title: string,
+    type: string,
+    target: string
 }
