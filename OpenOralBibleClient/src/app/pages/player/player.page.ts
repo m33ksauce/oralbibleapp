@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AudioMedia } from 'src/app/models/AudioMedia';
 import { AudioMediaService } from 'src/app/services/AudioMedia/AudioMedia.service';
+import { PlayerState } from 'src/app/interfaces/player-state';
+import { PlayerService } from 'src/app/services/Player/player.service';
+import { CategoryMediaService } from 'src/app/services/CategoryMedia/CategoryMedia.service';
 
 const states = {
   DEFAULT: 'default',
@@ -18,14 +21,15 @@ const states = {
 export class PlayerPage implements OnInit {
   media: AudioMedia;
   playlist: AudioMedia[] = new Array<AudioMedia>();
-  player = new Audio();
-  playerState: string = states.DEFAULT;
+  playerState: PlayerState;
 
-  constructor(public audioService: AudioMediaService, public route: ActivatedRoute) {
-    this.player.onplay = () => { this.playerState = states.PLAYING };
-    this.player.onpause = () => { this.playerState = states.PAUSED };
-    this.player.onended = () => { this.playerState = states.DEFAULT };
-  }
+  constructor(
+    public audioService: AudioMediaService,
+    public route: ActivatedRoute,
+    public player: PlayerService,
+    public categoryService: CategoryMediaService) {
+      player.getState().subscribe(state => this.playerState = state);
+    }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -35,35 +39,33 @@ export class PlayerPage implements OnInit {
 
   setMedia(id?: string) {
     if (id != undefined) {
-      this.playlist.push(this.audioService.getMedia(id));
-      if (this.media == undefined) {
-        this.media = this.playlist.shift();
+      this.media = this.audioService.getMedia(id);
+      if (this.media != undefined) {
+        this.player.loadMedia(this.media.target)
+        this.play();
       }
     }
-    this.player.src = this.media.target;
-    this.playMedia();
   }
 
-  playMedia() {
-    console.log("should be playing");
+  play() {
+    this.playerState.playing = true;
     this.player.play();
   }
 
-
-  pauseMedia() {
-    console.log("set pause")
+  pause() {
+    this.playerState.playing = false;
     this.player.pause();
   }
 
-  togglePlay() {
-    if (this.playerState == states.DEFAULT) {
-      this.playMedia();
-    }
-    if (this.playerState == states.PAUSED) {
-      this.playMedia();
-    }
-    if (this.playerState == states.PLAYING) {
-      this.pauseMedia();
-    }
+  previous() {
+    console.log("playing previous");
+    var prevMedia = this.categoryService.getPrevious(this.media.id);
+    this.setMedia(prevMedia.id);
+  }
+
+  next() {
+    console.log("playing next");
+    var nextMedia = this.categoryService.getNext(this.media.id);
+    this.setMedia(nextMedia.id);
   }
 }

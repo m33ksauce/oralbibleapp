@@ -45,6 +45,41 @@ export class CategoryMediaService {
         return this.formatCategory(id);
     }
 
+    getNext(id: string): AudioMedia {
+        if (this.hasChildren(id)) {
+            return this.getAvailable(id).shift();
+        }
+        var parentId = this.getParent(id);
+        var siblings = this.getAvailable(parentId);
+        var index = siblings.findIndex(cat => cat.id == id);
+        if (index === siblings.length - 1) {
+            return this.getNext(parentId);
+        }
+        console.log(siblings);
+        return siblings[index + 1];
+    }
+
+    getPrevious(id: string): AudioMedia {
+        if (this.hasChildren(id)) {
+            return this.getAvailable(id).pop();
+        }
+        var parentId = this.getParent(id);
+        var siblings = this.getAvailable(parentId);
+        var index = siblings.findIndex(cat => cat.id == id);
+        if (index === 0) {
+            return this.getPrevious(parentId);
+        }
+        console.log(siblings);
+        return siblings[index - 1];
+    }
+
+    hasChildren(id: string) {
+        if (metadata.Category.find(c => c.id == id).children) {
+            return true;
+        }
+        return false;
+    }
+
     formatCategory(id: string): MediaItem {
         var realData = metadata.Category.find(c => c.id == id);
         if (realData == undefined) { return undefined; }

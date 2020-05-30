@@ -32,12 +32,7 @@
         },
         {
             "id": "111",
-            "type": "audiomedia",
-            "title": "Lukas 2:42"
-        },
-        {
-            "id": "111",
-            "title": "Lukas 2:42",
+            "title": "Lukas 2:41",
             "type": "audiomedia"
         },
         {
@@ -47,7 +42,7 @@
         },
         {
             "id": "113",
-            "title": "Lukas 2:41",
+            "title": "Lukas 2:42",
             "type": "audiomedia"
         },
         {
@@ -79,8 +74,8 @@
     "Media": [
         {
             "id": "111",
-            "title": "Lukas 2:42",
-            "target": "sample_data/audio/Lukas/Lukas 2_42.mp3"
+            "title": "Lukas 2:41",
+            "target": "sample_data/audio/Lukas/Lukas 2_41.mp3"
         },
         {
             "id": "112",
@@ -89,8 +84,8 @@
         },
         {
             "id": "113",
-            "title": "Lukas 2:41",
-            "target": "sample_data/audio/Lukas/Lukas 2_41.mp3"
+            "title": "Lukas 2:42",
+            "target": "sample_data/audio/Lukas/Lukas 2_42.mp3"
         },
         {
             "id": "114",

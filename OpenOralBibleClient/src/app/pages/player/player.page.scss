@@ -1,6 +1,17 @@
+.content-title {
+    width: 100%;
+    align-content: center;
+}
+
 .controls {
     display: flex;
     width: 100%;
+}
+
+.player-progress {
+    ion-range {
+        display: flex-box;
+    }
 }
 
 .player-controls {
@@ -12,16 +23,24 @@
     font-size: 2em;
     background: inherit;
     vertical-align: center;
+    outline: none;
+    box-shadow: none;
 }
 
 .md-control {
     font-size: 4em;
     background: inherit;
     vertical-align: center;
+    outline: none;
+    box-shadow: none;
+    color: var(--ion-color-primary-tint);
 }
 
 .lg-control {
     font-size: 6em;
     background: inherit;
     vertical-align: center;
+    outline: none;
+    box-shadow: none;
+    color: var(--ion-color-primary);
 }
