@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
-import * as metadata from 'sample_data/metadata.json';
+import * as metadataFile from 'sample_data/metadata.json';
 import { Category } from 'src/app/models/Category';
 import { MediaItem } from 'src/app/models/MediaItem';
 import { AudioMedia } from 'src/app/models/AudioMedia';
+import { DatabaseService } from '../Database/Database.service';
+import { SQLiteObject } from '@ionic-native/sqlite';
 
 @Injectable({
     providedIn: 'root',
 })
 
 export class CategoryMediaService {
+
+    constructor() {}
+
+    private getCategories(): Category[] {
+        return metadataFile.Category as Category[];
+    }
+
     getBreadcrumbs(id?: string): MediaItem[] {
         var crumbs = new Array<MediaItem>();
         if (id === undefined) {
@@ -25,24 +34,27 @@ export class CategoryMediaService {
     }
 
     getParent(id?: string): string {
-        return metadata.Category.find(c => c.children.includes(id)).id;
+        return this.getCategories().find(c => c.children.includes(id)).id;
     }
 
     getAvailable(id?: string): MediaItem[] {
         if (id === undefined) {
             id = "0";
         }
-        var category = metadata.Category.find(c => c.id == id);
+        var category = this.getCategories().find(c => c.id == id);
         if (category != undefined) {
-            return category.children.map(this.formatCategory);
+            return category.children
+                .map(id => this.getCategory(id));
         }
     }
 
-    getCategory(id?: string) {
+    getCategory(id?: string): MediaItem {
         if (id === undefined) {
             id = "0";
         }
-        return this.formatCategory(id);
+        var category = this.getCategories()
+            .find(cat => cat.id == id);
+        return this.formatCategory(category);
     }
 
     getNext(id: string): AudioMedia {
@@ -74,15 +86,13 @@ export class CategoryMediaService {
     }
 
     hasChildren(id: string) {
-        if (metadata.Category.find(c => c.id == id).children) {
+        if (this.getCategories().find(c => c.id == id).children) {
             return true;
         }
         return false;
     }
 
-    formatCategory(id: string): MediaItem {
-        var realData = metadata.Category.find(c => c.id == id);
-        if (realData == undefined) { return undefined; }
+    formatCategory(realData: MediaItem): MediaItem {
         if (realData.type == Category.name.toLowerCase()) {
             var cat = new Category(realData.id, realData.title);
             cat.target = `/tabs/bible/${realData.id}`;
