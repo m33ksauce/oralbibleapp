@@ -74,6 +74,11 @@ export class PlayerService {
     this.player.pause();
   }
 
+  seek(time) {
+    console.log("we in here")
+    this.player.currentTime = time;
+  }
+
   formatTime(time: number) {
     return moment.utc(time * 1000).format("mm:ss");
   }

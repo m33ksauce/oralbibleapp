@@ -16,4 +16,14 @@ export class DatabaseService {
             location: 'default'
         });
     }
+
+    async getValue(key: string) {
+        this.getConnection()
+            .then((db: SQLiteObject) => {
+                db.executeSql('select * from something;')
+                .then((data) => console.log(data[0]))
+                .catch(e => console.log(e));
+            })
+            .catch(e => console.log(e));
+    }
 }

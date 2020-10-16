@@ -15,13 +15,19 @@
 
 <ion-footer class="conrols ion-padding">
   <div class="player-progress">
-    <ion-range min="0" [max]="playerState?.duration" [value]="playerState?.currentTime" color="secondary">
-      <ion-label slot="start">
-        {{playerState?.readableCurrentTime}}
-      </ion-label>
-      <ion-label slot="end">
-        {{playerState?.readableDuration}}
-      </ion-label>
+    <ion-range
+      [min]="0"
+      [max]="playerState?.duration"
+      [value]="playerState?.currentTime"
+      (ionBlur)="endSeek($event)"
+      (ionFocus)="startSeek()"
+      color="secondary">
+        <ion-label slot="start">
+          {{playerState?.readableCurrentTime}}
+        </ion-label>
+        <ion-label slot="end">
+          {{playerState?.readableDuration}}
+        </ion-label>
     </ion-range>
   </div>
   <div class="player-controls">

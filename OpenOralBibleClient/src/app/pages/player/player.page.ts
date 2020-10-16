@@ -68,4 +68,13 @@ export class PlayerPage implements OnInit {
     var nextMedia = this.categoryService.getNext(this.media.id);
     this.setMedia(nextMedia.id);
   }
+
+  startSeek() {
+    this.pause();
+  }
+
+  endSeek(event) {
+    this.player.seek(event.value);
+    this.play();
+  }
 }

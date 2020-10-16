@@ -12,7 +12,9 @@ import { SQLiteObject } from '@ionic-native/sqlite';
 
 export class CategoryMediaService {
 
-    constructor() {}
+    constructor(dbService: DatabaseService) {
+        dbService.getValue("");
+    }
 
     private getCategories(): Category[] {
         return metadataFile.Category as Category[];
