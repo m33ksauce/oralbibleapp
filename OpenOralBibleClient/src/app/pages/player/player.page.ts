@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import {FormControl} from '@angular/forms';
 import { AudioMedia } from 'src/app/models/AudioMedia';
 import { AudioMediaService } from 'src/app/services/AudioMedia/AudioMedia.service';
 import { PlayerState } from 'src/app/interfaces/player-state';
@@ -19,6 +20,7 @@ const states = {
 })
 
 export class PlayerPage implements OnInit {
+  seekbar: FormControl = new FormControl("seekbar");
   media: AudioMedia;
   playlist: AudioMedia[] = new Array<AudioMedia>();
   playerState: PlayerState;

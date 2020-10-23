@@ -19,6 +19,7 @@
       [min]="0"
       [max]="playerState?.duration"
       [value]="playerState?.currentTime"
+      [formControl]="seekbar"
       (ionBlur)="endSeek($event)"
       (ionFocus)="startSeek()"
       color="secondary">

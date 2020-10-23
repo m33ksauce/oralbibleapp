@@ -1,1 +1,10 @@
-apksigner sign --key crypto/debug/encKey.pk8 --cert crypto/debug/certificate.crt --out /Users/chris/repo/OpenOralBible/OpenOralBibleClient/platforms/android/app/build/outputs/apk/release/app-release.apk /Users/chris/repo/OpenOralBible/OpenOralBibleClient/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+#!/bin/bash
+ARTIFACT_PATH=./artifacts
+APK_PATH=./platforms/android/app/build/outputs/apk/release
+SIGNED_APK=$APK_PATH/app-release.apk
+UNSIGNED_APK=$APK_PATH/app-release-unsigned.apk
+
+apksigner sign --key crypto/debug/encKey.pk8 --cert crypto/debug/certificate.crt --out $SIGNED_APK $UNSIGNED_APK
+mkdir -p $ARTIFACT_PATH
+
+cp $SIGNED_APK $ARTIFACT_PATH
