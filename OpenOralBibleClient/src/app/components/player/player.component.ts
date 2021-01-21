@@ -12,14 +12,13 @@ const states = {
   PLAYING: 'playing',
   PAUSED: 'paused'
 }
-
 @Component({
-  selector: 'app-player',
-  templateUrl: './player.page.html',
-  styleUrls: ['./player.page.scss'],
+  selector: 'bible-player',
+  templateUrl: './player.component.html',
+  styleUrls: ['./player.component.scss'],
 })
 
-export class PlayerPage implements OnInit {
+export class PlayerComponent implements OnInit {
   seekbar: FormControl = new FormControl("seekbar");
   media: AudioMedia;
   playlist: AudioMedia[] = new Array<AudioMedia>();
@@ -80,3 +79,4 @@ export class PlayerPage implements OnInit {
     this.play();
   }
 }
+
