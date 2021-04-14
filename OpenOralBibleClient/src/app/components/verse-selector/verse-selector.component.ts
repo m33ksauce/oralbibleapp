@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnInit } from '@angular/core';
+import { ToggleListComponent } from 'src/app/components/toggle-list/toggle-list.component';
 
 @Component({
   selector: 'verse-selector',
@@ -14,6 +15,8 @@ export class VerseSelectorComponent implements OnInit {
     ];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
 }

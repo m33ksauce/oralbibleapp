@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { PlayerComponent } from './player.component';
 
-describe('PlayerComponent', () => {
+xdescribe('PlayerComponent', () => {
   let component: PlayerComponent;
   let fixture: ComponentFixture<PlayerComponent>;
 

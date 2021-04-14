@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlayerPage } from './player.page';
 
-describe('PlayerPage', () => {
+xdescribe('PlayerPage', () => {
   let component: PlayerPage;
   let fixture: ComponentFixture<PlayerPage>;
 

@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { VerseSelectorComponent } from './verse-selector.component';
 import { VerseItemComponentModule } from 'src/app/components/verse-item/verse-item.module';
+import { ToggleListModule } from '../toggle-list/toggle-list.module';
 
 @NgModule({
   declarations: [VerseSelectorComponent],
@@ -11,6 +12,7 @@ import { VerseItemComponentModule } from 'src/app/components/verse-item/verse-it
     IonicModule,
     CommonModule,
     VerseItemComponentModule,
+    ToggleListModule,
   ],
   exports: [VerseSelectorComponent]
 })

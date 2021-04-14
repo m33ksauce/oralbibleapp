@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -10,6 +10,10 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import * as metadata from 'sample_data/metadata.new.json';
+import { AudioMetadata } from './interfaces/audio-metadata';
+
+export const METADATA_TOKEN = new InjectionToken<AudioMetadata>("METADATA_TOKEN");
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +24,7 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
     SplashScreen,
     SQLite,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    [(metadata as AudioMetadata)],
   ],
   bootstrap: [AppComponent]
 })

@@ -8,6 +8,7 @@
     "start": "ionic serve",
     "build": "ng build",
     "test": "ng test",
+    "watchtest": "ng test --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "package": "ionic cordova build android --release"

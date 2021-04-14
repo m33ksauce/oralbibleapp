@@ -3,3 +3,13 @@
     <verse-item [title]="verse.title"></verse-item>
   </ion-list>
 </ul>
+
+<toggle-list [label]="Luke" [items]="verses"></toggle-list>
+
+<ul class="toggle-list">
+  <li><label (click)="toggleParentList">Luke</label>
+    <ul>
+      <li></li>
+    </ul>
+  </li>
+</ul>
