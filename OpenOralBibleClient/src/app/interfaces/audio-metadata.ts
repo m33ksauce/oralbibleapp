@@ -1,1 +1,4 @@
-export interface AudioMetadata {}
+export interface AudioMetadata {
+    Categories?: Object[],
+    Audio?: Object[]
+}

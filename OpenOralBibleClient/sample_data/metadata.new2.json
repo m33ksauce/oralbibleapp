@@ -1,26 +1,26 @@
 {
     "Categories": [
       {
-        "type": "category",
-        "displayName": "Old Testament",
+        "type": 1,
+        "name": "Old Testament",
         "children": []
       },
       {
-        "type": "category",
-        "displayName": "New Testament",
+        "type": 1,
+        "name": "New Testament",
         "children": [
           {
-            "type": "category",
-            "displayName": "Luke",
+            "type": 1,
+            "name": "Luke",
             "children": [
               {
-                "type": "category",
-                "displayName": "Luke 1",
+                "type": 1,
+                "name": "Luke 1",
                 "children": [
                   {
-                    "type": "audio",
-                    "displayName": "Luke 1:1-4",
-                    "target": "5bb543cf-ae41-4f8c-afcb-1d4cfaa44bc0"
+                    "type": 2,
+                    "name": "Luke 1:1-4",
+                    "audioTargetId": "5bb543cf-ae41-4f8c-afcb-1d4cfaa44bc0"
                   }
                 ]
               }
@@ -30,8 +30,8 @@
       },
       {
         "id": 3,
-        "type": "category",
-        "displayName": "Stories",
+        "type": 1,
+        "name": "Stories",
         "children": []
       }
     ],

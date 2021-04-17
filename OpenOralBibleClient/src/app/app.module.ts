@@ -24,7 +24,6 @@ export const METADATA_TOKEN = new InjectionToken<AudioMetadata>("METADATA_TOKEN"
     SplashScreen,
     SQLite,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    [(metadata as AudioMetadata)],
   ],
   bootstrap: [AppComponent]
 })
