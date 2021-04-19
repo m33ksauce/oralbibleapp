@@ -1,0 +1,12 @@
+<ul *ngIf="isCategory()">
+  <h1>
+    {{item.name}}
+  </h1>
+  <li *ngFor="let i of item.children">
+    <media-container [item]="i"></media-container>
+  </li>
+</ul>
+
+<li *ngIf="isAudio()">
+  <media-item [item]="item"></media-item>
+</li>

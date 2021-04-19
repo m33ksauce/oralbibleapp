@@ -9,7 +9,7 @@ import { MainPageRoutingModule } from './main-routing.module';
 import { MainPage } from './main.page';
 
 import { PlayerComponentModule } from 'src/app/components/player/player.module';
-import { VerseSelectorComponentModule } from 'src/app/components/verse-selector/verse-selector.module';
+import { MediaSelectorComponentModule } from 'src/app/components/media-selector/media-selector.module';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { VerseSelectorComponentModule } from 'src/app/components/verse-selector/
     IonicModule,
     MainPageRoutingModule,
     PlayerComponentModule,
-    VerseSelectorComponentModule
+    MediaSelectorComponentModule
   ],
   declarations: [MainPage]
 })
