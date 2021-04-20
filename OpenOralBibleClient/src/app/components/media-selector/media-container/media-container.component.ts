@@ -44,9 +44,9 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
   }
 
   setVisibility(status: boolean) {
-    var vis = status ? "visible" : "hidden";
+    var vis = status ? "block" : "none";
     if(this.isCategory()) {
-      this.renderer.setStyle(this.cardLabel.nativeElement, 'visibility', vis);
+      this.renderer.setStyle(this.cardLabel.nativeElement, 'display', vis);
     }
     this.childMedia.forEach(c => c.setVisibility(status));
   }

@@ -31,8 +31,8 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
 
   setVisibility(status: boolean) {
     console.log("called")
-    var vis = status ? "visible" : "hidden";
-    this.renderer.setStyle(this.cardLabel.nativeElement, 'visibility', vis);
+    var vis = status ? "block" : "none";
+    this.renderer.setStyle(this.cardLabel.nativeElement, 'display', vis);
   }
 
 }
