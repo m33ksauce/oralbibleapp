@@ -1,12 +1,6 @@
-<ul *ngIf="isCategory()">
-  <h1>
-    {{item.name}}
-  </h1>
-  <li *ngFor="let i of item.children">
-    <media-container [item]="i"></media-container>
-  </li>
-</ul>
+<ion-card *ngIf="isCategory()" (click)="toggleExpand()" #card>
+  {{item.name}}
+</ion-card>
+<media-container *ngFor="let i of item.children" [item]="i"></media-container>
 
-<li *ngIf="isAudio()">
-  <media-item [item]="item"></media-item>
-</li>
+<media-item *ngIf="isAudio()" [item]="item" [visible]="false"></media-item>
