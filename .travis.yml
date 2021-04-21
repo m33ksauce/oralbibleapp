@@ -6,8 +6,7 @@ branches:
   - dev
 
 before_install:
-  — npm install -g ionic @angular/cli
-  — npm ci
+  - npm install -g ionic @angular/cli
 
 jobs:
   include:
