@@ -1,5 +1,6 @@
 export interface PlayerState {
     playing: boolean;
+    mediaTitle: string;
     readableCurrentTime: string;
     readableDuration: string;
     duration: number | undefined;
@@ -11,6 +12,7 @@ export interface PlayerState {
 export function MakeDefaultState(): PlayerState {
     return {
         playing: false,
+        mediaTitle: '',
         readableCurrentTime: '',
         readableDuration: '',
         duration: undefined,

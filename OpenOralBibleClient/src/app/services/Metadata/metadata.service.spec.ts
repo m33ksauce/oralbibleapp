@@ -180,6 +180,32 @@ describe('MetadataService', () => {
       });
     })
   });
+
+  describe('getAudioFromTarget', () => {
+    it('get file string from id', () => {
+      const mockTargetId = "00000000-0000";    
+      const mockFilePath = "path/to/thing";
+
+      metadataProviderSpy.getRawMetadata.and.returnValue({
+        "Audio": [
+          { "id": mockTargetId, "file": mockFilePath }
+        ]
+      });
+
+      const service: MetadataService = TestBed.get(MetadataService);
+
+      var file = service.getAudioFileFromTarget(mockTargetId);
+
+      expect(file).toBe(mockFilePath);
+
+    });
+  });
+
+  describe('getNextMedia', () => {
+    it('returns adjacent next', () => {
+      
+    }) 
+  })
 });
 
 const verifyCategory = (media: MediaListItem, name: string) => {

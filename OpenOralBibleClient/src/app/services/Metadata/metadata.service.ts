@@ -10,6 +10,7 @@ import { MetadataProviderService } from '../MetadataProvider/metadata-provider.s
 export class MetadataService {
   private _metadataProviderService: MetadataProviderService;
   currentMediaMetadata: MediaListItem[] = new Array<MediaListItem>();
+  currentAudioMetadata: Map<string, string> = new Map<string, string>();
   currentMediaSubject: BehaviorSubject<MediaListItem[]> = 
     new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
 
@@ -25,14 +26,29 @@ export class MetadataService {
   }
 
   private parseMetadata(md: AudioMetadata) {
-    if (!(md.hasOwnProperty("Categories"))) {
-      return;
+    if (md.hasOwnProperty("Categories")) {
+      var categories = md["Categories"];
+      categories.forEach(cat => {
+        var item = this.parseCategory(cat);
+        this.currentMediaMetadata.push(item);
+      });
     }
-    var categories = md["Categories"];
-    categories.forEach(cat => {
-      var item = this.parseCategory(cat);
-      this.currentMediaMetadata.push(item);
-    });
+    if(md.hasOwnProperty("Audio")) {
+      var audio = md["Audio"];
+      audio.forEach(ad => {
+        var item = this.parseAudio(ad);
+        this.currentAudioMetadata.set(item[0], item[1]);
+      })
+    }
+  }
+
+  private parseAudio(item: any) {
+    if (!item.hasOwnProperty("id")) {
+      throw new Error("no id for this one!");
+    }
+    var id = item.id;
+    var name = item.hasOwnProperty("file") ? item.file : "";
+    return [id, name];
   }
 
   private parseCategory(cat: any): MediaListItem {
@@ -67,6 +83,10 @@ export class MetadataService {
 
   public getAvailableMedia(): Observable<MediaListItem[]> {
     return this.currentMediaSubject.asObservable();
+  }
+
+  public getAudioFileFromTarget(target: string): string {
+    return this.currentAudioMetadata.get(target);
   }
 
   public getNextMedia(): MediaListItem {

@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IonCard } from '@ionic/angular';
 import { MediaListItem } from 'src/app/models/MediaListItem';
+import { MetadataService } from 'src/app/services/Metadata/metadata.service';
+import { PlayerService } from 'src/app/services/Player/player.service';
 
 @Component({
   selector: 'media-item',
@@ -12,7 +14,11 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   @Input() visible: boolean = true;
   @ViewChild('card', {read: ElementRef, static: false}) cardLabel: ElementRef
 
-  constructor(private renderer: Renderer2) { }
+  constructor(
+    private renderer: Renderer2,
+    private metadataService: MetadataService,
+    private playerService: PlayerService
+    ) { }
 
   ngOnInit() {
 
@@ -30,9 +36,16 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   }
 
   setVisibility(status: boolean) {
-    console.log("called")
     var vis = status ? "block" : "none";
     this.renderer.setStyle(this.cardLabel.nativeElement, 'display', vis);
+  }
+
+  playTarget() {
+    console.log(this.item.audioTargetId);
+    var media = this.metadataService.getAudioFileFromTarget(this.item.audioTargetId);
+    console.log(media);
+    this.playerService.loadMedia(media, this.item.name);
+    this.playerService.play();
   }
 
 }
