@@ -19,4 +19,4 @@ jobs:
   - stage: test
     script: npm run ci-test
   - stage: package
-    scipt: npm run package
+    script: npm run package
