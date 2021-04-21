@@ -6,11 +6,11 @@ branches:
   - dev
 
 before_script:
- — npm install -g ionic
+ — npm install -g ionic @angular/cli
  — npm ci
 
 jobs:
   include:
   - stage: test
     before_script: cd OpenOralBibleClient
-    script: npm test
+    script: npm run ci-test

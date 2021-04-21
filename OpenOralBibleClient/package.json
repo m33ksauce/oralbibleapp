@@ -11,6 +11,7 @@
     "watchtest": "ng test --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "ci-test": "ng test --watch false --browsers ChromeHeadless",
     "package": "ionic cordova build android --release"
   },
   "private": true,

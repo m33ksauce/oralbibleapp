@@ -43,7 +43,7 @@ export class PlayerPage implements OnInit {
     if (id != undefined) {
       this.media = this.audioService.getMedia(id);
       if (this.media != undefined) {
-        this.player.loadMedia(this.media.target)
+        this.player.loadMedia(this.media.target, "")
         this.play();
       }
     }

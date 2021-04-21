@@ -33,19 +33,11 @@ export class PlayerComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => this.setMedia(params.id)
-    )
+
   }
 
   setMedia(id?: string) {
-    if (id != undefined) {
-      this.media = this.audioService.getMedia(id);
-      if (this.media != undefined) {
-        this.player.loadMedia(this.media.target)
-        this.play();
-      }
-    }
+    
   }
 
   play() {
