@@ -5,6 +5,10 @@ branches:
   - master
   - dev
 
+before_script:
+ — npm install -g ionic
+ — npm ci
+
 jobs:
   include:
   - stage: test
