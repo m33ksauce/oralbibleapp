@@ -8,7 +8,7 @@ branches:
   - dev
 
 before_install:
-  - npm install -g @ionic/cli @angular/cli
+  - npm install -g @ionic/cli @angular/cli cordova
 
 install:
   - cd OpenOralBibleClient
