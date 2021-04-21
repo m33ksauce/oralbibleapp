@@ -1,0 +1,11 @@
+language: node_js
+
+branches:
+  only:
+  - master
+  - dev
+
+jobs:
+  include:
+  - stage: test
+    script: npm test
