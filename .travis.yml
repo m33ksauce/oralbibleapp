@@ -11,10 +11,10 @@ before_install:
   - npm install -g @ionic/cli @angular/cli
 
 install:
+  - cd OpenOralBibleClient
   - npm ci
 
 jobs:
   include:
   - stage: test
-    before_script: cd OpenOralBibleClient
     script: npm run ci-test
