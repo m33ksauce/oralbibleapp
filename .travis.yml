@@ -8,6 +8,7 @@ branches:
   - dev
 
 before_install:
+  - sudo apt-get install npm
   - npm install -g @ionic/cli @angular/cli cordova
 
 install:
