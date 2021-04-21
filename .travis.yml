@@ -10,7 +10,7 @@ branches:
 
 before_install:
   - sudo apt-get install npm
-  - npm i -g npm@7.3.0
+  - npm i -g npm
   - npm install -g @ionic/cli @angular/cli cordova
 
 install:
