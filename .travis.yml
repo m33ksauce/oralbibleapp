@@ -5,7 +5,7 @@ branches:
   - master
   - dev
 
-before_script:
+before_install:
  — npm install -g ionic @angular/cli
  — npm ci
 
