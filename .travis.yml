@@ -3,14 +3,17 @@ sudo: false
 node_js:
   - "15.5.0"
 
+addons:
+  apt:
+    packages:
+      - oracle-java8-set-default
+
 branches:
   only:
   - master
   - dev
 
 before_install:
-  - sudo apt install -y openjdk-8-jdk
-  - jdk_switcher use oraclejdk8
   - sudo apt-get install android-sdk
   - npm install -g @ionic/cli @angular/cli cordova
 
