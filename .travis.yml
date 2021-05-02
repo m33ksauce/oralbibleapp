@@ -1,5 +1,4 @@
 language: node_js
-dist: trusty
 sudo: false
 node_js:
   - "15.5.0"
@@ -10,8 +9,9 @@ branches:
   - dev
 
 before_install:
+  - sudo apt install -y openjdk-8-jdk
   - jdk_switcher use oraclejdk8
-  - sudo apt install android-sdk
+  - sudo apt-get install android-sdk
   - npm install -g @ionic/cli @angular/cli cordova
 
 install:
