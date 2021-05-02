@@ -9,6 +9,7 @@ branches:
   - dev
 
 before_install:
+  - jdk_switcher use oraclejdk8
   - sudo apt-get install android-sdk
   - npm install -g @ionic/cli @angular/cli cordova
 
