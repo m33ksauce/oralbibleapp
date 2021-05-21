@@ -1,7 +1,16 @@
-language: node_js
+language: android
 sudo: false
-node_js:
-  - "15.5.0"
+
+android:
+  components:
+  - tools
+  - platform-tools
+  - tools
+  - build-tools-26.0.0
+  - android-25
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
 
 branches:
   only:
@@ -9,8 +18,7 @@ branches:
   - dev
 
 before_install:
-  - sudo apt-get install apt-transport-https
-  - sudo apt-get install android-sdk oracle-java8-set-default
+  - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
 
 install:
@@ -23,3 +31,7 @@ jobs:
     script: npm run ci-test
   - stage: package
     script: npm run package
+
+env:
+  global:
+  - JAVA_HOME=/usr/lib/jvm/java-8-oracle
