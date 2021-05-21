@@ -1,6 +1,9 @@
 language: android
 sudo: false
 
+addons:
+  chrome: stable
+
 android:
   components:
   - tools
