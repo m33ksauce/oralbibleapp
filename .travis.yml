@@ -9,6 +9,7 @@ branches:
   - dev
 
 before_install:
+  - sudo apt-get install apt-transport-https
   - sudo apt-get install android-sdk oracle-java8-set-default
   - npm install -g @ionic/cli @angular/cli cordova
 
