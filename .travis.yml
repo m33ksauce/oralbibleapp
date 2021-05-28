@@ -2,7 +2,9 @@ language: android
 sudo: false
 
 addons:
-  chrome: stable
+  apt:
+    packages:
+      - google-chrome-stable
 
 android:
   components:
@@ -21,7 +23,6 @@ branches:
   - dev
 
 before_install:
-  - sudo apt install google-chrome
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome
