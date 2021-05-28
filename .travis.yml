@@ -24,7 +24,7 @@ before_install:
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome-stable
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - google-chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 install:
   - cd OpenOralBibleClient
