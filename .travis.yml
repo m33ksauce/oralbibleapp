@@ -21,11 +21,11 @@ branches:
   - dev
 
 before_install:
-  - sudo apt install google-chrome-stable
+  - sudo apt install google-chrome
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
-  - export CHROME_BIN=google-chrome-stable
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - export CHROME_BIN=google-chrome
+  - google-chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 install:
   - cd OpenOralBibleClient
@@ -41,4 +41,4 @@ jobs:
 env:
   global:
   - JAVA_HOME=/usr/lib/jvm/java-8-oracle
-  - CHROME_BIN=google-chrome-stable
+  - CHROME_BIN=google-chrome
