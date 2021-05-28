@@ -1,14 +1,6 @@
 language: android
 sudo: false
 
-addons:
-  apt:
-    sources:
-        - sourceline: deb http://dl.google.com/linux/chrome/deb/ stable main
-          key_url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    packages:
-      - google-chrome-stable
-
 android:
   components:
   - tools
@@ -20,13 +12,25 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
 
+addons:
+  apt:
+    sources:
+        - sourceline: deb http://dl.google.com/linux/chrome/deb/ stable main
+          key_url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    packages:
+      - google-chrome-stable
+
+licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
+
 branches:
   only:
   - master
   - dev
 
 before_install:
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome
