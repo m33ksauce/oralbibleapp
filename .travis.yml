@@ -26,6 +26,7 @@ branches:
   - dev
 
 before_install:
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome
