@@ -21,7 +21,7 @@ branches:
   - dev
 
 before_install:
-  - apt install google-chrome-stable
+  - sudo apt install google-chrome-stable
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome-stable
