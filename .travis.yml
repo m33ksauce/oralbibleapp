@@ -49,3 +49,4 @@ env:
   global:
   - JAVA_HOME=/usr/lib/jvm/java-8-oracle
   - CHROME_BIN=google-chrome
+  - ANDROID_BUILD_TOOLS=26.0.2
