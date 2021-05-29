@@ -27,6 +27,7 @@ before_install:
   - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a ${TRAVIS_ROOT}/etc/apt/sources.list >/dev/null
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
   - sudo apt-get update
+  - sudo apt install dpkg
   - sudo apt install google-chrome-stable
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
