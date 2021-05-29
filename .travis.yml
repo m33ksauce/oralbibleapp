@@ -12,14 +12,6 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
 
-addons:
-  apt:
-    sources:
-      - sourceline: deb http://dl.google.com/linux/chrome/deb/ stable main
-        key_url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    packages:
-      - google-chrome-stable
-
 licenses:
     - android-sdk-preview-license-.+
     - android-sdk-license-.+
@@ -31,7 +23,10 @@ branches:
   - dev
 
 before_install:
+  - curl -sSL "https://dl-ssl.google.com/linux/linux_signing_key.pub" | sudo -E apt-key add -
+  - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a ${TRAVIS_ROOT}/etc/apt/sources.list >/dev/null
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
+  - sudo apt install google-chrome-stable
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome
