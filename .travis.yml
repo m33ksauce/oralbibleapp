@@ -17,8 +17,6 @@ addons:
     sources:
       - sourceline: deb http://dl.google.com/linux/chrome/deb/ stable main
         key_url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-      - sourceline: https://packagecloud.io/github/git-lfs/ubuntu trusty InRelease
-        key_url: https://packagecloud.io/github/git-lfs/gpgkey
     packages:
       - google-chrome-stable
 
@@ -33,6 +31,7 @@ branches:
   - dev
 
 before_install:
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
   - nvm install 15
   - npm install -g @ionic/cli @angular/cli cordova
   - export CHROME_BIN=google-chrome
