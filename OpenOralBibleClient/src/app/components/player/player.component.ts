@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AudioMedia } from 'src/app/models/AudioMedia';
-import { AudioMediaService } from 'src/app/services/AudioMedia/AudioMedia.service';
 import { PlayerState } from 'src/app/interfaces/player-state';
 import { PlayerService } from 'src/app/services/Player/player.service';
 import { CategoryMediaService } from 'src/app/services/CategoryMedia/CategoryMedia.service';
@@ -25,7 +24,6 @@ export class PlayerComponent implements OnInit {
   playerState: PlayerState;
 
   constructor(
-    public audioService: AudioMediaService,
     public route: ActivatedRoute,
     public player: PlayerService,
     public categoryService: CategoryMediaService) {
