@@ -52,14 +52,10 @@ export class PlayerComponent implements OnInit {
 
   previous() {
     console.log("playing previous");
-    var prevMedia = this.categoryService.getPrevious(this.media.id);
-    this.setMedia(prevMedia.id);
   }
 
   next() {
     console.log("playing next");
-    var nextMedia = this.categoryService.getNext(this.media.id);
-    this.setMedia(nextMedia.id);
   }
 
   startSeek() {
