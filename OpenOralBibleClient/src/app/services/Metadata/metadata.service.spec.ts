@@ -203,9 +203,93 @@ describe('MetadataService', () => {
 
   describe('getNextMedia', () => {
     it('returns adjacent next', () => {
-      
-    }) 
-  })
+      metadataProviderSpy.getRawMetadata.and.returnValue({
+        "Categories": [
+          { "name": "book", "type": MediaType.Category, "children": [
+            { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target1" },
+            { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target2" }
+          ]},
+        ]
+      });
+
+      const service: MetadataService = TestBed.get(MetadataService);
+
+      service.getAvailableMedia().subscribe(m => {
+        var first = m.pop().children.pop();
+        var nxt = service.getNextMedia(first.index);
+
+        expect(nxt.audioTargetId).toBe("target2");
+      });
+    });
+
+    it('returns media from adjacent category', () => {
+      metadataProviderSpy.getRawMetadata.and.returnValue({
+        "Categories": [
+          { "name": "category1", "type": MediaType.Category, "children": [
+            { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target3" }
+          ]},
+          { "name": "category1", "type": MediaType.Category, "children": [
+            { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target4" }
+          ]}
+        ]
+      });
+
+      const service: MetadataService = TestBed.get(MetadataService);
+
+      service.getAvailableMedia().subscribe(m => {
+        var first = m.pop().children.pop();
+        var nxt = service.getNextMedia(first.index);
+
+        expect(nxt.audioTargetId).toBe("target4");
+      });
+    });
+  });
+
+  describe('getPrevMedia', () => {
+    it('returns adjacent previous', () => {
+      metadataProviderSpy.getRawMetadata.and.returnValue({
+        "Categories": [
+          { "name": "book", "type": MediaType.Category, "children": [
+            { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target1" },
+            { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target2" }
+          ]},
+        ]
+      });
+
+      const service: MetadataService = TestBed.get(MetadataService);
+
+      service.getAvailableMedia().subscribe(m => {
+        m.pop().children.pop();
+        var second = m.pop().children.pop();
+        var nxt = service.getPrevMedia(second.index);
+
+        expect(nxt.audioTargetId).toBe("target1");
+      });
+    });
+
+    it('returns media from adjacent category', () => {
+      metadataProviderSpy.getRawMetadata.and.returnValue({
+        "Categories": [
+          { "name": "category1", "type": MediaType.Category, "children": [
+            { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target3" }
+          ]},
+          { "name": "category1", "type": MediaType.Category, "children": [
+            { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target4" }
+          ]}
+        ]
+      });
+
+      const service: MetadataService = TestBed.get(MetadataService);
+
+      service.getAvailableMedia().subscribe(m => {
+        m.pop();
+        var first = m.pop().children.pop();
+        var nxt = service.getPrevMedia(first.index);
+
+        expect(nxt.audioTargetId).toBe("target3");
+      });
+    });
+  });
 });
 
 const verifyCategory = (media: MediaListItem, name: string) => {

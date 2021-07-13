@@ -48,11 +48,12 @@ export class PlayerService {
     this.stateSubject.next(this.state);
   }
 
-  loadMedia(media, title) {
+  loadMedia(media, title, index) {
     this.player.src = media;
     this.player.load();
     this.clearState();
     this.state.mediaTitle = title;
+    this.state.index = index;
 
     const handler = (event: Event) => {
       this.updateState(event);

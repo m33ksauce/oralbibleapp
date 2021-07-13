@@ -6,6 +6,7 @@ export enum MediaType {
 export class MediaListItem {
     name: string
     type: MediaType
+    index?: number
     children?: MediaListItem[]
     audioTargetId?: string
 
@@ -15,7 +16,7 @@ export class MediaListItem {
     }
 
     public hasChildren(): boolean {
-        return this.children.length > 0;
+        return (this.children != undefined) && (this.children.length > 0);
     }
 
     public hasTarget(): boolean {

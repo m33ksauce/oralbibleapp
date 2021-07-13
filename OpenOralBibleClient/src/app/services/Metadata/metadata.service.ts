@@ -14,6 +14,8 @@ export class MetadataService {
   currentMediaSubject: BehaviorSubject<MediaListItem[]> = 
     new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
 
+  private index = 0;
+
 
   constructor(public metadataProviderService: MetadataProviderService) {
     this._metadataProviderService = metadataProviderService;
@@ -26,6 +28,7 @@ export class MetadataService {
   }
 
   private parseMetadata(md: AudioMetadata) {
+    var curIndex = 0;
     if (md.hasOwnProperty("Categories")) {
       var categories = md["Categories"];
       categories.forEach(cat => {
@@ -58,6 +61,7 @@ export class MetadataService {
 
     if (cat.hasOwnProperty("audioTargetId") && typeof(cat["audioTargetId"]) == "string") {
       res.audioTargetId = cat["audioTargetId"];
+      res.index = this.index++;
     }
     
     if (cat.hasOwnProperty("children") && cat.children.length != undefined && cat.children.length > 0) {
@@ -89,11 +93,31 @@ export class MetadataService {
     return this.currentAudioMetadata.get(target);
   }
 
-  public getNextMedia(): MediaListItem {
-    return;
+  public getNextMedia(currentIndex: number): MediaListItem {
+    var nxt = this.findAtIndex(this.currentMediaMetadata, currentIndex + 1);
+    return nxt;
   }
 
-  public getPreviousMedia(): MediaListItem {
-    return;
+  private findAtIndex(list: MediaListItem[], index: number): MediaListItem {
+    var match;
+    var nxt = list.find(i => i.index == index);
+
+    if (nxt != undefined) match = nxt;
+
+    if (nxt == undefined) {
+      list.forEach(l => {
+        if (l.hasChildren()) {
+          var check = this.findAtIndex(l.children, index);
+          if (check != undefined) match = check;
+        }
+      })
+    }
+
+    return match;
+  }
+
+  public getPrevMedia(currentIndex: number): MediaListItem {
+    var nxt = this.findAtIndex(this.currentMediaMetadata, currentIndex - 1);
+    return nxt;
   }
 }

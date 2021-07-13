@@ -4,6 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AudioMedia } from 'src/app/models/AudioMedia';
 import { PlayerState } from 'src/app/interfaces/player-state';
 import { PlayerService } from 'src/app/services/Player/player.service';
+import { MetadataService } from 'src/app/services/Metadata/metadata.service';
 
 const states = {
   DEFAULT: 'default',
@@ -18,13 +19,14 @@ const states = {
 
 export class PlayerComponent implements OnInit {
   seekbar: FormControl = new FormControl("seekbar");
-  media: AudioMedia;
+  currentIndex: number;
   playlist: AudioMedia[] = new Array<AudioMedia>();
   playerState: PlayerState;
 
   constructor(
     public route: ActivatedRoute,
-    public player: PlayerService) {
+    public player: PlayerService,
+    public metadata: MetadataService) {
       player.getState().subscribe(state => this.playerState = state);
     }
 
@@ -48,10 +50,18 @@ export class PlayerComponent implements OnInit {
 
   previous() {
     console.log("playing previous");
+    var prev = this.metadata.getPrevMedia(this.playerState.index);
+    var audio = this.metadata.getAudioFileFromTarget(prev.audioTargetId);
+    this.player.loadMedia(audio, prev.name, prev.index);
+    this.play();
   }
 
   next() {
     console.log("playing next");
+    var nxt = this.metadata.getNextMedia(this.playerState.index);
+    var audio = this.metadata.getAudioFileFromTarget(nxt.audioTargetId);
+    this.player.loadMedia(audio, nxt.name, nxt.index);
+    this.play();
   }
 
   startSeek() {

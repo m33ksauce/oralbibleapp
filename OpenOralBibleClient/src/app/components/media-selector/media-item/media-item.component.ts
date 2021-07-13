@@ -41,10 +41,9 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   }
 
   playTarget() {
-    console.log(this.item.audioTargetId);
     var media = this.metadataService.getAudioFileFromTarget(this.item.audioTargetId);
     console.log(media);
-    this.playerService.loadMedia(media, this.item.name);
+    this.playerService.loadMedia(media, this.item.name, this.item.index);
     this.playerService.play();
   }
 
