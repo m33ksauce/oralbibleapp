@@ -4,7 +4,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AudioMedia } from 'src/app/models/AudioMedia';
 import { PlayerState } from 'src/app/interfaces/player-state';
 import { PlayerService } from 'src/app/services/Player/player.service';
-import { CategoryMediaService } from 'src/app/services/CategoryMedia/CategoryMedia.service';
 
 const states = {
   DEFAULT: 'default',
@@ -25,8 +24,7 @@ export class PlayerComponent implements OnInit {
 
   constructor(
     public route: ActivatedRoute,
-    public player: PlayerService,
-    public categoryService: CategoryMediaService) {
+    public player: PlayerService) {
       player.getState().subscribe(state => this.playerState = state);
     }
 
