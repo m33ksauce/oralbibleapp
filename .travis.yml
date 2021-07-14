@@ -31,7 +31,7 @@ before_install:
   - sudo apt install google-chrome-stable
   - yes | sdkmanager "platforms;android-27"
   - nvm install 15
-  - npm install -g @ionic/cli @angular/cli cordova
+  - npm install -g @ionic/cli @angular/cli cordova appcenter-cli
   - export CHROME_BIN=google-chrome
   - google-chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
@@ -39,12 +39,16 @@ install:
   - cd OpenOralBibleClient
   - npm ci
 
-jobs:
-  include:
-  - stage: test
-    script: npm run ci-test
-  - stage: package
-    script: npm run package
+script:
+  - npm run ci-test
+  - npm run package
+  - appcenter distribute release \
+        --group Collaborators \
+        --file "./artifacts/app-release.apk" \
+        --release-notes 'App submission via Travis-CI' \
+        --app Chris/OpenOralBibleClient \
+        --token "${appcenter_api_token}" \
+        --quiet
 
 env:
   global:
