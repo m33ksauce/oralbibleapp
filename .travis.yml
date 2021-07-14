@@ -42,6 +42,7 @@ install:
 script:
   - npm run ci-test
   - npm run package
+  - ./signbuild.sh
   - appcenter distribute release \
         --group Collaborators \
         --file "./artifacts/app-release.apk" \
