@@ -17,6 +17,9 @@ describe('MetadataService', () => {
   });
 
   describe('getAvailableMedia', () => {
+
+    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+
     it('should parse metadata', () => {
       metadataProviderSpy.getRawMetadata.and.returnValue({});
 
@@ -182,6 +185,9 @@ describe('MetadataService', () => {
   });
 
   describe('getAudioFromTarget', () => {
+
+    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+
     it('get file string from id', () => {
       const mockTargetId = "00000000-0000";    
       const mockFilePath = "path/to/thing";
@@ -202,7 +208,10 @@ describe('MetadataService', () => {
   });
 
   describe('getNextMedia', () => {
-    it('returns adjacent next', () => {
+
+    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+
+    it('returns adjacent next', async () => {
       metadataProviderSpy.getRawMetadata.and.returnValue({
         "Categories": [
           { "name": "book", "type": MediaType.Category, "children": [
@@ -214,15 +223,13 @@ describe('MetadataService', () => {
 
       const service: MetadataService = TestBed.get(MetadataService);
 
-      service.getAvailableMedia().subscribe(m => {
-        var first = m.pop().children.pop();
-        var nxt = service.getNextMedia(first.index);
-
-        expect(nxt.audioTargetId).toBe("target2");
-      });
+      var nxt = service.getNextMedia(0);
+      
+      expect(nxt).not.toBeUndefined();
+      expect(nxt.audioTargetId).toBe("target2");
     });
 
-    it('returns media from adjacent category', () => {
+    it('returns media from adjacent category', async () => {
       metadataProviderSpy.getRawMetadata.and.returnValue({
         "Categories": [
           { "name": "category1", "type": MediaType.Category, "children": [
@@ -236,17 +243,18 @@ describe('MetadataService', () => {
 
       const service: MetadataService = TestBed.get(MetadataService);
 
-      service.getAvailableMedia().subscribe(m => {
-        var first = m.pop().children.pop();
-        var nxt = service.getNextMedia(first.index);
+      var nxt = service.getNextMedia(0);
 
-        expect(nxt.audioTargetId).toBe("target4");
-      });
+      expect(nxt).not.toBeUndefined();
+      expect(nxt.audioTargetId).toBe("target4");
     });
   });
 
   describe('getPrevMedia', () => {
-    it('returns adjacent previous', () => {
+
+    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+
+    it('returns adjacent previous', async () => {
       metadataProviderSpy.getRawMetadata.and.returnValue({
         "Categories": [
           { "name": "book", "type": MediaType.Category, "children": [
@@ -258,16 +266,13 @@ describe('MetadataService', () => {
 
       const service: MetadataService = TestBed.get(MetadataService);
 
-      service.getAvailableMedia().subscribe(m => {
-        m.pop().children.pop();
-        var second = m.pop().children.pop();
-        var nxt = service.getPrevMedia(second.index);
+      var prev = service.getPrevMedia(1);
 
-        expect(nxt.audioTargetId).toBe("target1");
-      });
+      expect(prev).not.toBeUndefined();
+      expect(prev.audioTargetId).toBe("target1");
     });
 
-    it('returns media from adjacent category', () => {
+    it('returns media from adjacent category', async () => {
       metadataProviderSpy.getRawMetadata.and.returnValue({
         "Categories": [
           { "name": "category1", "type": MediaType.Category, "children": [
@@ -281,13 +286,10 @@ describe('MetadataService', () => {
 
       const service: MetadataService = TestBed.get(MetadataService);
 
-      service.getAvailableMedia().subscribe(m => {
-        m.pop();
-        var first = m.pop().children.pop();
-        var nxt = service.getPrevMedia(first.index);
+      var prev = service.getPrevMedia(1);
 
-        expect(nxt.audioTargetId).toBe("target3");
-      });
+      expect(prev).not.toBeUndefined();
+      expect(prev.audioTargetId).toBe("target3");
     });
   });
 });
