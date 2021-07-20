@@ -1,0 +1,9 @@
+ion-item {
+    --background: var(--ion-color-secondary);
+    --color: var(--ion-color-secondary-contrast);
+}
+
+ion-item.playing {
+    --background: var(--ion-color-tertiary);
+    --color: var(--ion-color-tertiary-contrast);
+}

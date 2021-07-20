@@ -1,6 +1,8 @@
-<div *ngIf="isCategory()" (click)="toggleExpand()" #card>
-  {{item.name}}
-</div>
-<media-container *ngFor="let i of item.children" [item]="i"></media-container>
+<ion-item-group *ngIf="isCategory()" #card>
+    <ion-item-divider (click)="toggleExpand()" color="primary">
+      <ion-label>{{item.name}}</ion-label>
+    </ion-item-divider>
+    <media-container *ngFor="let i of item.children" [item]="i"></media-container>
+</ion-item-group>
 
-<media-item *ngIf="isAudio()" [item]="item" [visible]="false"></media-item>
+<media-item *ngIf="isAudio()" [item]="item" [visible]="false" [index]="item.index"></media-item>

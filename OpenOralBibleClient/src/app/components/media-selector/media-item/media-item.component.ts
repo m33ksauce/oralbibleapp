@@ -12,7 +12,9 @@ import { PlayerService } from 'src/app/services/Player/player.service';
 export class MediaItemComponent implements OnInit, AfterViewInit {
   @Input() item: MediaListItem;
   @Input() visible: boolean = true;
+  @Input() index: number;
   @ViewChild('card', {read: ElementRef, static: false}) cardLabel: ElementRef
+  private playing: boolean = false;
 
   constructor(
     private renderer: Renderer2,
@@ -28,6 +30,12 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
     this.setVisibility(false);
   }
 
+  ngDoCheck() {
+    this.playerService.getState().subscribe(state => {
+      this.setPlaying(state.index == this.index);
+    })
+  }
+
   getVisibleStatus() {
     if (this.visible) {
       return "none"
@@ -38,6 +46,18 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   setVisibility(status: boolean) {
     var vis = status ? "block" : "none";
     this.renderer.setStyle(this.cardLabel.nativeElement, 'display', vis);
+  }
+
+  setPlaying(isPlaying: boolean) {
+    isPlaying 
+    ? this.renderer.addClass(this.cardLabel.nativeElement, "playing")
+    : this.renderer.removeClass(this.cardLabel.nativeElement, "playing");
+
+    this.playing = isPlaying;
+  }
+
+  isPlaying() {
+    return this.playing;
   }
 
   playTarget() {

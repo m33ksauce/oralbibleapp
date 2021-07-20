@@ -25,6 +25,19 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
     this.collapse();
   }
 
+  ngDoCheck() {
+    if (this.childMedia != undefined) {
+      this.childMedia.forEach(child => {
+        if (child.isPlaying()) this.expand();
+      })
+    }
+    if (this.childCats != undefined) {
+      this.childCats.forEach(cat => {
+        if (cat.expanded) this.expand();
+      })
+    }
+  }
+
   isCategory() {
     return this.item.type == MediaType.Category;
   }
@@ -36,11 +49,9 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
   toggleExpand() {
     if (this.expanded) {
       this.collapse();
-      this.expanded = false;
       return;
     }
     this.expand();
-    this.expanded = true;
   }
 
   setVisibility(status: boolean) {
@@ -57,12 +68,20 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
   }
 
   collapse() {
-    this.setChildVis(false);
-    this.childCats.forEach(c => c.collapse());
+    var canCollapse = true;
+    this.childMedia.forEach(media => {
+      if (media.isPlaying()) canCollapse = false;
+    })
+    if (canCollapse) {  
+      this.setChildVis(false);
+      this.childCats.forEach(c => c.collapse());
+      this.expanded = false;
+    }
   }
 
   expand() {
     this.setChildVis(true);
+    this.expanded = true;
   }
 
 }

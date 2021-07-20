@@ -1,3 +1,5 @@
-<ion-list *ngFor="let item of catalog">
-  <media-container [item]="item"></media-container>
+<ion-list color="primary" inset="true">
+  <div *ngFor="let item of catalog">
+    <media-container [item]="item"></media-container>
+  </div>
 </ion-list>

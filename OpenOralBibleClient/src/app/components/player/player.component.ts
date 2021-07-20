@@ -34,10 +34,6 @@ export class PlayerComponent implements OnInit {
 
   }
 
-  setMedia(id?: string) {
-    
-  }
-
   play() {
     this.playerState.playing = true;
     this.player.play();
@@ -71,6 +67,10 @@ export class PlayerComponent implements OnInit {
   endSeek(event) {
     this.player.seek(event.value);
     this.play();
+  }
+
+  nowPlaying() {
+    return this.currentIndex;
   }
 }
 
