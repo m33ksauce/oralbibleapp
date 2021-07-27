@@ -11,7 +11,7 @@ import { MediaItemComponent } from '../media-item/media-item.component';
 export class MediaContainerComponent implements OnInit, AfterViewInit {
   @Input() item: MediaListItem;
   @Input() expanded: boolean = false;
-  @ViewChild('card', {read: ElementRef, static: false}) cardLabel: ElementRef
+  @ViewChild('card', { read: ElementRef }) cardLabel: ElementRef
   @ViewChildren(MediaContainerComponent) childCats: Array<MediaContainerComponent>;
   @ViewChildren(MediaItemComponent) childMedia: Array<MediaItemComponent>;
 

@@ -13,7 +13,7 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   @Input() item: MediaListItem;
   @Input() visible: boolean = true;
   @Input() index: number;
-  @ViewChild('card', {read: ElementRef, static: false}) cardLabel: ElementRef
+  @ViewChild('card', { read: ElementRef }) cardLabel: ElementRef
   private playing: boolean = false;
 
   constructor(
