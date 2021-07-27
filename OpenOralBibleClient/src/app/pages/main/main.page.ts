@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DatabaseService } from 'src/app/services/Database/database.service';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -8,13 +7,12 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./main.page.scss'],
 })
 export class MainPage implements OnInit {
-  _dbService: DatabaseService;
   AppName: string = "Bible App";
 
-  constructor(public storage: Storage) {}
-
-  ngOnInit() {
+  constructor(public storage: Storage) {
     this.storage.get('app-name').then(data => this.AppName = data);
   }
+
+  ngOnInit() {}
 
 }

@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { DatabaseService } from './services/Database/database.service';
 
 import { Storage } from '@ionic/storage';
 import { MetadataProviderService } from './services/MetadataProvider/metadata-provider.service';
@@ -27,8 +26,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(async () => {
       this.statusBar.styleDefault();
+      await this.initializeDB();
       this.splashScreen.hide();
-      this.initializeDB();
     });
   }
 
