@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
 import { MetadataProviderService } from '../MetadataProvider/metadata-provider.service';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +18,12 @@ export class MetadataService {
   private index = 0;
 
 
-  constructor(public metadataProviderService: MetadataProviderService) {
-    this._metadataProviderService = metadataProviderService;
+  constructor(public storage: Storage) {
     this.loadMetadata();
   }
 
   private loadMetadata() {
-    var md = this._metadataProviderService.getRawMetadata();
-    this.parseMetadata(md);
+    this.storage.get("media-metadata").then(md => this.parseMetadata(md));
   }
 
   private parseMetadata(md: AudioMetadata) {

@@ -1,3 +1,7 @@
 <ion-item #card (click)="playTarget()">
-  <ion-label>{{item.name}}</ion-label>
+  <ion-label>
+    {{item.name}}
+    <ion-icon *ngIf="!isPlaying()" name="volume-off-outline"></ion-icon>
+    <ion-icon *ngIf="isPlaying()" name="volume-high-outline"></ion-icon>
+  </ion-label>
 </ion-item>

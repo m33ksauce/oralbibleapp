@@ -1,6 +1,10 @@
 <ion-item-group *ngIf="isCategory()" #card>
-    <ion-item-divider (click)="toggleExpand()" color="primary">
-      <ion-label>{{item.name}}</ion-label>
+    <ion-item-divider (click)="toggleExpand()">
+      <ion-label>
+        <ion-icon *ngIf="!expanded" name="chevron-forward-outline"></ion-icon>
+        <ion-icon *ngIf="expanded" name="chevron-down-outline"></ion-icon>
+        {{item.name}}
+      </ion-label>
     </ion-item-divider>
     <media-container *ngFor="let i of item.children" [item]="i"></media-container>
 </ion-item-group>
