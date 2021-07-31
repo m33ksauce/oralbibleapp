@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, SecurityContext } from '@angular/core';
 import { PlayerState, MakeDefaultState } from 'src/app/interfaces/player-state';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as moment from 'moment';
+import { Storage } from '@ionic/storage-angular';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,7 @@ export class PlayerService {
   private stateSubject: BehaviorSubject<PlayerState> = 
     new BehaviorSubject<PlayerState>(this.state);
 
-  constructor() { }
+  constructor(private storage: Storage, private sanitizer: DomSanitizer) { }
 
   getState(): Observable<PlayerState> {
     return this.stateSubject.asObservable();
@@ -48,18 +50,29 @@ export class PlayerService {
     this.stateSubject.next(this.state);
   }
 
+  getFileFromTarget(target) {
+    return this.storage.get(target).then(d => {
+      var blob = new Blob([d.buffer], {type: "audio/mpeg"});
+      var dURL = URL.createObjectURL(blob);
+      this.player.src = dURL;
+    })
+  }
+
   loadMedia(media, title, index) {
-    this.player.src = media;
-    this.player.load();
-    this.clearState();
-    this.state.mediaTitle = title;
-    this.state.index = index;
+    return this.getFileFromTarget(media).then(() => {
+      console.log("loading")
+      console.log(this.player.src)
+      this.player.load();
+      this.clearState();
+      this.state.mediaTitle = title;
+      this.state.index = index;
 
-    const handler = (event: Event) => {
-      this.updateState(event);
-    }
+      const handler = (event: Event) => {
+        this.updateState(event);
+      }
 
-    this.addEvents(this.player, this.playerEvents, handler);
+      this.addEvents(this.player, this.playerEvents, handler);
+    })
   }
 
   addEvents(player: HTMLAudioElement, playerEvents: string[], handler: (event: Event) => void) {

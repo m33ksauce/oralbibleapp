@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 import { MetadataProviderService } from './services/MetadataProvider/metadata-provider.service';
 
 @Component({
@@ -32,7 +32,8 @@ export class AppComponent {
   }
 
   initializeDB() {
-    this.storage.set("app-name", "Yetfa Bible");
-    this.storage.set("media-metadata", this.metadata.getRawMetadata());
+    this.storage.create()
+      .then(() => this.storage.set("app-name", "Yetfa Bible"))
+      .then(() => this.metadata.loadMetadata());
   }
 }
