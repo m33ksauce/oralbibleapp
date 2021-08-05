@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
-import { MetadataProviderService } from '../MetadataProvider/metadata-provider.service';
-import { Storage } from '@ionic/storage-angular';
+import { StorageService } from '../Storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetadataService {
-  private _metadataProviderService: MetadataProviderService;
   currentMediaMetadata: MediaListItem[] = new Array<MediaListItem>();
   currentAudioMetadata: Map<string, string> = new Map<string, string>();
   currentMediaSubject: BehaviorSubject<MediaListItem[]> = 
@@ -18,12 +16,12 @@ export class MetadataService {
   private index = 0;
 
 
-  constructor(public storage: Storage) {
+  constructor(public storage: StorageService) {
     this.loadMetadata();
   }
 
   private loadMetadata() {
-    this.storage.get("current-metadata").then(md => this.parseMetadata(md));
+    this.storage.getKey("current-metadata").subscribe(md => this.parseMetadata(md as AudioMetadata));
   }
 
   private parseMetadata(md: AudioMetadata) {

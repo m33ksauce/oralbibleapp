@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot({
-      name: '__mydb',
+      name: '__obadb',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     }),
     HttpClientModule,

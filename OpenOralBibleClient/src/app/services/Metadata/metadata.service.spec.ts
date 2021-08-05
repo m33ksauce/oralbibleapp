@@ -2,38 +2,39 @@ import { TestBed } from '@angular/core/testing';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { Category } from 'src/app/models/Category';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
-import { MetadataProviderService } from '../MetadataProvider/metadata-provider.service';
+import { storageServiceSpy, WrapObservable } from 'src/test/storageSpy';
+import { StorageService } from '../Storage/storage.service';
 
 import { MetadataService } from './metadata.service';
 
 describe('MetadataService', () => {
-  const metadataProviderSpy = jasmine.createSpyObj('MetadataProviderService', ['getRawMetadata']);
+  const metadataProviderSpy = storageServiceSpy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{provide: MetadataProviderService, useValue: metadataProviderSpy}]
+      providers: [{provide: StorageService, useValue: storageServiceSpy}]
     });
-    metadataProviderSpy.getRawMetadata.calls.reset();
+    storageServiceSpy.getKey.calls.reset();
   });
 
   describe('getAvailableMedia', () => {
 
-    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+    beforeEach(() => storageServiceSpy.getKey.calls.reset());
 
     it('should parse metadata', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({});
+      storageServiceSpy.getKey.and.returnValue(WrapObservable(WrapObservable({})));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
-      expect(metadataProviderSpy.getRawMetadata.calls.count()).toBe(1);
+      expect(storageServiceSpy.getKey.calls.count()).toBe(1);
     });
 
     it('should parse categories', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "categoryName", "type": MediaType.Category, "children": [] }
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -45,12 +46,12 @@ describe('MetadataService', () => {
     });
 
     it('should parse multiple categories', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "categoryName", "type": MediaType.Category, "children": [] },
           { "name": "categoryName2", "type": MediaType.Category, "children": [] }
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -62,13 +63,13 @@ describe('MetadataService', () => {
     });
 
     it('should parse categories with child categories', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "categoryName", "type": MediaType.Category, "children": [
             { "name": "categoryName2", "type": MediaType.Category, "children": [] }
           ] },
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -83,14 +84,14 @@ describe('MetadataService', () => {
     });
 
     it('should parse categories with multiple children', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "categoryName", "type": MediaType.Category, "children": [
             { "name": "categoryName2", "type": MediaType.Category, "children": [] },
             { "name": "categoryName3", "type": MediaType.Category, "children": [] }
           ] },
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
       
@@ -108,11 +109,11 @@ describe('MetadataService', () => {
     });
 
     it('should parse audio', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "audioName", "type": MediaType.Audio, "children": [], "audioTargetId": "target" }
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -124,13 +125,13 @@ describe('MetadataService', () => {
     });
 
     it('should parse categories with child audio', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "categoryName", "type": MediaType.Category, "children": [
             { "name": "audioName", "type": MediaType.Audio, "children": [], "audioTargetId": "target"}
           ]}
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -145,7 +146,7 @@ describe('MetadataService', () => {
     });
 
     it('should parse complex metadata', () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "New Testament", "type": MediaType.Category, "children": [
             { "name": "Luke", "type": MediaType.Category, "children": [
@@ -156,7 +157,7 @@ describe('MetadataService', () => {
             { "name": "John", "type": MediaType.Category, "children": [] },
           ], }
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -186,17 +187,17 @@ describe('MetadataService', () => {
 
   describe('getAudioFromTarget', () => {
 
-    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+    beforeEach(() => storageServiceSpy.getKey.calls.reset());
 
     it('get file string from id', () => {
       const mockTargetId = "00000000-0000";    
       const mockFilePath = "path/to/thing";
 
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Audio": [
           { "id": mockTargetId, "file": mockFilePath }
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -209,17 +210,17 @@ describe('MetadataService', () => {
 
   describe('getNextMedia', () => {
 
-    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+    beforeEach(() => storageServiceSpy.getKey.calls.reset());
 
     it('returns adjacent next', async () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "book", "type": MediaType.Category, "children": [
             { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target1" },
             { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target2" }
           ]},
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -230,7 +231,7 @@ describe('MetadataService', () => {
     });
 
     it('returns media from adjacent category', async () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "category1", "type": MediaType.Category, "children": [
             { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target3" }
@@ -239,7 +240,7 @@ describe('MetadataService', () => {
             { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target4" }
           ]}
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -252,17 +253,17 @@ describe('MetadataService', () => {
 
   describe('getPrevMedia', () => {
 
-    beforeEach(() => metadataProviderSpy.getRawMetadata.calls.reset());
+    beforeEach(() => storageServiceSpy.getKey.calls.reset());
 
     it('returns adjacent previous', async () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "book", "type": MediaType.Category, "children": [
             { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target1" },
             { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target2" }
           ]},
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 
@@ -273,7 +274,7 @@ describe('MetadataService', () => {
     });
 
     it('returns media from adjacent category', async () => {
-      metadataProviderSpy.getRawMetadata.and.returnValue({
+      storageServiceSpy.getKey.and.returnValue(WrapObservable({
         "Categories": [
           { "name": "category1", "type": MediaType.Category, "children": [
             { "name": "audioName1", "type": MediaType.Audio, "children": [], "audioTargetId": "target3" }
@@ -282,7 +283,7 @@ describe('MetadataService', () => {
             { "name": "audioName2", "type": MediaType.Audio, "children": [], "audioTargetId": "target4" }
           ]}
         ]
-      });
+      }));
 
       const service: MetadataService = TestBed.get(MetadataService);
 

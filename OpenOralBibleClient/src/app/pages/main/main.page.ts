@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { StorageService } from 'src/app/services/Storage/storage.service';
+import { StorageKeys } from 'src/app/services/Storage/storageKeys';
 
 @Component({
   selector: 'app-main',
@@ -9,8 +11,8 @@ import { Storage } from '@ionic/storage-angular';
 export class MainPage implements OnInit {
   AppName: string = "Bible App";
 
-  constructor(public storage: Storage) {
-    this.storage.get('app-name').then(data => this.AppName = data);
+  constructor(public storage: StorageService) {
+    this.storage.getKey(StorageKeys.AppName).subscribe(data => this.AppName = data as string);
   }
 
   ngOnInit() {}

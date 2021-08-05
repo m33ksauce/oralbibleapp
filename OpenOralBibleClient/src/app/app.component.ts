@@ -3,9 +3,7 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
-import { Storage } from '@ionic/storage-angular';
-import { MetadataProviderService } from './services/MetadataProvider/metadata-provider.service';
+import { StorageService } from './services/Storage/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -17,23 +15,19 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private storage: Storage,
-    private metadata: MetadataProviderService
+    private storage: StorageService,
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
-    this.platform.ready().then(async () => {
+    this.platform.ready().then(async() => {
       this.statusBar.styleDefault();
-      await this.initializeDB();
-      this.splashScreen.hide();
+      this.initializeDB().then(() => this.splashScreen.hide());
     });
   }
 
   initializeDB() {
-    this.storage.create()
-      .then(() => this.storage.set("app-name", "Yetfa Bible"))
-      .then(() => this.metadata.loadMetadata());
+    return this.storage.setKey("app-name", "Yetfa Bible");
   }
 }
