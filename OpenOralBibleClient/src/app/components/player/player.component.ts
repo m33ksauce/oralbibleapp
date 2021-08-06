@@ -18,6 +18,7 @@ const states = {
 })
 
 export class PlayerComponent implements OnInit {
+  seeking: boolean = false;
   seekbar: FormControl = new FormControl("seekbar");
   currentIndex: number;
   playlist: AudioMedia[] = new Array<AudioMedia>();
@@ -67,11 +68,20 @@ export class PlayerComponent implements OnInit {
 
   startSeek() {
     this.pause();
+    this.seeking = true;
   }
 
-  endSeek(event) {
-    this.player.seek(parseFloat(event.target.value));
-    this.play();
+  endSeek() {
+    if (this.seeking) {
+      this.play();
+      this.seeking = false;
+    }
+  }
+
+  setSeek(event) {
+    if (this.seeking) {
+      this.player.seek(parseFloat(event.target.value));
+    }
   }
 
   nowPlaying() {

@@ -7,8 +7,9 @@
     [max]="playerState?.duration"
     [value]="playerState?.currentTime"
     [formControl]="seekbar"
-    (ionBlur)="endSeek($event)"
-    (ionFocus)="startSeek()"
+    (ionChange)="setSeek($event)"
+    (touchstart)="startSeek()"
+    (touchend)="endSeek()"
     color="secondary">
       <ion-label slot="start">
         {{playerState?.readableCurrentTime}}
