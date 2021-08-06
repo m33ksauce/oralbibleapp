@@ -1,0 +1,122 @@
+{
+  "Version": "0.0.0-1",
+  "Categories": [
+    {
+      "type": 1,
+      "name": "Old Testament",
+      "children": []
+    },
+    {
+      "type": 1,
+      "name": "New Testament",
+      "children": [
+        {
+          "type": 1,
+          "name": "Lukas",
+          "children": [
+            {
+              "type": 1,
+              "name": "Lukas 1",
+              "children": [
+                {
+                  "type": 2,
+                  "name": "Lukas 1:1-4",
+                  "audioTargetId": "5bb543cf-ae41-4f8c-afcb-1d4cfaa44bc0"
+                }
+              ]
+            },
+            {
+              "type": 1,
+              "name": "Lukas 2",
+              "children": [
+                {
+                  "type": 2,
+                  "name": "Lukas 2:41",
+                  "audioTargetId": "33dec6ca-e3f7-4172-97aa-81437c626bcc"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 2:42",
+                  "audioTargetId": "02b99709-b29f-4d96-9816-0d9dc16e694d"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 2:43",
+                  "audioTargetId": "a53586c6-500b-4f3e-b30a-956ade387e90"
+                }
+              ]
+            },
+            {
+              "type": 1,
+              "name": "Lukas 4",
+              "children": [
+                {
+                  "type": 2,
+                  "name": "Lukas 4:1",
+                  "audioTargetId": "406ec902-9ef7-4896-9a54-a5ff64b7db79"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 4:2",
+                  "audioTargetId": "d9f80651-1d8e-4d27-8bf1-a925710e5ef4"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 4:3",
+                  "audioTargetId": "4f6447bd-568e-48f9-bc97-b7deea2885a7"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 4:4",
+                  "audioTargetId": "c8528847-bd33-4759-9ab4-b0ff265a2799"
+                }
+              ]
+            }
+            
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": 1,
+      "name": "Stories",
+      "children": []
+    }
+  ],
+  "Audio": [
+      {
+        "id": "5bb543cf-ae41-4f8c-afcb-1d4cfaa44bc0",
+        "file": "audio/Lukas/Lukas 1_1-4.mp3"
+      },
+      {
+        "id": "33dec6ca-e3f7-4172-97aa-81437c626bcc",
+        "file": "audio/Lukas/Lukas 2_41.mp3"
+      },
+      {
+        "id": "02b99709-b29f-4d96-9816-0d9dc16e694d",
+        "file": "audio/Lukas/Lukas 2_42.mp3"
+      },
+      {
+        "id": "a53586c6-500b-4f3e-b30a-956ade387e90",
+        "file": "audio/Lukas/Lukas 2_43.mp3"
+      },
+      {
+        "id": "406ec902-9ef7-4896-9a54-a5ff64b7db79",
+        "file": "audio/Lukas/Lukas 4_1.mp3"
+      },
+      {
+        "id": "d9f80651-1d8e-4d27-8bf1-a925710e5ef4",
+        "file": "audio/Lukas/Lukas 4_2.mp3"
+      },
+      {
+        "id": "4f6447bd-568e-48f9-bc97-b7deea2885a7",
+        "file": "audio/Lukas/Lukas 4_3.mp3"
+      },
+      {
+        "id": "c8528847-bd33-4759-9ab4-b0ff265a2799",
+        "file": "audio/Lukas/Lukas 4_4.mp3"
+      }
+    ]
+}
+  
