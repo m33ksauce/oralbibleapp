@@ -46,6 +46,10 @@ export class PlayerComponent implements OnInit {
 
   previous() {
     console.log("playing previous");
+    if (this.playerState.currentTime > 2) {
+      this.player.seek(0);
+      return;
+    }
     var prev = this.metadata.getPrevMedia(this.playerState.index);
     var audio = this.metadata.getAudioFileFromTarget(prev.audioTargetId);
     this.player.loadMedia(audio, prev.name, prev.index).then(() => this.play());
