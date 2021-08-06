@@ -28,6 +28,9 @@ export class PlayerComponent implements OnInit {
     public player: PlayerService,
     public metadata: MetadataService) {
       player.getState().subscribe(state => this.playerState = state);
+      player.getEvents().subscribe(e => {
+        if (e.type == "ended") this.next();
+      })
     }
 
   ngOnInit() {
@@ -67,7 +70,7 @@ export class PlayerComponent implements OnInit {
   }
 
   endSeek(event) {
-    this.player.seek(event.value);
+    this.player.seek(parseFloat(event.target.value));
     this.play();
   }
 
