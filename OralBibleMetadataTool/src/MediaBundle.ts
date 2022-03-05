@@ -3,7 +3,6 @@ export class MediaBundle {
     public Media: AudioMedia[];
 
     constructor() {
-        this.Metadata = {};
         this.Media = new Array<AudioMedia>()
     }
 }
@@ -20,6 +19,7 @@ export interface AudioMetadata {
 }
 
 export interface AudioMedia {
-    target: string
+    target: string;
+    file: string;
     data: ArrayBuffer;
 }

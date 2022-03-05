@@ -37,7 +37,8 @@ export class Bundle {
             return readFile(path.join(process.cwd(), 'inputs/', audio.file))
                 .then(dataBuf => {
                     this.bundle.Media.push({
-                        target: audio.file,
+                        target: audio.id,
+                        file: audio.file,
                         data: dataBuf
                     })
                     console.log("write complete")
