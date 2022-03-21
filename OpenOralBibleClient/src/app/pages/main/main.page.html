@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>{{AppName}}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" (click)="navigateToSettings()">
       <ion-icon name="settings" size="large"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
@@ -12,6 +12,5 @@
 </ion-content>
 
 <ion-footer class="conrols ion-padding">
-  <a href="/update">Update!</a>
   <bible-player></bible-player>
 </ion-footer>
