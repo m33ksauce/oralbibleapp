@@ -5,6 +5,8 @@ import { StorageService } from '../Storage/storage.service';
 import { StorageKeys } from '../Storage/storageKeys';
 import { UpdateMethods, UpdateProvider } from './update-provider';
 import { WebUpdateProvider } from './web-update-provider';
+import * as semver from 'semver';
+import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 
 @Injectable({
   providedIn: 'root'
@@ -27,14 +29,43 @@ export class UpdaterService {
   public Update() {
     console.log("updating...");
     this.provider.getMetadata().subscribe(data => {
-      console.log(data);
+      var newVersion = data.Version;
+      this.storage.getKey(StorageKeys.Version).subscribe(currentVersion => {
+        if (!semver.valid(newVersion)) {
+          console.log("Couldn't update - version not valid")
+          return;
+        };
+        
+        if (semver.lt(newVersion, currentVersion)) {
+          console.log("Couldn't update - new version older than current version");
+        }
+
+        this.storage.setKey(StorageKeys.NextMetadata, data).then(() => {
+          this.triggerUpdate();
+        })
+      })
       this.storage.setKey(StorageKeys.CurrentMetadata, data).then(() => this.metadataService.reload());
     });
   }
 
-  private updateMetadata(newData, version) {
+  private triggerUpdate() {
+    this.syncNextMedia();
+  }
+
+  private syncNextMedia() {
+    this.storage.getKey(StorageKeys.NextMetadata).subscribe(md => {
+      console.log(md)
+      var keys = [];
+      (md as AudioMetadata).Audio.map(item => {
+        console.log(item["id"])
+      })
+    })
+  }
+
+  private updateMetadata(newData, newVersion) {
+    
     this.storage.setKey(StorageKeys.CurrentMetadata, newData);
-    this.storage.setKey(StorageKeys.Version, version);
+    this.storage.setKey(StorageKeys.Version, newVersion);
   }
 
   private updateMedia(media) {

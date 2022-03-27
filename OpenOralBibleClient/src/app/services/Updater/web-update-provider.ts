@@ -9,18 +9,19 @@ class metadataApiDto {
     id: string;
     version: string;
     metadata: Object;
+    audio: Object;
 }
 
 export class WebUpdateProvider implements UpdateProvider {
     constructor(private http: HttpClient) {}
 
     public getMetadata(version?: string): Observable<AudioMetadata> {
-        console.log("do an updatey update");
         return this.http.get<metadataApiDto>(`${this.releaseEndpointApi()}/latest`).pipe(
             map(dto => {
                 return {
                     Version: dto.version,
-                    Categories: dto.metadata["categories"]
+                    Categories: dto.metadata["categories"],
+                    Audio: dto.metadata["audio"]
                 }
             })
         );
