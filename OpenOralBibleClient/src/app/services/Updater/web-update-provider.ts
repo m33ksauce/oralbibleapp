@@ -1,15 +1,36 @@
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { AudioMetadata } from "src/app/interfaces/audio-metadata";
+import { environment } from "src/environments/environment";
 import { UpdateProvider } from "./update-provider";
 
+class metadataApiDto {
+    id: string;
+    version: string;
+    metadata: Object;
+}
+
 export class WebUpdateProvider implements UpdateProvider {
-    public getMetadata(version?: string): Promise<AudioMetadata> {
-        return new Promise<AudioMetadata>(res => {
-            return {
-                Version: "1",
-            }
-        });
+    constructor(private http: HttpClient) {}
+
+    public getMetadata(version?: string): Observable<AudioMetadata> {
+        console.log("do an updatey update");
+        return this.http.get<metadataApiDto>(`${this.releaseEndpointApi()}/latest`).pipe(
+            map(dto => {
+                return {
+                    Version: dto.version,
+                    Categories: dto.metadata["categories"]
+                }
+            })
+        );
     }
-    public getMedia(fileKey: string): Promise<ArrayBuffer> {
-        return new Promise<ArrayBuffer>(res => new ArrayBuffer(1));
+
+    public getMedia(fileKey: string): Observable<ArrayBuffer> {
+        return new Observable<ArrayBuffer>();
+    }
+
+    private releaseEndpointApi() {
+        return `${environment.backend.url}:${environment.backend.port}/api/releases`;
     }
 }

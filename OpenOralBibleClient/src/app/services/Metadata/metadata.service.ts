@@ -20,6 +20,12 @@ export class MetadataService {
     this.loadMetadata();
   }
 
+  public reload() {
+    this.currentMediaMetadata = new Array<MediaListItem>();
+    this.currentAudioMetadata = new Map<string, string>();
+    this.loadMetadata();
+  }
+
   private loadMetadata() {
     this.storage.getKey("current-metadata").subscribe(md => this.parseMetadata(md as AudioMetadata));
   }

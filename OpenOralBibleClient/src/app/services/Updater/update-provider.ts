@@ -1,3 +1,4 @@
+import { Observable } from "rxjs"
 import { AudioMetadata } from "src/app/interfaces/audio-metadata"
 
 export enum UpdateMethods {
@@ -5,6 +6,6 @@ export enum UpdateMethods {
 }
 
 export interface UpdateProvider {
-    getMetadata(version?: string): Promise<AudioMetadata>
-    getMedia(fileKey: string): Promise<ArrayBuffer>
+    getMetadata(version?: string): Observable<AudioMetadata>
+    getMedia(fileKey: string): Observable<ArrayBuffer>
 }
