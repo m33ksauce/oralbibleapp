@@ -45,18 +45,22 @@ export class StorageService {
       })
   }
 
-  public getKey(key: string) {
-    return new Observable(sub => {
-      this.getKeyWhenReady(key, sub);
+  public getKey<T>(key: string): Observable<T> {
+    return new Observable<T>(sub => {
+      this.getKeyWhenReady<T>(key, sub);
     });
   }
 
-  private getKeyWhenReady(key: string, sub: Subscriber<any>) {
-    if (this.isReady) return this._storage.get(key).then((val) => sub.next(val));
+  public checkKey(key: string): Promise<boolean> {
+    return this._storage.keys().then(keys => keys.includes(key))
+  }
+
+  private getKeyWhenReady<T>(key: string, sub: Subscriber<T>) {
+    if (this.isReady) return this._storage.get(key).then((val) => sub.next(val as T));
     setTimeout(() => {
-      this.getKeyWhenReady(key, sub);
+      this.getKeyWhenReady<T>(key, sub);
     }, 100);
-  } 
+  }
 
   public async setKey(key: string, val: any) {
     return this._storage.set(key, val);

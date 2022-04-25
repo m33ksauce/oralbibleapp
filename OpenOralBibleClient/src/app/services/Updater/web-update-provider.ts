@@ -15,8 +15,8 @@ class metadataApiDto {
 export class WebUpdateProvider implements UpdateProvider {
     constructor(private http: HttpClient) {}
 
-    public getMetadata(version?: string): Observable<AudioMetadata> {
-        return this.http.get<metadataApiDto>(`${this.releaseEndpointApi()}/latest`).pipe(
+    public getMetadata(version: string = "latest"): Observable<AudioMetadata> {
+        return this.http.get<metadataApiDto>(`${this.releaseEndpointApi()}/${version}`).pipe(
             map(dto => {
                 return {
                     Version: dto.version,
@@ -32,6 +32,6 @@ export class WebUpdateProvider implements UpdateProvider {
     }
 
     private releaseEndpointApi() {
-        return `${environment.backend.url}:${environment.backend.port}/api/releases`;
+        return `${environment.backend.endpoint}/api/v1/release`;
     }
 }

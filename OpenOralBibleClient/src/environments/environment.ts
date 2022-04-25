@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   backend: {
-    url: "http://localhost",
-    port: 3000,
+    endpoint: "http://localhost:5001/oralbibleapp/us-central1/handler"
   }
 };
 
