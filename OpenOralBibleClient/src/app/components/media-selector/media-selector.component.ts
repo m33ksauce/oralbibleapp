@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { MediaListItem } from 'src/app/models/MediaListItem';
 import { MetadataService } from 'src/app/services/Metadata/metadata.service';
 
@@ -8,14 +9,15 @@ import { MetadataService } from 'src/app/services/Metadata/metadata.service';
   styleUrls: ['./media-selector.component.scss'],
 })
 export class MediaSelectorComponent implements OnInit {
-  catalog: MediaListItem[];
+  catalog: Observable<MediaListItem[]>;
   
   constructor(
     public metadataService: MetadataService
-  ) { 
-    metadataService.getAvailableMedia().subscribe(media => this.catalog = media);
-  }
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.catalog = this.metadataService.getAvailableMedia();
+    console.log("initting")
+  }
 
 }

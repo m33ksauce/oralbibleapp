@@ -45,7 +45,7 @@ export class UpdaterService {
           console.log("Couldn't update - new version older than current version");
         }
 
-        this.storage.setKey(StorageKeys.StageMetadata, data).then(async () => {
+        this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
           if (await this.isStageMediaReady()) {
             this.finalizeUpdate();
           }
@@ -69,11 +69,12 @@ export class UpdaterService {
   }
 
   private finalizeUpdate() {
-    console.log("finalizing")
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(async data => {
-      await this.storage.setKey(StorageKeys.CurrentMetadata, data);
-      await this.storage.setKey(StorageKeys.Version, data.Version);
-      this.metadataService.reload();
+      
+      console.log("finalizing")
+      await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
+      await this.storage.setKey<string>(StorageKeys.Version, data.Version);
+      // this.metadataService.reload();
     });
   }
 
@@ -85,6 +86,7 @@ export class UpdaterService {
 
   private isStageMediaReady(): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      console.log("ready")
       this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(data => {
         Promise.all(data.Audio.map(a => this.storage.checkKey(`media-${a.id}`))).then(keys => {
           resolve(keys.reduce((curr, nxt) => curr && nxt, true));

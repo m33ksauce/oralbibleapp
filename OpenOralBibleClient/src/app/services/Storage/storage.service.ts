@@ -2,15 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import bson from 'bson';
-import { Observable, Subscriber } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject, Subject, Subscriber } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { StorageKeys } from './storageKeys';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class StorageService {
   private isReady = false;
+  private observers = new Map<string, ReplaySubject<unknown>>();
 
   constructor(
     private _storage: Storage,
@@ -45,32 +47,36 @@ export class StorageService {
       })
   }
 
-  public getKey<T>(key: string): Observable<T> {
-    return new Observable<T>(sub => {
-      this.getKeyWhenReady<T>(key, sub);
-    });
+  // public getKey<T>(key: string): Observable<T> {
+  //   return new Observable<T>(sub => {
+  //     this.getKeyWhenReady<T>(key, sub);
+  //   });
+  // }
+
+  public getKey<T>(key: string): ReplaySubject<T> {
+    if (!this.observers.has(key)) this.observers[key] = new ReplaySubject<T>(0);
+    this.getKeyWhenReady(key, this.observers[key]);
+    return this.observers[key] as ReplaySubject<T>;
   }
 
   public checkKey(key: string): Promise<boolean> {
     return this._storage.keys().then(keys => keys.includes(key))
   }
 
-  private getKeyWhenReady<T>(key: string, sub: Subscriber<T>) {
+  private getKeyWhenReady<T>(key: string, sub: ReplaySubject<T>) {
     if (this.isReady) return this._storage.get(key).then((val) => sub.next(val as T));
     setTimeout(() => {
       this.getKeyWhenReady<T>(key, sub);
     }, 100);
   }
 
-  public async setKey(key: string, val: any) {
+  public async setKey<T>(key: string, val: T) {
+    
     return this._storage.set(key, val);
-  }
-
-  private setKeyWhenReady(key: string, val: any, resolve) {
-    if (this.isReady) return this._storage.set(key, val).then(resolve);
-    setTimeout(() => {
-      this.setKeyWhenReady(key, val, resolve)
-    }, 100);
+    if(this.observers.has(key)) {
+      console.log("sending next")
+      this.observers.get(key).next(val);
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subject, Subscriber, Subscription } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
 import { StorageService } from '../Storage/storage.service';
@@ -14,27 +14,18 @@ export class MetadataService {
     new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
 
   private index = 0;
-  private subscription: Subscription;
 
 
   constructor(public storage: StorageService) {
     this.loadMetadata();
   }
 
-  public reload() {
-    this.subscription.unsubscribe();
-    this.currentMediaMetadata = new Array<MediaListItem>();
-    this.currentAudioMetadata = new Map<string, string>();
-    this.currentMediaSubject = new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
-    
-    this.loadMetadata();
-  }
-
   private loadMetadata() {
-    this.subscription = this.storage.getKey<AudioMetadata>("current-metadata").subscribe(md => this.parseMetadata(md as AudioMetadata));
+    this.storage.getKey<AudioMetadata>("current-metadata").subscribe(md => this.parseMetadata(md));
   }
 
   private parseMetadata(md: AudioMetadata) {
+    console.log("parsing")
     var curIndex = 0;
     if (md.hasOwnProperty("Categories")) {
       var categories = md["Categories"];
@@ -50,6 +41,7 @@ export class MetadataService {
         this.currentAudioMetadata.set(item[0], item[1]);
       })
     }
+    this.currentMediaSubject.next(this.currentMediaMetadata);
   }
 
   private parseAudio(item: any) {
@@ -92,8 +84,8 @@ export class MetadataService {
     }
   }
 
-  public getAvailableMedia(): Observable<MediaListItem[]> {
-    return this.currentMediaSubject.asObservable();
+  public getAvailableMedia(): Subject<MediaListItem[]> {
+    return this.currentMediaSubject;
   }
 
   public getAudioFileFromTarget(target: string): string {

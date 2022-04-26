@@ -28,6 +28,6 @@ export class AppComponent {
   }
 
   initializeDB() {
-    return this.storage.setKey("app-name", "Yetfa Bible");
+    return this.storage.setKey<string>("app-name", "Yetfa Bible");
   }
 }
