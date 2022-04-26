@@ -5,26 +5,11 @@ import { AudioMetadata } from "src/app/interfaces/audio-metadata";
 import { environment } from "src/environments/environment";
 import { UpdateProvider } from "./update-provider";
 
-class metadataApiDto {
-    id: string;
-    version: string;
-    metadata: Object;
-    audio: Object;
-}
-
 export class WebUpdateProvider implements UpdateProvider {
     constructor(private http: HttpClient) {}
 
     public getMetadata(version: string = "latest"): Observable<AudioMetadata> {
-        return this.http.get<metadataApiDto>(`${this.releaseEndpointApi()}/${version}`).pipe(
-            map(dto => {
-                return {
-                    Version: dto.version,
-                    Categories: dto.metadata["categories"],
-                    Audio: dto.metadata["audio"]
-                }
-            })
-        );
+        return this.http.get<AudioMetadata>(`${this.releaseEndpointApi()}/${version}`);
     }
 
     public getMedia(fileKey: string): Observable<ArrayBuffer> {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscriber, Subscription } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
 import { StorageService } from '../Storage/storage.service';
@@ -14,6 +14,7 @@ export class MetadataService {
     new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
 
   private index = 0;
+  private subscription: Subscription;
 
 
   constructor(public storage: StorageService) {
@@ -21,13 +22,16 @@ export class MetadataService {
   }
 
   public reload() {
+    this.subscription.unsubscribe();
     this.currentMediaMetadata = new Array<MediaListItem>();
     this.currentAudioMetadata = new Map<string, string>();
+    this.currentMediaSubject = new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
+    
     this.loadMetadata();
   }
 
   private loadMetadata() {
-    this.storage.getKey("current-metadata").subscribe(md => this.parseMetadata(md as AudioMetadata));
+    this.subscription = this.storage.getKey<AudioMetadata>("current-metadata").subscribe(md => this.parseMetadata(md as AudioMetadata));
   }
 
   private parseMetadata(md: AudioMetadata) {

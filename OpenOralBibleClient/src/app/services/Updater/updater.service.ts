@@ -35,7 +35,7 @@ export class UpdaterService {
   private stageUpdate(): Subscription {
     return this.provider.getMetadata().subscribe(data => {
       var newVersion = data.Version;
-      this.storage.getKey(StorageKeys.Version).subscribe(currentVersion => {
+      this.storage.getKey<string>(StorageKeys.Version).subscribe(currentVersion => {
         if (!semver.valid(newVersion)) {
           console.log("Couldn't update - version not valid")
           return;
@@ -56,19 +56,20 @@ export class UpdaterService {
   }
 
   private syncStageMedia()   {
-    return this.storage.getKey(StorageKeys.StageMetadata).subscribe(md => {
+    return this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(md => {
       console.log(md)
       var keys = [];
       (md as AudioMetadata).Audio.forEach(item => {
         console.log(`Syncing ${item.id}...`);
-        this.provider.getMedia(item.id).subscribe(media => {
-          
+        this.provider.getMedia(item.id).subscribe(async media => {
+          if (await this.isStageMediaReady) this.finalizeUpdate();
         });
       })
     })
   }
 
   private finalizeUpdate() {
+    console.log("finalizing")
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(async data => {
       await this.storage.setKey(StorageKeys.CurrentMetadata, data);
       await this.storage.setKey(StorageKeys.Version, data.Version);

@@ -57,7 +57,7 @@ export class PlayerService {
 
   loadMedia(media, title, index) {
     return new Promise<void>((resolve, reject) => {
-      this.storage.getKey(`media-${media}`).subscribe(d => {
+      this.storage.getKey<any>(`media-${media}`).subscribe(d => {
         var blob = new Blob([d["buffer"]], {type: "audio/mpeg"});
         var dURL = URL.createObjectURL(blob);
         this.player.src = dURL;

@@ -15,7 +15,7 @@ export class MainPage implements OnInit {
   constructor(
     public storage: StorageService,
     public navCtrl: NavController) {
-    this.storage.getKey(StorageKeys.AppName).subscribe(data => this.AppName = data as string);
+    this.storage.getKey<string>(StorageKeys.AppName).subscribe(data => this.AppName = data as string);
   }
 
   ngOnInit() {}
