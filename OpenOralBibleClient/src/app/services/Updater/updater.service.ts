@@ -34,7 +34,7 @@ export class UpdaterService {
   }
 
   private stageUpdate(): Subscription {
-    return this.provider.getMetadata().subscribe(data => {
+    return this.provider.getMetadata().pipe(first()).subscribe(data => {
       var newVersion = data.Version;
       var updating = true;
       this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
@@ -60,7 +60,7 @@ export class UpdaterService {
   }
 
   private syncStageMedia()   {
-    return this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(md => {
+    return this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(md => {
       console.log(md)
       var keys = [];
       (md as AudioMetadata).Audio.forEach(item => {
@@ -75,7 +75,7 @@ export class UpdaterService {
   }
 
   private finalizeUpdate() {
-    this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(async data => {
+    this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(async data => {
       
       console.log("finalizing")
       await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
@@ -93,7 +93,7 @@ export class UpdaterService {
   private isStageMediaReady(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       console.log("ready")
-      this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).subscribe(data => {
+      this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(data => {
         Promise.all(data.Audio.map(a => this.storage.checkKey(`media-${a.id}`))).then(keys => {
           resolve(keys.reduce((curr, nxt) => curr && nxt, true));
         })
