@@ -24,7 +24,13 @@ export class MetadataService {
     this.storage.getKey<AudioMetadata>("current-metadata").subscribe(md => this.parseMetadata(md));
   }
 
+  private clearMetadata() {
+    this.currentAudioMetadata = new Map<string, string>();
+    this.currentMediaMetadata = new Array<MediaListItem>();
+  }
+
   private parseMetadata(md: AudioMetadata) {
+    this.clearMetadata();
     console.log("parsing")
     var curIndex = 0;
     if (md.hasOwnProperty("Categories")) {

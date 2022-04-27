@@ -8,6 +8,7 @@ import { WebUpdateProvider } from './web-update-provider';
 import * as semver from 'semver';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -35,19 +36,22 @@ export class UpdaterService {
   private stageUpdate(): Subscription {
     return this.provider.getMetadata().subscribe(data => {
       var newVersion = data.Version;
-      this.storage.getKey<string>(StorageKeys.Version).subscribe(currentVersion => {
+      var updating = true;
+      this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
         if (!semver.valid(newVersion)) {
           console.log("Couldn't update - version not valid")
           return;
         };
         
-        if (semver.lt(newVersion, currentVersion)) {
-          console.log("Couldn't update - new version older than current version");
-        }
+        
+        // if (semver.lt(newVersion, currentVersion)) {
+        //   console.log("Couldn't update - new version older than current version");
+        // }
 
         this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
           if (await this.isStageMediaReady()) {
             this.finalizeUpdate();
+            return;
           }
           this.syncStageMedia()
         })
@@ -62,7 +66,9 @@ export class UpdaterService {
       (md as AudioMetadata).Audio.forEach(item => {
         console.log(`Syncing ${item.id}...`);
         this.provider.getMedia(item.id).subscribe(async media => {
-          if (await this.isStageMediaReady) this.finalizeUpdate();
+          if (await this.isStageMediaReady) {
+            return this.finalizeUpdate();
+          }
         });
       })
     })

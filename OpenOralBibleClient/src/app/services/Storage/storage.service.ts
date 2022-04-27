@@ -54,9 +54,9 @@ export class StorageService {
   // }
 
   public getKey<T>(key: string): ReplaySubject<T> {
-    if (!this.observers.has(key)) this.observers[key] = new ReplaySubject<T>(0);
-    this.getKeyWhenReady(key, this.observers[key]);
-    return this.observers[key] as ReplaySubject<T>;
+    if (!this.observers.has(key)) this.observers.set(key, new ReplaySubject<T>(0));
+    this.getKeyWhenReady(key, this.observers.get(key));
+    return this.observers.get(key) as ReplaySubject<T>;
   }
 
   public checkKey(key: string): Promise<boolean> {
@@ -71,12 +71,11 @@ export class StorageService {
   }
 
   public async setKey<T>(key: string, val: T) {
-    
-    return this._storage.set(key, val);
     if(this.observers.has(key)) {
       console.log("sending next")
       this.observers.get(key).next(val);
     }
+    return this._storage.set(key, val);
   }
 }
 
