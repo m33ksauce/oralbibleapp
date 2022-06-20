@@ -4,4 +4,6 @@ export const StorageKeys = {
     StageMetadata: "stage-metadata",
     AudioFiles: "audio-files",
     AppName: "app-name",
+    
+    MakeMediaKey: id => `media-${id}`,
 }

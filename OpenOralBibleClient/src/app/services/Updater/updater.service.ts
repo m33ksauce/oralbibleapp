@@ -44,9 +44,9 @@ export class UpdaterService {
         };
         
         
-        // if (semver.lt(newVersion, currentVersion)) {
-        //   console.log("Couldn't update - new version older than current version");
-        // }
+        if (semver.lt(newVersion, currentVersion)) {
+          console.log("Couldn't update - new version older than current version");
+        }
 
         this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
           if (await this.isStageMediaReady()) {
@@ -66,9 +66,12 @@ export class UpdaterService {
       (md as AudioMetadata).Audio.forEach(item => {
         console.log(`Syncing ${item.id}...`);
         this.provider.getMedia(item.id).subscribe(async media => {
-          if (await this.isStageMediaReady) {
-            return this.finalizeUpdate();
-          }
+          this.storage.setKey(StorageKeys.MakeMediaKey(item.id), media)
+            .then(async  _ => {
+              if (await this.isStageMediaReady) {
+                return this.finalizeUpdate();
+              }
+            });
         });
       })
     })
@@ -94,7 +97,7 @@ export class UpdaterService {
     return new Promise((resolve, reject) => {
       console.log("ready")
       this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(data => {
-        Promise.all(data.Audio.map(a => this.storage.checkKey(`media-${a.id}`))).then(keys => {
+        Promise.all(data.Audio.map(a => this.storage.checkKey(StorageKeys.MakeMediaKey(a.id)))).then(keys => {
           resolve(keys.reduce((curr, nxt) => curr && nxt, true));
         })
       })

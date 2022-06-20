@@ -13,10 +13,14 @@ export class WebUpdateProvider implements UpdateProvider {
     }
 
     public getMedia(fileKey: string): Observable<ArrayBuffer> {
-        return new Observable<ArrayBuffer>();
+        return this.http.get<ArrayBuffer>(`${this.audioEndpointApi()}/${fileKey}`);
     }
 
     private releaseEndpointApi() {
         return `${environment.backend.endpoint}/api/v1/release`;
+    }
+
+    private audioEndpointApi() {
+        return `${environment.backend.endpoint}/api/v1/audio`;
     }
 }
