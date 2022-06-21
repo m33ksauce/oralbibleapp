@@ -9,6 +9,7 @@ import * as semver from 'semver';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { Buffer } from "buffer";
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +50,6 @@ export class UpdaterService {
         }
 
         this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
-          if (await this.isStageMediaReady()) {
-            this.finalizeUpdate();
-            return;
-          }
           this.syncStageMedia()
         })
       })
@@ -65,14 +62,20 @@ export class UpdaterService {
       var keys = [];
       (md as AudioMetadata).Audio.forEach(item => {
         console.log(`Syncing ${item.id}...`);
-        this.provider.getMedia(item.id).subscribe(async media => {
-          this.storage.setKey(StorageKeys.MakeMediaKey(item.id), media)
-            .then(async  _ => {
-              if (await this.isStageMediaReady) {
-                return this.finalizeUpdate();
-              }
-            });
-        });
+        this.storage.checkKey(StorageKeys.MakeMediaKey(item.id))
+          .then(exists => {
+            if (!exists) {
+              this.provider.getMedia(item.id).subscribe(async media => {
+                console.log("got media!")
+                this.storage.setKey(StorageKeys.MakeMediaKey(item.id), Buffer.from(media))
+                  .then(async  _ => {
+                    if (await this.isStageMediaReady) {
+                      return this.finalizeUpdate();
+                    }
+                  });
+              });
+            }
+          })
       })
     })
   }

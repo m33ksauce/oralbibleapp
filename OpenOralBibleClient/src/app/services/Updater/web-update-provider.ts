@@ -13,7 +13,9 @@ export class WebUpdateProvider implements UpdateProvider {
     }
 
     public getMedia(fileKey: string): Observable<ArrayBuffer> {
-        return this.http.get<ArrayBuffer>(`${this.audioEndpointApi()}/${fileKey}`);
+        return this.http.get(`${this.audioEndpointApi()}/${fileKey}`, {
+            responseType: "arraybuffer",
+        });
     }
 
     private releaseEndpointApi() {
