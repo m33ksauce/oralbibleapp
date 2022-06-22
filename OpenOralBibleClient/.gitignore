@@ -36,3 +36,5 @@ crypto/
 
 # OSX specific
 .DS_Store
+
+/.angular
