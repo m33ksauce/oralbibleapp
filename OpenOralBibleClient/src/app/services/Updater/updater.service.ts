@@ -30,7 +30,6 @@ export class UpdaterService {
   }
 
   public Update(): Observable<string> {
-    console.log("updating...");
     return this.stageUpdate()
   }
 
@@ -67,17 +66,15 @@ export class UpdaterService {
 
   private syncStageMedia(sub: Subscriber<string>)  {
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(md => {
-      console.log(md)
       var keys = [];
       var total = (md as AudioMetadata).Audio.length;
       (md as AudioMetadata).Audio.forEach((item, index) => {
         sub.next(`Syncing ${index + 1}/${total}`);
-        console.log(`Syncing ${item.id}...`);
         this.storage.checkKey(StorageKeys.MakeMediaKey(item.id))
           .then(exists => {
             if (!exists) {
               this.provider.getMedia(item.id).subscribe(async media => {
-                console.log("got media!")
+                console.log(`Syncing ${item.id}...`);
                 this.storage.setKey(StorageKeys.MakeMediaKey(item.id), Buffer.from(media))
                   .then(async  _ => {
                     if (await this.isStageMediaReady) {
@@ -94,10 +91,10 @@ export class UpdaterService {
   private finalizeUpdate(sub: Subscriber<string>) {
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(async data => {
       sub.next("Finalizing")
-      console.log("finalizing")
       await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
       await this.storage.setKey<string>(StorageKeys.Version, data.Version);
       sub.next("Updated!")
+      sub.complete();
       // this.metadataService.reload();
     });
   }
@@ -110,7 +107,6 @@ export class UpdaterService {
 
   private isStageMediaReady(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      console.log("ready")
       this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(data => {
         Promise.all(data.Audio.map(a => this.storage.checkKey(StorageKeys.MakeMediaKey(a.id)))).then(keys => {
           resolve(keys.reduce((curr, nxt) => curr && nxt, true));

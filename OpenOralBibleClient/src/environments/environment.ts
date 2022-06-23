@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   backend: {
-    endpoint: "http://localhost:5001/oralbibleapp/us-central1/handler"
+    endpoint: "https://us-central1-oralbibleapp.cloudfunctions.net/handler"
   }
 };
 

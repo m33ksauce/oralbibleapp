@@ -61,8 +61,7 @@ export class PlayerService {
         var blob = new Blob([d["buffer"]], {type: "audio/mpeg"});
         var dURL = URL.createObjectURL(blob);
         this.player.src = dURL;
-        console.log("loading")
-        console.log(this.player.src)
+        console.log(`Loading media ${this.player.src}`);
         this.player.load();
         this.clearState();
         this.state.mediaTitle = title;

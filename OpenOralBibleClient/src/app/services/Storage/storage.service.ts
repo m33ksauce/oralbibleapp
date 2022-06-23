@@ -72,7 +72,6 @@ export class StorageService {
 
   public async setKey<T>(key: string, val: T) {
     if(this.observers.has(key)) {
-      console.log("sending next")
       this.observers.get(key).next(val);
     }
     return this._storage.set(key, val);

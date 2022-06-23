@@ -17,9 +17,7 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
 
   constructor(public renderer: Renderer2) { }
 
-  ngOnInit() {
-    console.log(this.childCats);
-  }
+  ngOnInit() {  }
 
   ngAfterViewInit() {
     this.collapse();

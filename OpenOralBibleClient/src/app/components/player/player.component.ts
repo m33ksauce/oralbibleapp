@@ -55,15 +55,13 @@ export class PlayerComponent implements OnInit {
       return;
     }
     var prev = this.metadata.getPrevMedia(this.playerState.index);
-    var audio = this.metadata.getAudioFileFromTarget(prev.audioTargetId);
-    this.player.loadMedia(audio, prev.name, prev.index).then(() => this.play());
+    this.player.loadMedia(prev.audioTargetId, prev.name, prev.index).then(() => this.play());
   }
 
   next() {
     console.log("playing next");
     var nxt = this.metadata.getNextMedia(this.playerState.index);
-    var audio = this.metadata.getAudioFileFromTarget(nxt.audioTargetId);
-    this.player.loadMedia(audio, nxt.name, nxt.index).then(() => this.play());
+    this.player.loadMedia(nxt.audioTargetId, nxt.name, nxt.index).then(() => this.play());
   }
 
   startSeek() {

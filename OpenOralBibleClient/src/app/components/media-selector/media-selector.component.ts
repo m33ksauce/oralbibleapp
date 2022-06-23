@@ -17,7 +17,6 @@ export class MediaSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.catalog = this.metadataService.getAvailableMedia();
-    console.log("initting")
   }
 
 }
