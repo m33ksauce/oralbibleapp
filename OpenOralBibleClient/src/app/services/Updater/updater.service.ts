@@ -7,7 +7,7 @@ import { UpdateMethods, UpdateProvider } from './update-provider';
 import { WebUpdateProvider } from './web-update-provider';
 import * as semver from 'semver';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
-import { Subscription } from 'rxjs';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Buffer } from "buffer";
 
@@ -29,38 +29,49 @@ export class UpdaterService {
     }
   }
 
-  public Update() {
+  public Update(): Observable<string> {
     console.log("updating...");
-    this.stageUpdate();
+    return this.stageUpdate()
   }
 
-  private stageUpdate(): Subscription {
-    return this.provider.getMetadata().pipe(first()).subscribe(data => {
-      var newVersion = data.Version;
-      var updating = true;
-      this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
-        if (!semver.valid(newVersion)) {
-          console.log("Couldn't update - version not valid")
-          return;
-        };
-        
-        
-        if (semver.lt(newVersion, currentVersion)) {
-          console.log("Couldn't update - new version older than current version");
-        }
-
-        this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
-          this.syncStageMedia()
+  private stageUpdate(): Observable<string> {
+    return new Observable<string>(sub => {
+      this.provider.getMetadata().pipe(first()).subscribe(data => {
+        sub.next("Checking for updates...");
+        var newVersion = data.Version;
+        var updating = true;
+        this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
+          if (!semver.valid(newVersion)) {
+            console.log("Couldn't update - version not valid")
+            sub.next("Error!");
+            sub.complete();
+            return
+          };
+          
+          
+          if (semver.lt(newVersion, currentVersion)) {
+            console.log("Couldn't update - new version older than current version");
+            sub.next("Error!");
+            sub.complete();
+            return
+          }
+  
+          this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
+            sub.next("Update found! Syncing now!");
+            this.syncStageMedia(sub)
+          })
         })
-      })
+      });
     });
   }
 
-  private syncStageMedia()   {
-    return this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(md => {
+  private syncStageMedia(sub: Subscriber<string>)  {
+    this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(md => {
       console.log(md)
       var keys = [];
-      (md as AudioMetadata).Audio.forEach(item => {
+      var total = (md as AudioMetadata).Audio.length;
+      (md as AudioMetadata).Audio.forEach((item, index) => {
+        sub.next(`Syncing ${index + 1}/${total}`);
         console.log(`Syncing ${item.id}...`);
         this.storage.checkKey(StorageKeys.MakeMediaKey(item.id))
           .then(exists => {
@@ -70,7 +81,7 @@ export class UpdaterService {
                 this.storage.setKey(StorageKeys.MakeMediaKey(item.id), Buffer.from(media))
                   .then(async  _ => {
                     if (await this.isStageMediaReady) {
-                      return this.finalizeUpdate();
+                      return this.finalizeUpdate(sub);
                     }
                   });
               });
@@ -80,12 +91,13 @@ export class UpdaterService {
     })
   }
 
-  private finalizeUpdate() {
+  private finalizeUpdate(sub: Subscriber<string>) {
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(async data => {
-      
+      sub.next("Finalizing")
       console.log("finalizing")
       await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
       await this.storage.setKey<string>(StorageKeys.Version, data.Version);
+      sub.next("Updated!")
       // this.metadataService.reload();
     });
   }
