@@ -57,35 +57,46 @@ export class UpdaterService {
   
           this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
             sub.next("Update found! Syncing now!");
-            this.syncStageMedia(sub)
+            this.syncStageMedia(data, sub)
           })
         })
       });
     });
   }
 
-  private syncStageMedia(sub: Subscriber<string>)  {
-    this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(md => {
-      var keys = [];
-      var total = (md as AudioMetadata).Audio.length;
-      (md as AudioMetadata).Audio.forEach((item, index) => {
-        sub.next(`Syncing ${index + 1}/${total}`);
-        this.storage.checkKey(StorageKeys.MakeMediaKey(item.id))
-          .then(exists => {
-            if (!exists) {
-              this.provider.getMedia(item.id).subscribe(async media => {
-                console.log(`Syncing ${item.id}...`);
-                this.storage.setKey(StorageKeys.MakeMediaKey(item.id), Buffer.from(media))
-                  .then(async  _ => {
-                    if (await this.isStageMediaReady) {
-                      return this.finalizeUpdate(sub);
-                    }
-                  });
-              });
-            }
-          })
-      })
+  private async syncStageMedia(md: AudioMetadata, statusUpdater: Subscriber<string>)  {
+    console.log("Syncing...")
+    var curr = 0;
+    let audio = md.Audio;
+    var total = audio.length;
+    // Aggregate these promises and finalize once, not multiple times
+    let promises = [];
+    
+    for (let item of audio) {
+      promises.push(this.syncMedia(item.id).then(() => {
+        statusUpdater.next(`Syncing ${++curr}/${total}`);
+      }))
+    }
+    Promise.all(promises).then(async () => {
+      if (await this.isStageMediaReady) {
+        return this.finalizeUpdate(statusUpdater);
+      }
     })
+  }
+
+  private syncMedia(id): Promise<void> {
+    return new Promise(async (res, rej) => {
+      let exists = await this.storage.checkKey(StorageKeys.MakeMediaKey(id))
+      if (exists) res();
+      if (!exists) {
+        this.provider.getMedia(id).subscribe(media => {
+          console.log(`Syncing ${id}`);
+          this.storage.setKey(StorageKeys.MakeMediaKey(id), Buffer.from(media))
+            .then(() => res())
+            .catch(() => rej());
+        })
+      }
+    });
   }
 
   private finalizeUpdate(sub: Subscriber<string>) {
@@ -95,14 +106,7 @@ export class UpdaterService {
       await this.storage.setKey<string>(StorageKeys.Version, data.Version);
       sub.next("Updated!")
       sub.complete();
-      // this.metadataService.reload();
     });
-  }
-
-  private updateMedia(media) {
-    media.forEach(
-      this.storage.setKey(media.target, media.data)
-    )
   }
 
   private isStageMediaReady(): Promise<boolean> {

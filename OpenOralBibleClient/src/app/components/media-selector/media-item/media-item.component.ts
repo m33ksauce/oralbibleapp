@@ -22,18 +22,13 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
     private playerService: PlayerService
     ) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {  }
 
   ngAfterViewInit() {
     this.setVisibility(false);
-  }
-
-  ngDoCheck() {
     this.playerService.getState().subscribe(state => {
       this.setPlaying(state.index == this.index);
-    })
+    });
   }
 
   getVisibleStatus() {
