@@ -1,7 +1,8 @@
 {
   "name": "OpenOralBibleClient",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

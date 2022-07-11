@@ -38,3 +38,5 @@ crypto/
 .DS_Store
 
 /.angular
+
+build.json
