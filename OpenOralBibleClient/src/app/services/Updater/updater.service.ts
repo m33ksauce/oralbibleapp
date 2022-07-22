@@ -66,9 +66,9 @@ export class UpdaterService {
 
   private async syncStageMedia(md: AudioMetadata, statusUpdater: Subscriber<string>)  {
     console.log("Syncing...")
-    var curr = 0;
-    let audio = md.Audio;
-    var total = audio.length;
+    let curr = 0;
+    const audio = md.Audio;
+    const total = audio.length;
     // Aggregate these promises and finalize once, not multiple times
     let promises = [];
     
@@ -77,6 +77,7 @@ export class UpdaterService {
         statusUpdater.next(`Syncing ${++curr}/${total}`);
       }))
     }
+
     Promise.all(promises).then(async () => {
       if (await this.isStageMediaReady) {
         return this.finalizeUpdate(statusUpdater);
