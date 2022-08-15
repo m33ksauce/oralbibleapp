@@ -10,7 +10,7 @@ import { StorageService } from '../Storage/storage.service';
 export class MetadataService {
   currentMediaMetadata: MediaListItem[] = new Array<MediaListItem>();
   currentAudioMetadata: Map<string, string> = new Map<string, string>();
-  currentMediaSubject: BehaviorSubject<MediaListItem[]> = 
+  currentMediaSubject: BehaviorSubject<MediaListItem[]> =
     new BehaviorSubject<MediaListItem[]>(this.currentMediaMetadata);
 
   private index = 0;
@@ -31,23 +31,51 @@ export class MetadataService {
 
   private parseMetadata(md: AudioMetadata) {
     this.clearMetadata();
-    console.log("parsing")
+    console.log("Parsing metadata")
     var curIndex = 0;
     if (md.hasOwnProperty("Categories")) {
       var categories = md["Categories"];
       categories.forEach(cat => {
-        var item = this.parseCategory(cat);
-        this.currentMediaMetadata.push(item);
+        try {
+          var item = this.parseCategory(cat);
+          this.currentMediaMetadata.push(item);
+        } catch (e) {
+          console.log(e);
+        }
       });
     }
-    if(md.hasOwnProperty("Audio")) {
+    if (md.hasOwnProperty("Audio")) {
       var audio = md["Audio"];
       audio.forEach(ad => {
-        var item = this.parseAudio(ad);
-        this.currentAudioMetadata.set(item[0], item[1]);
+        try {
+          var item = this.parseAudio(ad);
+          this.currentAudioMetadata.set(item[0], item[1]);
+        } catch (e) {
+          console.log(e);
+        }
       })
     }
     this.currentMediaSubject.next(this.currentMediaMetadata);
+  }
+
+  private parseCategory(cat: any): MediaListItem {
+    var name = (cat.name != undefined) ? cat.name : "";
+    var mediaType = this.getMediaTypeFromInt(cat.type);
+    var res: MediaListItem = new MediaListItem(name, mediaType);
+
+    if (cat.hasOwnProperty("audioTargetId") && typeof (cat["audioTargetId"]) == "string") {
+      res.audioTargetId = cat["audioTargetId"];
+      res.index = this.index++;
+    }
+
+    if (cat.hasOwnProperty("children") && cat.children.length != undefined && cat.children.length > 0) {
+      res.children = new Array<MediaListItem>();
+      cat.children.forEach(child => {
+        res.children.push(this.parseCategory(child));
+      })
+    }
+
+    return res;
   }
 
   private parseAudio(item: any) {
@@ -59,28 +87,8 @@ export class MetadataService {
     return [id, name];
   }
 
-  private parseCategory(cat: any): MediaListItem {
-    var name = (cat.name != undefined) ? cat.name : "";
-    var mediaType = this.getMediaTypeFromInt(cat.type);
-    var res: MediaListItem = new MediaListItem(name, mediaType);
-
-    if (cat.hasOwnProperty("audioTargetId") && typeof(cat["audioTargetId"]) == "string") {
-      res.audioTargetId = cat["audioTargetId"];
-      res.index = this.index++;
-    }
-    
-    if (cat.hasOwnProperty("children") && cat.children.length != undefined && cat.children.length > 0) {
-      res.children = new Array<MediaListItem>();
-      cat.children.forEach(child => {
-        res.children.push(this.parseCategory(child));
-      })
-    }
-
-    return res;
-  }
-
   private getMediaTypeFromInt(v: Number) {
-    switch(v) {
+    switch (v) {
       case 1:
         return MediaType.Category;
       case 2:

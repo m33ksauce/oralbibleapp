@@ -57,26 +57,30 @@ export class PlayerService {
 
   loadMedia(media, title, index) {
     return new Promise<void>((resolve, reject) => {
-      this.storage.getKey<any>(`media-${media}`).subscribe(d => {
-        var blob = new Blob([d["buffer"]], {type: "audio/mpeg"});
-        var dURL = URL.createObjectURL(blob);
-        this.player.src = dURL;
-        console.log(`Loading media ${this.player.src}`);
-        this.player.load();
-        this.clearState();
-        this.state.mediaTitle = title;
-        this.state.index = index;
-  
-        const handler = (event: Event) => {
-          this.updateState(event);
-        }
-  
-        this.addEvents(this.player, this.playerEvents, handler);
-        this.addEvents(this.player, ["ended"], (e) => {
-          this.eventSubject.next(e);
-        });
-        resolve();
-      });
+      this.storage.getKey<any>(`media-${media}`).subscribe(
+        (d) => {
+          var blob = new Blob([d["buffer"]], {type: "audio/mpeg"});
+          var dURL = URL.createObjectURL(blob);
+          this.player.src = dURL;
+          console.log(`Loading media ${this.player.src}`);
+          this.player.load();
+          console.log('Loaded media');
+          this.clearState();
+          this.state.mediaTitle = title;
+          this.state.index = index;
+    
+          const handler = (event: Event) => {
+            this.updateState(event);
+          }
+    
+          this.addEvents(this.player, this.playerEvents, handler);
+          this.addEvents(this.player, ["ended"], (e) => {
+            this.eventSubject.next(e);
+          });
+          console.log("Finished loading")
+          resolve();
+        },
+        (err) => reject(err));
     }) 
   }
 

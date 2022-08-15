@@ -28,11 +28,11 @@ export class PlayerComponent implements OnInit {
     public route: ActivatedRoute,
     public player: PlayerService,
     public metadata: MetadataService) {
-      player.getState().subscribe(state => this.playerState = state);
-      player.getEvents().subscribe(e => {
-        if (e.type == "ended") this.next();
-      })
-    }
+    player.getState().subscribe(state => this.playerState = state);
+    player.getEvents().subscribe(e => {
+      if (e.type == "ended") this.next();
+    })
+  }
 
   ngOnInit() {
 
@@ -49,19 +49,31 @@ export class PlayerComponent implements OnInit {
   }
 
   previous() {
-    console.log("playing previous");
-    if (this.playerState.currentTime > 2) {
-      this.player.seek(0);
-      return;
+    try {
+      console.log("Playing previous");
+      if (this.playerState.currentTime > 2) {
+        this.player.seek(0);
+        return;
+      }
+      var prev = this.metadata.getPrevMedia(this.playerState.index);
+      this.player.loadMedia(prev.audioTargetId, prev.name, prev.index)
+        .then(() => this.play())
+        .catch(() => console.log("Couldn't load previous media"));
+    } catch (e) {
+      console.log("Could not play previous - ", e);
     }
-    var prev = this.metadata.getPrevMedia(this.playerState.index);
-    this.player.loadMedia(prev.audioTargetId, prev.name, prev.index).then(() => this.play());
   }
 
   next() {
-    console.log("playing next");
-    var nxt = this.metadata.getNextMedia(this.playerState.index);
-    this.player.loadMedia(nxt.audioTargetId, nxt.name, nxt.index).then(() => this.play());
+    try {
+      console.log("Playing next");
+      var nxt = this.metadata.getNextMedia(this.playerState.index);
+      this.player.loadMedia(nxt.audioTargetId, nxt.name, nxt.index)
+        .then(() => this.play())
+        .catch(() => console.log("Couldn't load next media"));
+    } catch (e) {
+      console.log("Could not play next - ", e);
+    }    
   }
 
   startSeek() {

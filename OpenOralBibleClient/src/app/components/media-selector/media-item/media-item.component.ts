@@ -56,7 +56,9 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   }
 
   playTarget() {
-    this.playerService.loadMedia(this.item.audioTargetId, this.item.name, this.item.index).then(() => this.playerService.play());
+    this.playerService.loadMedia(this.item.audioTargetId, this.item.name, this.item.index)
+      .then(() => this.playerService.play())
+      .catch(() => console.log("Couldn't load item"));
   }
 
 }

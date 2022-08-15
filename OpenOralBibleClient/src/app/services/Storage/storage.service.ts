@@ -24,11 +24,11 @@ export class StorageService {
   private async initializeDB() {
     return this._storage.keys().then((keys) => {
       if (keys.find(k => k == StorageKeys.Version) == undefined) {
-        console.log("db not initializing");
+        console.log("DB not found - initializing from local metadata");
         return this.seedDatabase();
       }
 
-      console.log("db already initialized");
+      console.log("DB already initialized");
       this.isReady = true;
     });
   }
@@ -47,12 +47,6 @@ export class StorageService {
       })
   }
 
-  // public getKey<T>(key: string): Observable<T> {
-  //   return new Observable<T>(sub => {
-  //     this.getKeyWhenReady<T>(key, sub);
-  //   });
-  // }
-
   public getKey<T>(key: string): ReplaySubject<T> {
     if (!this.observers.has(key)) this.observers.set(key, new ReplaySubject<T>(0));
     this.getKeyWhenReady(key, this.observers.get(key));
@@ -60,11 +54,24 @@ export class StorageService {
   }
 
   public checkKey(key: string): Promise<boolean> {
-    return this._storage.keys().then(keys => keys.includes(key))
+    return this._storage.keys()
+      .then(keys => keys.includes(key))
+      .catch(() => {
+        console.log(`Check key failed for key: ${key}`)
+        return false;
+      });
   }
 
   private getKeyWhenReady<T>(key: string, sub: ReplaySubject<T>) {
-    if (this.isReady) return this._storage.get(key).then((val) => sub.next(val as T));
+    if (this.isReady) return this._storage.get(key)
+      .then((val) => {
+        if (val == null) {
+          sub.error(`Get key failed for key: ${key}`)
+          throw new Error();
+        }
+        sub.next(val as T)
+      })
+      .catch(() => console.log(`Get key failed for key: ${key}`));
     setTimeout(() => {
       this.getKeyWhenReady<T>(key, sub);
     }, 100);
@@ -74,7 +81,9 @@ export class StorageService {
     if(this.observers.has(key)) {
       this.observers.get(key).next(val);
     }
-    return this._storage.set(key, val);
+    return this._storage.set(key, val)
+      .then(() => console.log(`Set key succeeded for key: ${key}`))
+      .catch(() => console.log(`Set key failed for key: ${key}`));
   }
 }
 

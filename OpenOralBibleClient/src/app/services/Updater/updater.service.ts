@@ -37,8 +37,7 @@ export class UpdaterService {
     return new Observable<string>(sub => {
       this.provider.getMetadata().pipe(first()).subscribe(data => {
         sub.next("Checking for updates...");
-        var newVersion = data.Version;
-        var updating = true;
+        let newVersion = data.Version;
         this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
           if (!semver.valid(newVersion)) {
             console.log("Couldn't update - version not valid")
@@ -50,13 +49,13 @@ export class UpdaterService {
           
           if (semver.lt(newVersion, currentVersion)) {
             console.log("Couldn't update - new version older than current version");
-            sub.next("Error!");
+            sub.next("Already up to date!");
             sub.complete();
             return
           }
   
           this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
-            sub.next("Update found! Syncing now!");
+            sub.next("Update found!");
             this.syncStageMedia(data, sub)
           })
         })
@@ -65,7 +64,7 @@ export class UpdaterService {
   }
 
   private async syncStageMedia(md: AudioMetadata, statusUpdater: Subscriber<string>)  {
-    console.log("Syncing...")
+    console.log("Starting update sync")
     let curr = 0;
     const audio = md.Audio;
     const total = audio.length;
@@ -80,6 +79,7 @@ export class UpdaterService {
 
     Promise.all(promises).then(async () => {
       if (await this.isStageMediaReady) {
+        console.log("Finished syncing")
         return this.finalizeUpdate(statusUpdater);
       }
     })
@@ -102,16 +102,18 @@ export class UpdaterService {
 
   private finalizeUpdate(sub: Subscriber<string>) {
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(async data => {
-      sub.next("Finalizing")
+      console.log("Finalizing update")
+      sub.next("Finalizing update")
       await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
       await this.storage.setKey<string>(StorageKeys.Version, data.Version);
+      console.log("Finalized update")
       sub.next("Updated!")
       sub.complete();
     });
   }
 
   private isStageMediaReady(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(data => {
         Promise.all(data.Audio.map(a => this.storage.checkKey(StorageKeys.MakeMediaKey(a.id)))).then(keys => {
           resolve(keys.reduce((curr, nxt) => curr && nxt, true));
