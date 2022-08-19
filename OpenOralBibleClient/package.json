@@ -50,7 +50,7 @@
     "cordova-sqlite-storage": "^5.1.0",
     "core-js": "^2.6.12",
     "fs": "^0.0.1-security",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "path": "^0.12.7",
     "rxjs": "^6.6.0",
     "semver": "^7.3.7",
