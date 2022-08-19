@@ -34,7 +34,7 @@ export class StorageService {
   }
 
   private async seedDatabase() {
-    return this.httpClient.get('sample_data/bundle.obd', {"responseType": "arraybuffer"})
+    return this.httpClient.get('media/bundle.obd', {"responseType": "arraybuffer"})
       .subscribe(data => {
         var readyActions = [];
         var bundle = bson.deserialize(data) as MediaBundle;

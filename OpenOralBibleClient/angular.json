@@ -31,14 +31,9 @@
                 "output": "./svg"
               },
               {
-                "glob": "**/*.mp3",
-                "input": "sample_data",
-                "output": "audio"
-              },
-              {
                 "glob": "**/*.obd",
-                "input": "sample_data",
-                "output": "sample_data"
+                "input": "dist/media",
+                "output": "media"
               }
             ],
             "styles": [
