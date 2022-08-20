@@ -1,0 +1,5 @@
+<ion-list inset="true">
+  <div *ngFor="let item of catalog|async">
+    <media-container [item]="item"></media-container>
+  </div>
+</ion-list>

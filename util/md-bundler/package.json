@@ -1,0 +1,25 @@
+{
+  "name": "md-bundler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "view": "npm run build && node ./lib/view-bundle.js",
+    "make": "npm run build && node ./lib/make-bundle.js",
+    "delete-old-bundle": "rm ../../client/dist/media/bundle.obd",
+    "refresh-bundle": 
+    "npm run delete-old-bundle && npm run make -- \"../../sample-media/inputs/yetfa\" \"../../client/dist/media\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "bson": "^4.7.0",
+    "tslib": "^2.4.0"
+  }
+}

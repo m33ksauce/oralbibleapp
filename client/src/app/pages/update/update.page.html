@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="main"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <h2>
+        <ion-icon name="globe" size="large" style="vertical-align: bottom; padding-right: 5px;"></ion-icon>
+        <span>Web</span>
+      </h2>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button (click)="checkWebUpdate()">Check for Updates</ion-button>
+      <ion-item>{{updateStatus|async}}</ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="bluetoothFeatureEnabled">
+    <ion-card-header>
+      <h2>
+        <ion-icon name="bluetooth" size="large" style="vertical-align: bottom; padding-right: 3px;"></ion-icon>
+        <span>Bluetooth</span>
+      </h2>
+    </ion-card-header>
+    <ion-card-content>
+      Not available
+    </ion-card-content>
+  </ion-card>
+</ion-content>
