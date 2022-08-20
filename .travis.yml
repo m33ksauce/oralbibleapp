@@ -41,7 +41,7 @@ install:
 
 script:
   - npm run ci-test
-  - npm run package
+  - npm run build
   # - ./signbuild.sh
   # - appcenter distribute release \
   #       --group Collaborators \
