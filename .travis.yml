@@ -36,20 +36,20 @@ before_install:
   - google-chrome --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 install:
-  - cd OpenOralBibleClient
+  - cd client
   - npm ci
 
 script:
   - npm run ci-test
   - npm run package
-  - ./signbuild.sh
-  - appcenter distribute release \
-        --group Collaborators \
-        --file "./artifacts/app-release.apk" \
-        --release-notes 'App submission via Travis-CI' \
-        --app Chris/OpenOralBibleClient \
-        --token "${appcenter_api_token}" \
-        --quiet
+  # - ./signbuild.sh
+  # - appcenter distribute release \
+  #       --group Collaborators \
+  #       --file "./artifacts/app-release.apk" \
+  #       --release-notes 'App submission via Travis-CI' \
+  #       --app Chris/OpenOralBibleClient \
+  #       --token "${appcenter_api_token}" \
+  #       --quiet
 
 env:
   global:
