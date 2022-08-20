@@ -10,19 +10,22 @@ const readFile = promisify(fs.readFile);
 
 export class Bundle {
     private bundle: MediaBundle;
+    private bundleInputPaths:  string = process.cwd();
 
     constructor() {
         this.bundle = new MediaBundle();
     }
 
-    public createBundle() {
+    public createBundle(inputPath: string, outputPath?: string) {
+        this.bundleInputPaths = inputPath;
         this.addMetadata()
             .then(() => this.addMedia())
-            .then(() => this.exportBundle());
+            .then(() => this
+                .exportBundle(outputPath || path.join(process.cwd(), "../../sample-media/outputs")));
     }
     
     private async addMetadata() {
-        return readFile(path.join(process.cwd(), 'inputs/metadata/metadata.json')).then((buf) => {
+        return readFile(path.join(this.bundleInputPaths, '/metadata/metadata.json')).then((buf) => {
             console.log("set metadata");
             this.bundle.Metadata = JSON.parse(buf.toString());
         });
@@ -34,7 +37,7 @@ export class Bundle {
 
         return Promise.all(audios.map(audio => {
             console.log("writing audio")
-            return readFile(path.join(process.cwd(), 'inputs/', audio.file))
+            return readFile(path.join(this.bundleInputPaths, '/', audio.file))
                 .then(dataBuf => {
                     this.bundle.Media.push({
                         target: audio.id,
@@ -47,10 +50,10 @@ export class Bundle {
         }))
     }
 
-    private exportBundle() {
+    private exportBundle(outputPath: string) {
         console.log("exporting")
         var bundleFile = bson.serialize(this.bundle);
-        var filePath = path.join(process.cwd(), 'artifacts', 'bundle.obd');
+        var filePath = path.join(outputPath, '/bundle.obd');
         fs.writeFile(filePath, bundleFile, () => {});
     }
 
