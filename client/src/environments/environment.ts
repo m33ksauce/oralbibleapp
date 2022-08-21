@@ -5,10 +5,11 @@
 export const environment = {
   production: false,
   backend: {
-    endpoint: "https://us-central1-oralbibleapp.cloudfunctions.net/handler"
+    endpoint: "https://us-central1-oralbibleapp.cloudfunctions.net/handler",
   },
   features: {
-    bluetoothUpdate: true
+    dynamicContent: true,
+    bluetoothUpdate: false,
   }
 };
 
