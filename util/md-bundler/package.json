@@ -10,7 +10,7 @@
     "make": "npm run build && node ./lib/make-bundle.js",
     "delete-old-bundle": "rm ../../client/dist/media/bundle.obd",
     "refresh-bundle": 
-    "npm run delete-old-bundle && npm run make -- \"../../sample-media/inputs/yetfa\" \"../../client/dist/media\""
+    "npm run delete-old-bundle && npm run make -- \"../../sample-media/inputs/tangko\" \"../../client/dist/media\""
   },
   "author": "",
   "license": "ISC",

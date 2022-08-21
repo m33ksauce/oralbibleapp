@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.oralbibleapp.yetfa" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Yetfa Bible</name>
-    <description>The OpenOralBible Client for Yetfa Scripture</description>
-    <author email="m33ksauce@gmail.com">OpenOralBible</author>
+<widget id="com.oralbibleapp.tangko" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Ara E Weng</name>
+    <description>The OpenOralBible Client for Tangko Scripture</description>
+    <author email="chris@meekhouse.org">OpenOralBible</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
