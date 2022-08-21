@@ -12,9 +12,11 @@ import { environment } from 'src/environments/environment';
 export class UpdatePage implements OnInit {
   updateStatus: Observable<string>;
   bluetoothFeatureEnabled: boolean;
+  dynamicContentFeatureEnabled: boolean;
 
   constructor(private updater: UpdaterService) { 
     this.bluetoothFeatureEnabled = environment.features.bluetoothUpdate;
+    this.dynamicContentFeatureEnabled = environment.features.dynamicContent;
   }
 
   ngOnInit() {  }

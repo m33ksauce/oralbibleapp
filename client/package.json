@@ -13,8 +13,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "ci-test": "ng test --watch false --browsers ChromeHeadless",
-    "package": "ionic cordova build android --release",
-    "package-prod": "ionic cordova build android --prod --release -- --packageType=bundle"
+    "package": "ionic cordova build android --debug",
+    "package-prod": "ionic cordova build android --prod --release"
   },
   "private": true,
   "dependencies": {
