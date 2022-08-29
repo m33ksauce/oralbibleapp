@@ -15,6 +15,7 @@ export class MainPage implements OnInit {
   constructor(
     public storage: StorageService,
     public navCtrl: NavController) {
+    // TODO: Add a catch
     this.storage.getKey<string>(StorageKeys.AppName).subscribe(data => this.AppName = data as string);
   }
 

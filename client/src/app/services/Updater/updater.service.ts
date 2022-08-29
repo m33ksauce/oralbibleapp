@@ -20,10 +20,10 @@ export class UpdaterService {
 
   constructor(
     public storage: StorageService,
-    private http: HttpClient,
-    private metadataService: MetadataService) { }
+    private http: HttpClient) { }
 
   public GetUpdater(method: UpdateMethods) {
+    // TODO: Handle invalid update method
     if (method === UpdateMethods.WEB) {
       this.provider = new WebUpdateProvider(this.http);
     }
@@ -35,6 +35,7 @@ export class UpdaterService {
 
   private stageUpdate(): Observable<string> {
     return new Observable<string>(sub => {
+      // TODO: Handle API errors
       this.provider.getMetadata().pipe(first()).subscribe(data => {
         sub.next("Checking for updates...");
         let newVersion = data.Version;
@@ -54,6 +55,7 @@ export class UpdaterService {
             return
           }
   
+          // TODO: Handle reject
           this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
             sub.next("Update found!");
             this.syncStageMedia(data, sub)
@@ -77,6 +79,7 @@ export class UpdaterService {
       }))
     }
 
+    // TODO: Handle reject
     Promise.all(promises).then(async () => {
       if (await this.isStageMediaReady) {
         console.log("Finished syncing")
@@ -90,6 +93,7 @@ export class UpdaterService {
       let exists = await this.storage.checkKey(StorageKeys.MakeMediaKey(id))
       if (exists) res();
       if (!exists) {
+        // TODO: Handle API errors
         this.provider.getMedia(id).subscribe(media => {
           console.log(`Syncing ${id}`);
           this.storage.setKey(StorageKeys.MakeMediaKey(id), Buffer.from(media))
@@ -101,6 +105,7 @@ export class UpdaterService {
   }
 
   private finalizeUpdate(sub: Subscriber<string>) {
+    // TODO: Handle rejects
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(async data => {
       console.log("Finalizing update")
       sub.next("Finalizing update")
@@ -113,6 +118,7 @@ export class UpdaterService {
   }
 
   private isStageMediaReady(): Promise<boolean> {
+    // TODO: Handle rejects
     return new Promise((resolve, _) => {
       this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(data => {
         Promise.all(data.Audio.map(a => this.storage.checkKey(StorageKeys.MakeMediaKey(a.id)))).then(keys => {

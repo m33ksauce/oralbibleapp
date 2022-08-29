@@ -24,6 +24,7 @@ export class UpdatePage implements OnInit {
   checkWebUpdate() {
     this.updater.GetUpdater(UpdateMethods.WEB);
     this.updateStatus = this.updater.Update();
+    // TODO: What happens when this fails?
   }
 
 }

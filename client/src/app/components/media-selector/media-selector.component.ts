@@ -17,6 +17,7 @@ export class MediaSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.catalog = this.metadataService.getAvailableMedia();
+    // TODO: What happens if this value returns an error?
   }
 
 }

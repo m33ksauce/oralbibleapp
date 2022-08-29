@@ -59,6 +59,8 @@ export class PlayerService {
     return new Promise<void>((resolve, reject) => {
       this.storage.getKey<any>(`media-${media}`).subscribe(
         (d) => {
+          // TODO: Handle missing media
+          // TODO: Handle exceptions
           var blob = new Blob([d["buffer"]], {type: "audio/mpeg"});
           var dURL = URL.createObjectURL(blob);
           this.player.src = dURL;
@@ -91,14 +93,17 @@ export class PlayerService {
   }
 
   play() {
+    // TODO: add try/catch
     this.player.play();
   }
 
   pause() {
+    // TODO: add try/catch
     this.player.pause();
   }
 
   seek(time) {
+    // TODO: add try/catch
     this.player.currentTime = time;
   }
 

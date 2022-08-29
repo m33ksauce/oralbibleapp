@@ -22,6 +22,7 @@ export class StorageService {
   }
 
   private async initializeDB() {
+    // TODO: What happens if initialization fails?
     return this._storage.keys().then((keys) => {
       if (keys.find(k => k == StorageKeys.Version) == undefined) {
         console.log("DB not found - initializing from local metadata");
@@ -36,8 +37,8 @@ export class StorageService {
   private async seedDatabase() {
     return this.httpClient.get('media/bundle.obd', {"responseType": "arraybuffer"})
       .subscribe(data => {
-        var readyActions = [];
-        var bundle = bson.deserialize(data) as MediaBundle;
+        var readyActions = []; // TODO: Handle action failures
+        var bundle = bson.deserialize(data) as MediaBundle; // TODO: Add try/catch
         readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, bundle.Metadata));
         readyActions.push(this._storage.set(StorageKeys.Version, bundle.Metadata.Version))
         for (var m of bundle.Media) {
