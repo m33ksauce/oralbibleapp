@@ -49,7 +49,7 @@ export class PlayerComponent implements OnInit {
   }
 
   previous() {
-    // TODO: Add an error message or something
+    // TODO: Emit an error dialog
     try {
       console.log("Playing previous");
       if (this.playerState.currentTime > 2) {
@@ -66,7 +66,7 @@ export class PlayerComponent implements OnInit {
   }
 
   next() {
-    // TODO: Add an error message or something
+    // TODO: Emit an error dialog
     try {
       console.log("Playing next");
       var nxt = this.metadata.getNextMedia(this.playerState.index);

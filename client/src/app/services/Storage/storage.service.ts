@@ -16,13 +16,14 @@ export class StorageService {
 
   constructor(
     private _storage: Storage,
-    protected httpClient: HttpClient) 
-  {
+    protected httpClient: HttpClient) {
     this._storage.create().then(() => this.initializeDB())
   }
 
   private async initializeDB() {
-    // TODO: What happens if initialization fails?
+    // TODO:
+    // Emit an error for the dialog if we fail
+    // any of these steps
     return this._storage.keys().then((keys) => {
       if (keys.find(k => k == StorageKeys.Version) == undefined) {
         console.log("DB not found - initializing from local metadata");
@@ -35,17 +36,28 @@ export class StorageService {
   }
 
   private async seedDatabase() {
-    return this.httpClient.get('media/bundle.obd', {"responseType": "arraybuffer"})
-      .subscribe(data => {
-        var readyActions = []; // TODO: Handle action failures
-        var bundle = bson.deserialize(data) as MediaBundle; // TODO: Add try/catch
-        readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, bundle.Metadata));
-        readyActions.push(this._storage.set(StorageKeys.Version, bundle.Metadata.Version))
-        for (var m of bundle.Media) {
-          readyActions.push(this._storage.set(`media-${m.target}`, m.data))
+    return this.httpClient.get('media/bundle.obd', { "responseType": "arraybuffer" })
+      .subscribe(
+        (data) => {
+          try {
+            var readyActions = [];
+            var bundle = bson.deserialize(data) as MediaBundle;
+            readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, bundle.Metadata));
+            readyActions.push(this._storage.set(StorageKeys.Version, bundle.Metadata.Version))
+            for (var m of bundle.Media) {
+              readyActions.push(this._storage.set(`media-${m.target}`, m.data))
+            }
+            Promise.all(readyActions).then(
+              () => this.isReady = true,
+              (err) => console.log(`Failed to seed DB - could not store metadata: ${err}`));
+          } catch (e) {
+            console.log(`Failed to seed DB: ${e}`);
+          }
+        },
+        (err) => {
+          console.log(`Failed to seed DB - could not open file: ${err}`);
         }
-        Promise.all(readyActions).then(() => this.isReady = true);
-      })
+      )
   }
 
   public getKey<T>(key: string): ReplaySubject<T> {
@@ -79,7 +91,7 @@ export class StorageService {
   }
 
   public async setKey<T>(key: string, val: T) {
-    if(this.observers.has(key)) {
+    if (this.observers.has(key)) {
       this.observers.get(key).next(val);
     }
     return this._storage.set(key, val)
@@ -93,8 +105,8 @@ class MediaBundle {
   public Media: AudioMedia[];
 
   constructor() {
-      this.Metadata = { Version: undefined };
-      this.Media = new Array<AudioMedia>()
+    this.Metadata = { Version: undefined };
+    this.Media = new Array<AudioMedia>()
   }
 }
 

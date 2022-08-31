@@ -9,24 +9,12 @@ export class WebUpdateProvider implements UpdateProvider {
     constructor(private http: HttpClient) {}
 
     public getMetadata(version: string = "latest"): Observable<AudioMetadata> {
-        // TODO: Handle timeouts/other API errors
-        return this.http.get<AudioMetadata>(`${this.releaseEndpointApi()}/${version}`);
+        return this.http.get<AudioMetadata>(`${environment.backend.releaseEndpoint}/${version}`);
     }
 
     public getMedia(fileKey: string): Observable<ArrayBuffer> {
-        // TODO: Handle timeouts/other API errors
-        return this.http.get(`${this.audioEndpointApi()}/${fileKey}`, {
+        return this.http.get(`${environment.backend.audioEndpoint}/${fileKey}`, {
             responseType: "arraybuffer",
         });
-    }
-
-    private releaseEndpointApi() {
-        // TODO: Move this into config
-        return `${environment.backend.endpoint}/api/v1/release`;
-    }
-
-    private audioEndpointApi() {
-        // TODO: Move this into config
-        return `${environment.backend.endpoint}/api/v1/audio`;
     }
 }

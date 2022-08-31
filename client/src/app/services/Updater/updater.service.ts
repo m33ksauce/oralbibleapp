@@ -36,43 +36,49 @@ export class UpdaterService {
   private stageUpdate(): Observable<string> {
     return new Observable<string>(sub => {
       // TODO: Handle API errors
-      this.provider.getMetadata().pipe(first()).subscribe(data => {
-        sub.next("Checking for updates...");
-        let newVersion = data.Version;
-        this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
-          if (!semver.valid(newVersion)) {
-            console.log("Couldn't update - version not valid")
-            sub.next("Error!");
-            sub.complete();
-            return
-          };
-          
-          
-          if (semver.lt(newVersion, currentVersion)) {
-            console.log("Couldn't update - new version older than current version");
-            sub.next("Already up to date!");
-            sub.complete();
-            return
-          }
-  
-          // TODO: Handle reject
-          this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
-            sub.next("Update found!");
-            this.syncStageMedia(data, sub)
+      this.provider.getMetadata().pipe(first()).subscribe(
+        (data) => {
+          sub.next("Checking for updates...");
+          let newVersion = data.Version;
+          this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
+            if (!semver.valid(newVersion)) {
+              console.log("Couldn't update - version not valid")
+              sub.next("Error!");
+              sub.complete();
+              return
+            };
+
+
+            if (semver.lt(newVersion, currentVersion)) {
+              console.log("Couldn't update - new version older than current version");
+              sub.next("Already up to date!");
+              sub.complete();
+              return
+            }
+
+            // TODO: Handle reject
+            this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
+              sub.next("Update found!");
+              this.syncStageMedia(data, sub)
+            })
           })
-        })
-      });
+        },
+        (err: Error) => {
+          console.log(`Failed to get metadata: ${err}`);
+          sub.next("Update Failed!");
+          sub.complete();
+        });
     });
   }
 
-  private async syncStageMedia(md: AudioMetadata, statusUpdater: Subscriber<string>)  {
+  private async syncStageMedia(md: AudioMetadata, statusUpdater: Subscriber<string>) {
     console.log("Starting update sync")
     let curr = 0;
     const audio = md.Audio;
     const total = audio.length;
     // Aggregate these promises and finalize once, not multiple times
     let promises = [];
-    
+
     for (let item of audio) {
       promises.push(this.syncMedia(item.id).then(() => {
         statusUpdater.next(`Syncing ${++curr}/${total}`);
@@ -94,12 +100,17 @@ export class UpdaterService {
       if (exists) res();
       if (!exists) {
         // TODO: Handle API errors
-        this.provider.getMedia(id).subscribe(media => {
-          console.log(`Syncing ${id}`);
-          this.storage.setKey(StorageKeys.MakeMediaKey(id), Buffer.from(media))
-            .then(() => res())
-            .catch(() => rej());
-        })
+        this.provider.getMedia(id).subscribe(
+          (media) => {
+            console.log(`Syncing ${id}`);
+            this.storage.setKey(StorageKeys.MakeMediaKey(id), Buffer.from(media))
+              .then(() => res())
+              .catch(() => rej());
+          },
+          (err: Error) => {
+            console.log(`Failed to get media: ${err}`)
+            // TODO: Add retry logic
+          });
       }
     });
   }
