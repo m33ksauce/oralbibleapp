@@ -6,6 +6,6 @@ export enum UpdateMethods {
 }
 
 export interface UpdateProvider {
-    getMetadata(version?: string): Observable<AudioMetadata>
-    getMedia(fileKey: string): Observable<ArrayBuffer>
+    GetMetadata(version?: string): Observable<AudioMetadata>
+    GetMedia(fileKey: string): Observable<ArrayBuffer>
 }

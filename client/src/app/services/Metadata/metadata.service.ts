@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject, Subject, Subscriber, Subscription } from 'rxjs';
+import { ArgumentOutOfRangeError, BehaviorSubject, Observable, ReplaySubject, Subject, Subscriber, Subscription } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
 import { StorageService } from '../Storage/storage.service';
@@ -30,12 +30,16 @@ export class MetadataService {
   }
 
   private parseMetadata(md: AudioMetadata) {
+    // TODO: I think this parser could be cleaner.
+    // I'm not sure what it will take to get there, 
+    // but we should definitely validate the data
+    // before we parse and rewrite.
+    // Maybe we should consider doing a streaming parser
+    
     this.clearMetadata();
     console.log("Parsing metadata")
-    var curIndex = 0;
-    if (md.hasOwnProperty("Categories")) {
-      var categories = md["Categories"];
-      categories.forEach(cat => {
+    if (MetadataService.propertyHasList(md, "Categories")) {
+      md["Categories"].forEach(cat => {
         try {
           var item = this.parseCategory(cat);
           this.currentMediaMetadata.push(item);
@@ -44,9 +48,8 @@ export class MetadataService {
         }
       });
     }
-    if (md.hasOwnProperty("Audio")) {
-      var audio = md["Audio"];
-      audio.forEach(ad => {
+    if (MetadataService.propertyHasList(md, "Audio")) {
+      md["Audio"].forEach(ad => {
         try {
           var item = this.parseAudio(ad);
           this.currentAudioMetadata.set(item[0], item[1]);
@@ -59,10 +62,12 @@ export class MetadataService {
   }
 
   private parseCategory(cat: any): MediaListItem {
+    // TODO: Gracefully handle missing data
     var name = (cat.name != undefined) ? cat.name : "";
     var mediaType = this.getMediaTypeFromInt(cat.type);
     var res: MediaListItem = new MediaListItem(name, mediaType);
 
+    // TODO: Gracefully handle missing audio
     if (cat.hasOwnProperty("audioTargetId") && typeof (cat["audioTargetId"]) == "string") {
       res.audioTargetId = cat["audioTargetId"];
       res.index = this.index++;
@@ -82,9 +87,16 @@ export class MetadataService {
     if (!item.hasOwnProperty("id")) {
       throw new Error("no id for this one!");
     }
-    var id = item.id;
-    var name = item.hasOwnProperty("file") ? item.file : "";
-    return [id, name];
+    return [
+      item.id,
+      item.hasOwnProperty("file") ? item.file : ""
+    ];
+  }
+
+  private static propertyHasList(md: AudioMetadata, prop: string) {
+    return md.hasOwnProperty(prop)
+      && md[prop].hasOwnProperty("length")
+      && md[prop].length > 0;
   }
 
   private getMediaTypeFromInt(v: Number) {
@@ -112,8 +124,9 @@ export class MetadataService {
   }
 
   private findAtIndex(list: MediaListItem[], index: number): MediaListItem {
-    var match;
-    var nxt = list.find(i => i.index == index);
+    // TODO: Rewrite to not use searching
+    let match;
+    let nxt = list.find(i => i.index == index);
 
     if (nxt != undefined) match = nxt;
 
@@ -130,6 +143,7 @@ export class MetadataService {
   }
 
   public getPrevMedia(currentIndex: number): MediaListItem {
+    if (currentIndex == 0) return this.findAtIndex(this.currentMediaMetadata, currentIndex);
     var nxt = this.findAtIndex(this.currentMediaMetadata, currentIndex - 1);
     return nxt;
   }

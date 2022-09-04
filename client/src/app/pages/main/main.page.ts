@@ -15,7 +15,11 @@ export class MainPage implements OnInit {
   constructor(
     public storage: StorageService,
     public navCtrl: NavController) {
-    this.storage.getKey<string>(StorageKeys.AppName).subscribe(data => this.AppName = data as string);
+    this.storage.getKey<string>(StorageKeys.AppName)
+      .subscribe(
+        data => this.AppName = data as string,
+        err => console.log(`Failed to fetch app name: ${err}`)
+      );
   }
 
   ngOnInit() {}

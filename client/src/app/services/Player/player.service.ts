@@ -20,7 +20,7 @@ export class PlayerService {
 
   private state: PlayerState = MakeDefaultState();
 
-  private stateSubject: BehaviorSubject<PlayerState> = 
+  private stateSubject: BehaviorSubject<PlayerState> =
     new BehaviorSubject<PlayerState>(this.state);
   private eventSubject = new Subject<Event>();
 
@@ -59,29 +59,34 @@ export class PlayerService {
     return new Promise<void>((resolve, reject) => {
       this.storage.getKey<any>(`media-${media}`).subscribe(
         (d) => {
-          var blob = new Blob([d["buffer"]], {type: "audio/mpeg"});
-          var dURL = URL.createObjectURL(blob);
-          this.player.src = dURL;
-          console.log(`Loading media ${this.player.src}`);
-          this.player.load();
-          console.log('Loaded media');
-          this.clearState();
-          this.state.mediaTitle = title;
-          this.state.index = index;
-    
-          const handler = (event: Event) => {
-            this.updateState(event);
+          try {
+            var blob = new Blob([d["buffer"]], { type: "audio/mpeg" });
+            var dURL = URL.createObjectURL(blob);
+            this.player.src = dURL;
+            console.log(`Loading media ${this.player.src}`);
+            this.player.load();
+            console.log('Loaded media');
+            this.clearState();
+            this.state.mediaTitle = title;
+            this.state.index = index;
+
+            const handler = (event: Event) => {
+              this.updateState(event);
+            }
+
+            this.addEvents(this.player, this.playerEvents, handler);
+            this.addEvents(this.player, ["ended"], (e) => {
+              this.eventSubject.next(e);
+            });
+            console.log("Finished loading")
+            resolve();
+          } catch (e) {
+            console.log(`Failed loading media: ${e}`)
+            reject();
           }
-    
-          this.addEvents(this.player, this.playerEvents, handler);
-          this.addEvents(this.player, ["ended"], (e) => {
-            this.eventSubject.next(e);
-          });
-          console.log("Finished loading")
-          resolve();
         },
         (err) => reject(err));
-    }) 
+    })
   }
 
   addEvents(player: HTMLAudioElement, playerEvents: string[], handler: (event: Event) => void) {
@@ -91,15 +96,28 @@ export class PlayerService {
   }
 
   play() {
-    this.player.play();
+    try {
+      this.player.play();
+    } catch (e) {
+      console.log(`Couldn't play: ${e}`)
+    }
   }
 
   pause() {
-    this.player.pause();
+    try {
+      this.player.pause();
+    } catch (e) {
+      console.log(`Couldn't pause: ${e}`)
+    }
   }
 
   seek(time) {
-    this.player.currentTime = time;
+    try {
+      this.player.currentTime = time;
+    } catch (e) {
+      console.log(`Couldn't seek: ${e}`)
+    }
+
   }
 
   formatTime(time: number) {
