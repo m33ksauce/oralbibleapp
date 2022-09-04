@@ -23,7 +23,6 @@ export class UpdaterService {
     private http: HttpClient) { }
 
   public GetUpdater(method: UpdateMethods) {
-    // TODO: Handle invalid update method
     if (method === UpdateMethods.WEB) {
       this.provider = new WebUpdateProvider(this.http);
     }
@@ -35,8 +34,7 @@ export class UpdaterService {
 
   private stageUpdate(): Observable<string> {
     return new Observable<string>(sub => {
-      // TODO: Handle API errors
-      this.provider.getMetadata().pipe(first()).subscribe(
+      this.provider.GetMetadata().pipe(first()).subscribe(
         (data) => {
           sub.next("Checking for updates...");
           let newVersion = data.Version;
@@ -56,17 +54,19 @@ export class UpdaterService {
               return
             }
 
-            // TODO: Handle reject
             this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
               sub.next("Update found!");
               this.syncStageMedia(data, sub)
             })
+              .catch((err) => {
+                console.log(`Failed to stage metadata: ${err}`);
+                this.completeWithError(sub, "Update failed!");
+              })
           })
         },
         (err: Error) => {
           console.log(`Failed to get metadata: ${err}`);
-          sub.next("Update Failed!");
-          sub.complete();
+          this.completeWithError(sub, "Update failed!");
         });
     });
   }
@@ -80,27 +80,29 @@ export class UpdaterService {
     let promises = [];
 
     for (let item of audio) {
-      promises.push(this.syncMedia(item.id).then(() => {
+      promises.push(this.syncMedia(item.id, statusUpdater).then(() => {
         statusUpdater.next(`Syncing ${++curr}/${total}`);
       }))
     }
 
-    // TODO: Handle reject
-    Promise.all(promises).then(async () => {
-      if (await this.isStageMediaReady) {
-        console.log("Finished syncing")
-        return this.finalizeUpdate(statusUpdater);
-      }
-    })
+    Promise.all(promises).then(
+      async () => {
+        if (await this.isStageMediaReady) {
+          console.log("Finished syncing")
+          return this.finalizeUpdate(statusUpdater);
+        }
+      })
+      .catch(() => {
+        this.completeWithError(statusUpdater, "Update Failed!");
+      })
   }
 
-  private syncMedia(id): Promise<void> {
+  private syncMedia(id: string, statusUpdater: Subscriber<string>): Promise<void> {
     return new Promise(async (res, rej) => {
       let exists = await this.storage.checkKey(StorageKeys.MakeMediaKey(id))
       if (exists) res();
       if (!exists) {
-        // TODO: Handle API errors
-        this.provider.getMedia(id).subscribe(
+        this.provider.GetMedia(id).subscribe(
           (media) => {
             console.log(`Syncing ${id}`);
             this.storage.setKey(StorageKeys.MakeMediaKey(id), Buffer.from(media))
@@ -108,34 +110,47 @@ export class UpdaterService {
               .catch(() => rej());
           },
           (err: Error) => {
-            console.log(`Failed to get media: ${err}`)
-            // TODO: Add retry logic
+            rej(err);
           });
       }
     });
   }
 
   private finalizeUpdate(sub: Subscriber<string>) {
-    // TODO: Handle rejects
-    this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(async data => {
-      console.log("Finalizing update")
-      sub.next("Finalizing update")
-      await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
-      await this.storage.setKey<string>(StorageKeys.Version, data.Version);
-      console.log("Finalized update")
-      sub.next("Updated!")
-      sub.complete();
-    });
+    this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(
+      async data => {
+        console.log("Finalizing update")
+        sub.next("Finalizing update")
+        await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
+        await this.storage.setKey<string>(StorageKeys.Version, data.Version);
+        console.log("Finalized update")
+        sub.next("Updated!")
+        sub.complete();
+      },
+      async err => {
+        this.completeWithError(sub, "Update failed!");
+      });
   }
 
   private isStageMediaReady(): Promise<boolean> {
-    // TODO: Handle rejects
-    return new Promise((resolve, _) => {
-      this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(data => {
-        Promise.all(data.Audio.map(a => this.storage.checkKey(StorageKeys.MakeMediaKey(a.id)))).then(keys => {
-          resolve(keys.reduce((curr, nxt) => curr && nxt, true));
+    return new Promise((resolve, reject) => {
+      this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(
+        data => {
+          Promise.all(data.Audio.map(a => this.storage.checkKey(StorageKeys.MakeMediaKey(a.id)))).then(keys => {
+            resolve(keys.reduce((curr, nxt) => curr && nxt, true));
+          })
+            .catch(err => {
+              reject(err);
+            })
+        },
+        err => {
+          reject(err);
         })
-      })
     })
+  }
+
+  private completeWithError(sub: Subscriber<string>, msg: string) {
+    sub.next(msg);
+    sub.complete();
   }
 }

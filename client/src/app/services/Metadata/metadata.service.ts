@@ -30,10 +30,14 @@ export class MetadataService {
   }
 
   private parseMetadata(md: AudioMetadata) {
-    // TODO: Add error handling
+    // TODO: I think this parser could be cleaner.
+    // I'm not sure what it will take to get there, 
+    // but we should definitely validate the data
+    // before we parse and rewrite.
+    // Maybe we should consider doing a streaming parser
+    
     this.clearMetadata();
     console.log("Parsing metadata")
-    // TODO: What happens if we don't have categories?
     if (MetadataService.propertyHasList(md, "Categories")) {
       md["Categories"].forEach(cat => {
         try {
