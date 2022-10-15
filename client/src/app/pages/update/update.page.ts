@@ -7,16 +7,20 @@ import { UpdateStatus } from 'src/app/services/Updater/update-status';
 import { UpdaterService } from 'src/app/services/Updater/updater.service';
 import { environment } from 'src/environments/environment';
 
+interface UpdateStatusIndicatorData {
+  icon: IconDefinition,
+  classes: string,
+  spinAnimation: boolean
+}
+
 @Component({
   selector: 'app-update',
   templateUrl: './update.page.html',
   styleUrls: ['./update.page.scss'],
 })
+
 export class UpdatePage implements OnInit {
-  updateStatus: Observable<UpdateStatus>;
-  updateStatusIcon: Observable<IconDefinition>;
-  updateStatusIconClasses: Observable<string>;
-  updateStatusIconSpin: Observable<boolean>;
+  updateStatusIndicator: Observable<UpdateStatusIndicatorData>;
   bluetoothFeatureEnabled: boolean;
   dynamicContentFeatureEnabled: boolean;
 
@@ -29,23 +33,40 @@ export class UpdatePage implements OnInit {
 
   checkWebUpdate() {
     this.updater.GetUpdater(UpdateMethods.WEB);
-    this.updateStatus = this.updater.UpdateWithStatus()
+    this.updateStatusIndicator = this.updater.UpdateWithStatus()
+      .pipe(map(stat => this.mapUpdateStatus(stat)));
+  }
 
-    this.updateStatusIcon = this.updateStatus.pipe(map(stat => {
-      if (stat == UpdateStatus.READY) return faCircleDown
-      if (stat == UpdateStatus.UPDATING) return faSync
-      if (stat == UpdateStatus.SUCCEEDED) return faCircleCheck
-      if (stat == UpdateStatus.FAILED) return faCircleXmark
-    }));
-    this.updateStatusIconClasses = this.updateStatus.pipe(map(stat => {
-      let classes = "fa-xl"
-      if (stat == UpdateStatus.SUCCEEDED) return `${classes} status-green`;
-      if (stat == UpdateStatus.FAILED) return `${classes} status-red`;
-      if (stat == UpdateStatus.UPDATING) return `${classes} status-orange`;
-      return `${classes} status-orange`;
-    }));
-    this.updateStatusIconSpin = this.updateStatus.pipe(map(stat => {
-      return stat == UpdateStatus.UPDATING;
-    }))
+  mapUpdateStatus(status: UpdateStatus) {
+    switch(status) {
+      case UpdateStatus.READY: {
+        return {
+          icon: faCircleDown,
+          classes: "fa-xl status-orange",
+          spinAnimation: false,
+        }
+      }
+      case UpdateStatus.UPDATING: {
+        return {
+          icon: faSync,
+          classes: "fa-xl status-orange",
+          spinAnimation: true,
+        }
+      }
+      case UpdateStatus.SUCCEEDED: {
+        return {
+          icon: faCircleCheck,
+          classes: "fa-xl status-green",
+          spinAnimation: false,
+        }
+      }
+      case UpdateStatus.FAILED: {
+        return {
+          icon: faCircleXmark,
+          classes: "fa-xl status-red",
+          spinAnimation: false,
+        }
+      }
+    }
   }
 }
