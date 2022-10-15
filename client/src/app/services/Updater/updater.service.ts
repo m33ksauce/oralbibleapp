@@ -8,19 +8,22 @@ import { WebUpdateProvider } from './web-update-provider';
 import * as semver from 'semver';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { Observable, Subscriber, Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { Buffer } from "buffer";
+import { UpdateStatus, UpdateStatusProvider } from './update-status';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class UpdaterService {
+export class UpdaterService extends UpdateStatusProvider {
   private provider: UpdateProvider;
 
   constructor(
     public storage: StorageService,
-    private http: HttpClient) { }
+    private http: HttpClient) {
+    super();
+  }
 
   public GetUpdater(method: UpdateMethods) {
     if (method === UpdateMethods.WEB) {
@@ -28,60 +31,56 @@ export class UpdaterService {
     }
   }
 
-  public Update(): Observable<string> {
-    return this.stageUpdate()
+  public UpdateWithStatus(): Observable<UpdateStatus> {
+    this.stageUpdate()
+    return this.SubscribeStatus()
+      .pipe(map(([s, _]) => s));
   }
 
-  private stageUpdate(): Observable<string> {
-    return new Observable<string>(sub => {
+  private stageUpdate() {
       this.provider.GetMetadata().pipe(first()).subscribe(
         (data) => {
-          sub.next("Checking for updates...");
           let newVersion = data.Version;
           this.storage.getKey<string>(StorageKeys.Version).pipe(first()).subscribe(currentVersion => {
             if (!semver.valid(newVersion)) {
               console.log("Couldn't update - version not valid")
-              sub.next("Error!");
-              sub.complete();
+              this.SetStatus(UpdateStatus.FAILED, "Couldn't update - new version not valid")
               return
             };
 
 
             if (semver.lt(newVersion, currentVersion)) {
               console.log("Couldn't update - new version older than current version");
-              sub.next("Already up to date!");
-              sub.complete();
+              this.SetStatus(UpdateStatus.SUCCEEDED, "No update available")
               return
             }
 
             this.storage.setKey<AudioMetadata>(StorageKeys.StageMetadata, data).then(async () => {
-              sub.next("Update found!");
-              this.syncStageMedia(data, sub)
+              this.syncStageMedia(data)
             })
               .catch((err) => {
                 console.log(`Failed to stage metadata: ${err}`);
-                this.completeWithError(sub, "Update failed!");
+                this.SetStatus(UpdateStatus.FAILED, "Failed to stage metadata")
               })
           })
         },
         (err: Error) => {
           console.log(`Failed to get metadata: ${err}`);
-          this.completeWithError(sub, "Update failed!");
+          this.SetStatus(UpdateStatus.FAILED, "Failed to get metadata")
         });
-    });
   }
 
-  private async syncStageMedia(md: AudioMetadata, statusUpdater: Subscriber<string>) {
+  private async syncStageMedia(md: AudioMetadata) {
     console.log("Starting update sync")
+    this.SetStatus(UpdateStatus.UPDATING, "Starting update")
     let curr = 0;
     const audio = md.Audio;
     const total = audio.length;
-    // Aggregate these promises and finalize once, not multiple times
     let promises = [];
 
     for (let item of audio) {
-      promises.push(this.syncMedia(item.id, statusUpdater).then(() => {
-        statusUpdater.next(`Syncing ${++curr}/${total}`);
+      promises.push(this.syncMedia(item.id).then(() => {
+        this.SetStatus(UpdateStatus.UPDATING, `Syncing ${++curr}/${total}`)
       }))
     }
 
@@ -89,15 +88,15 @@ export class UpdaterService {
       async () => {
         if (await this.isStageMediaReady) {
           console.log("Finished syncing")
-          return this.finalizeUpdate(statusUpdater);
+          return this.finalizeUpdate();
         }
       })
       .catch(() => {
-        this.completeWithError(statusUpdater, "Update Failed!");
+        this.SetStatus(UpdateStatus.FAILED, "Couldn't sync all media")
       })
   }
 
-  private syncMedia(id: string, statusUpdater: Subscriber<string>): Promise<void> {
+  private syncMedia(id: string): Promise<void> {
     return new Promise(async (res, rej) => {
       let exists = await this.storage.checkKey(StorageKeys.MakeMediaKey(id))
       if (exists) res();
@@ -116,19 +115,17 @@ export class UpdaterService {
     });
   }
 
-  private finalizeUpdate(sub: Subscriber<string>) {
+  private finalizeUpdate() {
     this.storage.getKey<AudioMetadata>(StorageKeys.StageMetadata).pipe(first()).subscribe(
       async data => {
         console.log("Finalizing update")
-        sub.next("Finalizing update")
         await this.storage.setKey<AudioMetadata>(StorageKeys.CurrentMetadata, data);
         await this.storage.setKey<string>(StorageKeys.Version, data.Version);
         console.log("Finalized update")
-        sub.next("Updated!")
-        sub.complete();
+        this.SetStatus(UpdateStatus.SUCCEEDED, "Finalized")
       },
       async err => {
-        this.completeWithError(sub, "Update failed!");
+        this.SetStatus(UpdateStatus.FAILED, "Couldn't finalize")
       });
   }
 
@@ -147,10 +144,5 @@ export class UpdaterService {
           reject(err);
         })
     })
-  }
-
-  private completeWithError(sub: Subscriber<string>, msg: string) {
-    sub.next(msg);
-    sub.complete();
   }
 }

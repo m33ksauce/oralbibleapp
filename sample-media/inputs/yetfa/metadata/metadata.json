@@ -3,12 +3,12 @@
   "Categories": [
     {
       "type": 1,
-      "name": "Perjanjian Lama",
+      "name": "📖 Perjanjian Lama",
       "children": []
     },
     {
       "type": 1,
-      "name": "Perjanjian Baru",
+      "name": "📖 Perjanjian Baru",
       "children": [
         {
           "type": 1,
@@ -79,7 +79,7 @@
     {
       "id": 3,
       "type": 1,
-      "name": "Cerita-Cerita Alkitab",
+      "name": "🎸Cerita-Cerita Alkitab",
       "children": [
         {
           "type": 2,
