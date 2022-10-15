@@ -16,8 +16,11 @@
       </h2>
     </ion-card-header>
     <ion-card-content>
-      <ion-button (click)="checkWebUpdate()">Check for Updates</ion-button>
-      <ion-item>{{updateStatus|async}}</ion-item>
+      <ion-button style="vertical-align: middle;" (click)="checkWebUpdate()">Update</ion-button>
+      <fa-icon [class]="updateStatusIconClasses | async"
+        style="vertical-align: middle; margin-left: .25em;"
+        *ngIf="updateStatusIcon | async"
+        [icon]="updateStatusIcon | async"></fa-icon>
     </ion-card-content>
   </ion-card>
   <ion-card *ngIf="bluetoothFeatureEnabled">

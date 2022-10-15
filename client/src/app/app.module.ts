@@ -13,6 +13,7 @@ import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { StorageService } from './services/Storage/storage.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { StorageService } from './services/Storage/storage.service';
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
     }),
     HttpClientModule,
+    FontAwesomeModule,
   ],
   providers: [
     StatusBar,
