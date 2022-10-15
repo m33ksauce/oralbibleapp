@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faCircleXmark, faCircleCheck, IconDefinition, faCircleDown, faHourglass } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faCircleCheck, IconDefinition, faCircleDown, faSync } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UpdateMethods } from 'src/app/services/Updater/update-provider';
@@ -16,6 +16,7 @@ export class UpdatePage implements OnInit {
   updateStatus: Observable<UpdateStatus>;
   updateStatusIcon: Observable<IconDefinition>;
   updateStatusIconClasses: Observable<string>;
+  updateStatusIconSpin: Observable<boolean>;
   bluetoothFeatureEnabled: boolean;
   dynamicContentFeatureEnabled: boolean;
 
@@ -32,7 +33,7 @@ export class UpdatePage implements OnInit {
 
     this.updateStatusIcon = this.updateStatus.pipe(map(stat => {
       if (stat == UpdateStatus.READY) return faCircleDown
-      if (stat == UpdateStatus.UPDATING) return faHourglass
+      if (stat == UpdateStatus.UPDATING) return faSync
       if (stat == UpdateStatus.SUCCEEDED) return faCircleCheck
       if (stat == UpdateStatus.FAILED) return faCircleXmark
     }));
@@ -40,7 +41,11 @@ export class UpdatePage implements OnInit {
       let classes = "fa-xl"
       if (stat == UpdateStatus.SUCCEEDED) return `${classes} status-green`;
       if (stat == UpdateStatus.FAILED) return `${classes} status-red`;
-      return `${classes} fa-fade status-blue`;
+      if (stat == UpdateStatus.UPDATING) return `${classes} status-orange`;
+      return `${classes} status-orange`;
     }));
+    this.updateStatusIconSpin = this.updateStatus.pipe(map(stat => {
+      return stat == UpdateStatus.UPDATING;
+    }))
   }
 }
