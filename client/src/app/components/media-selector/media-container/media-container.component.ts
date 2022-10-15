@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { IonCard } from '@ionic/angular';
 import { MediaListItem, MediaType } from 'src/app/models/MediaListItem';
+import { environment } from 'src/environments/environment';
 import { MediaItemComponent } from '../media-item/media-item.component';
 
 @Component({
@@ -24,16 +25,7 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
   }
 
   ngDoCheck() {
-    if (this.childMedia != undefined) {
-      this.childMedia.forEach(child => {
-        if (child.isPlaying()) this.expand();
-      })
-    }
-    if (this.childCats != undefined) {
-      this.childCats.forEach(cat => {
-        if (cat.expanded) this.expand();
-      })
-    }
+    if (!environment.features.mediaCanCollapseWhenPlaying) this.expandIfChildPlaying()
   }
 
   isCategory() {
@@ -50,6 +42,19 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
       return;
     }
     this.expand();
+  }
+
+  expandIfChildPlaying() {
+    if (this.childMedia != undefined) {
+      this.childMedia.forEach(child => {
+        if (child.isPlaying()) this.expand();
+      })
+    }
+    if (this.childCats != undefined) {
+      this.childCats.forEach(cat => {
+        if (cat.expanded) this.expand();
+      })
+    }
   }
 
   setVisibility(status: boolean) {
@@ -70,6 +75,7 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
     this.childMedia.forEach(media => {
       if (media.isPlaying()) canCollapse = false;
     })
+    if (environment.features.mediaCanCollapseWhenPlaying) canCollapse = true;
     if (canCollapse) {  
       this.setChildVis(false);
       this.childCats.forEach(c => c.collapse());
