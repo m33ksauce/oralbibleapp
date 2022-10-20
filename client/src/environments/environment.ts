@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   backend: {
-    releaseEndpoint: "https://us-central1-oralbibleapp.cloudfunctions.net/handler/api/v1/release",
-    audioEndpoint: "https://us-central1-oralbibleapp.cloudfunctions.net/handler/api/v1/audio",
+    releaseEndpoint: "http://localhost:8080/api/v1/release",
+    audioEndpoint: "http://localhost:8080/api/v1/audio",
   },
   features: {
     dynamicContent: true,
