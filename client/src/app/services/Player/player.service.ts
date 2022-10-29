@@ -23,11 +23,17 @@ export class PlayerService {
   private stateSubject: BehaviorSubject<PlayerState> =
     new BehaviorSubject<PlayerState>(this.state);
   private eventSubject = new Subject<Event>();
+  private currentlyPlayingSubject: BehaviorSubject<string> = 
+    new BehaviorSubject<string>("");
 
   constructor(private storage: StorageService, private sanitizer: DomSanitizer) { }
 
   getState(): Observable<PlayerState> {
     return this.stateSubject.asObservable();
+  }
+
+  getCurrentlyPlaying(): BehaviorSubject<string> {
+    return this.currentlyPlayingSubject;
   }
 
   getEvents(): Observable<Event> {
@@ -78,6 +84,7 @@ export class PlayerService {
             this.addEvents(this.player, ["ended"], (e) => {
               this.eventSubject.next(e);
             });
+            this.currentlyPlayingSubject.next(media)
             console.log("Finished loading")
             resolve();
           } catch (e) {

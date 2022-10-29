@@ -3,16 +3,16 @@
   "Categories": [
     {
       "type": 1,
-      "name": "📖 Perjanjian Lama",
+      "name": "📕 Perjanjian Lama",
       "children": []
     },
     {
       "type": 1,
-      "name": "📖 Perjanjian Baru",
+      "name": "📕 Perjanjian Baru",
       "children": [
         {
           "type": 1,
-          "name": "Lukas",
+          "name": "📖 Lukas",
           "children": [
             {
               "type": 1,

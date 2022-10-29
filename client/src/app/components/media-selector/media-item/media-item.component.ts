@@ -26,8 +26,8 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.setVisibility(false);
-    this.playerService.getState().subscribe(state => {
-      this.setPlaying(state.index == this.index);
+    this.playerService.getCurrentlyPlaying().subscribe(media => {
+      this.setPlaying(media == this.item.audioTargetId);
     });
   }
 
