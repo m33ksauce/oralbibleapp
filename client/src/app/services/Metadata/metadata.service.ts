@@ -123,6 +123,11 @@ export class MetadataService {
     return nxt;
   }
 
+  public getNextMediaById(currentId: string): MediaListItem {
+    var cur = this.findAtId(this.currentMediaMetadata, currentId);
+    return this.getNextMedia(cur.index);
+  }
+
   private findAtIndex(list: MediaListItem[], index: number): MediaListItem {
     // TODO: Rewrite to not use searching
     let match;
@@ -142,9 +147,33 @@ export class MetadataService {
     return match;
   }
 
+  private findAtId(list: MediaListItem[], id: string) {
+    let match;
+
+    let nxt = list.find(i => i.audioTargetId == id)
+
+    if (nxt != undefined) match = nxt;
+
+    if (nxt == undefined) {
+      list.forEach(l => {
+        if (l.hasChildren()) {
+          var check = this.findAtId(l.children, id);
+          if (check != undefined) match = check;
+        }
+      })
+    }
+
+    return match;
+  }
+
   public getPrevMedia(currentIndex: number): MediaListItem {
     if (currentIndex == 0) return this.findAtIndex(this.currentMediaMetadata, currentIndex);
     var nxt = this.findAtIndex(this.currentMediaMetadata, currentIndex - 1);
     return nxt;
+  }
+
+  public getPrevMediaById(currentId: string): MediaListItem {
+    var cur = this.findAtId(this.currentMediaMetadata, currentId);
+    return this.getPrevMedia(cur.index);
   }
 }

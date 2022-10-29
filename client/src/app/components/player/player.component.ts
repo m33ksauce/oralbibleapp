@@ -56,7 +56,8 @@ export class PlayerComponent implements OnInit {
         this.player.seek(0);
         return;
       }
-      var prev = this.metadata.getPrevMedia(this.playerState.index);
+      var currentId = this.player.getCurrentlyPlaying().getValue();
+      var prev = this.metadata.getPrevMediaById(currentId);
       this.player.loadMedia(prev.audioTargetId, prev.name, prev.index)
         .then(() => this.play())
         .catch(() => console.log("Couldn't load previous media"));
@@ -68,14 +69,14 @@ export class PlayerComponent implements OnInit {
   next() {
     // TODO: Emit an error dialog
     try {
-      console.log("Playing next");
-      var nxt = this.metadata.getNextMedia(this.playerState.index);
+      var currentId = this.player.getCurrentlyPlaying().getValue();
+      var nxt = this.metadata.getNextMediaById(currentId);
       this.player.loadMedia(nxt.audioTargetId, nxt.name, nxt.index)
         .then(() => this.play())
         .catch(() => console.log("Couldn't load next media"));
-    } catch (e) {
+    } catch(e) {
       console.log("Could not play next - ", e);
-    }    
+    }
   }
 
   startSeek() {

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IonCard } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { MediaListItem } from 'src/app/models/MediaListItem';
 import { MetadataService } from 'src/app/services/Metadata/metadata.service';
 import { PlayerService } from 'src/app/services/Player/player.service';
@@ -15,10 +16,10 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
   @Input() index: number;
   @ViewChild('card', { read: ElementRef }) cardLabel: ElementRef
   private playing: boolean = false;
+  private currentlyPlayingSub: Subscription;
 
   constructor(
     private renderer: Renderer2,
-    private metadataService: MetadataService,
     private playerService: PlayerService
     ) { }
 
@@ -26,9 +27,13 @@ export class MediaItemComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.setVisibility(false);
-    this.playerService.getState().subscribe(state => {
-      this.setPlaying(state.index == this.index);
+    this.currentlyPlayingSub = this.playerService.getCurrentlyPlaying().subscribe(media => {
+      this.setPlaying(media == this.item.audioTargetId);
     });
+  }
+
+  ngOnDestroy() {
+    this.currentlyPlayingSub.unsubscribe();
   }
 
   getVisibleStatus() {
