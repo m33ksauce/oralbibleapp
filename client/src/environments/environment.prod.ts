@@ -7,5 +7,6 @@ export const environment = {
   features: {
     dynamicContent: true,
     bluetoothUpdate: false,
+    mediaCanCollapseWhenPlaying: true,
   }
 };
