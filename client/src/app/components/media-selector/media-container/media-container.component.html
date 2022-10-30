@@ -4,7 +4,7 @@
         <h1>
           <ion-icon *ngIf="!expanded" name="chevron-forward-outline"></ion-icon>
           <ion-icon *ngIf="expanded" name="chevron-down-outline"></ion-icon>
-          {{item.name}}
+          {{item.name}} <em>({{item.getTotalChildMediaCount()}})</em>
         </h1>
       </ion-label>
     </ion-item-divider>
