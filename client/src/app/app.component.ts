@@ -28,6 +28,6 @@ export class AppComponent {
   }
 
   initializeDB() {
-    return this.storage.setKey<string>("app-name", "Awa Ma");
+    return this.storage.setKey<string>("app-name", "Dengar MP");
   }
 }
