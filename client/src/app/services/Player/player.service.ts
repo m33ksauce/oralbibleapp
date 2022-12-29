@@ -4,8 +4,13 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from '../Storage/storage.service';
+<<<<<<< HEAD
 import { initialize } from '@ionic/core';
 import { take, takeLast } from 'rxjs/operators';
+||||||| parent of ef00614 (Fix autoplay bug)
+=======
+import { initialize } from '@ionic/core';
+>>>>>>> ef00614 (Fix autoplay bug)
 
 @Injectable({
   providedIn: 'root'
@@ -95,8 +100,22 @@ export class PlayerService {
             this.state.index = index;
             this.state.currentTime = 0;
 
+<<<<<<< HEAD
             if (this.initialized == false) this.initializePlayer();
             
+||||||| parent of ef00614 (Fix autoplay bug)
+            const handler = (event: Event) => {
+              this.updateState(event);
+            }
+
+            this.addEvents(this.player, this.playerEvents, handler);
+            this.addEvents(this.player, ["ended"], (e) => {
+              this.eventSubject.next(e);
+            });
+=======
+            if (this.initialized == false) this.initializePlayer();
+
+>>>>>>> ef00614 (Fix autoplay bug)
             this.currentlyPlayingSubject.next(media)
             console.log("Finished loading")
             resolve();
