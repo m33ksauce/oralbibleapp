@@ -37,7 +37,7 @@ export class Bundle {
 
         return Promise.all(audios.map(audio => {
             console.log("writing audio")
-            return readFile(path.join(this.bundleInputPaths, '/', audio.file))
+            return readFile(path.resolve(path.join(this.bundleInputPaths, '/', audio.file)))
                 .then(dataBuf => {
                     this.bundle.Media.push({
                         target: audio.id,
