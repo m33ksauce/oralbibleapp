@@ -4,6 +4,7 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from '../Storage/storage.service';
+import { initialize } from '@ionic/core';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class PlayerService {
     "timeupdate",
   ]
 
+  private initialized = false;
   private state: PlayerState = MakeDefaultState();
 
   private stateSubject: BehaviorSubject<PlayerState> =
@@ -61,7 +63,21 @@ export class PlayerService {
     this.stateSubject.next(this.state);
   }
 
-  loadMedia(media, title, index) {
+
+  initializePlayer() {
+    const handler = (event: Event) => {
+      this.updateState(event);
+    }
+
+    this.addEvents(this.player, this.playerEvents, handler);
+    this.addEvents(this.player, ["ended"], (e) => {
+      this.eventSubject.next(e);
+    });
+
+    this.initialized = true;
+  }
+
+  load(media, title, index) {
     return new Promise<void>((resolve, reject) => {
       this.storage.getKey<any>(`media-${media}`).subscribe(
         (d) => {
@@ -76,14 +92,8 @@ export class PlayerService {
             this.state.mediaTitle = title;
             this.state.index = index;
 
-            const handler = (event: Event) => {
-              this.updateState(event);
-            }
+            if (this.initialized == false) this.initializePlayer();
 
-            this.addEvents(this.player, this.playerEvents, handler);
-            this.addEvents(this.player, ["ended"], (e) => {
-              this.eventSubject.next(e);
-            });
             this.currentlyPlayingSubject.next(media)
             console.log("Finished loading")
             resolve();

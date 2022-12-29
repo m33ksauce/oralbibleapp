@@ -58,7 +58,7 @@ export class PlayerComponent implements OnInit {
       }
       var currentId = this.player.getCurrentlyPlaying().getValue();
       var prev = this.metadata.getPrevMediaById(currentId);
-      this.player.loadMedia(prev.audioTargetId, prev.name, prev.index)
+      this.player.load(prev.audioTargetId, prev.name, prev.index)
         .then(() => this.play())
         .catch(() => console.log("Couldn't load previous media"));
     } catch (e) {
@@ -71,7 +71,7 @@ export class PlayerComponent implements OnInit {
     try {
       var currentId = this.player.getCurrentlyPlaying().getValue();
       var nxt = this.metadata.getNextMediaById(currentId);
-      this.player.loadMedia(nxt.audioTargetId, nxt.name, nxt.index)
+      this.player.load(nxt.audioTargetId, nxt.name, nxt.index)
         .then(() => this.play())
         .catch(() => console.log("Couldn't load next media"));
     } catch(e) {
