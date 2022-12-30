@@ -93,6 +93,7 @@ export class PlayerService {
             this.clearState();
             this.state.mediaTitle = title;
             this.state.index = index;
+            this.state.currentTime = 0;
 
             if (this.initialized == false) this.initializePlayer();
             
