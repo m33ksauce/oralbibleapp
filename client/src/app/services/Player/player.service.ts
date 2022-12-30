@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from '../Storage/storage.service';
 import { initialize } from '@ionic/core';
+import { take, takeLast } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -77,9 +78,10 @@ export class PlayerService {
     this.initialized = true;
   }
 
-  load(media, title, index) {
+  async load(media, title, index) {
+
     return new Promise<void>((resolve, reject) => {
-      this.storage.getKey<any>(`media-${media}`).subscribe(
+      this.storage.getKey<any>(`media-${media}`).pipe(take(1)).subscribe(
         (d) => {
           try {
             var blob = new Blob([d["buffer"]], { type: "audio/mpeg" });
@@ -93,7 +95,7 @@ export class PlayerService {
             this.state.index = index;
 
             if (this.initialized == false) this.initializePlayer();
-
+            
             this.currentlyPlayingSubject.next(media)
             console.log("Finished loading")
             resolve();
@@ -114,7 +116,7 @@ export class PlayerService {
 
   play() {
     try {
-      this.player.play();
+      return this.player.play();
     } catch (e) {
       console.log(`Couldn't play: ${e}`)
     }
@@ -122,7 +124,7 @@ export class PlayerService {
 
   pause() {
     try {
-      this.player.pause();
+      return this.player.pause();
     } catch (e) {
       console.log(`Couldn't pause: ${e}`)
     }
