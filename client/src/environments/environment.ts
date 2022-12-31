@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   backend: {
-    releaseEndpoint: "http://localhost:8080/api/v1/release",
-    audioEndpoint: "http://localhost:8080/api/v1/audio",
+    releaseEndpoint: "http://localhost:8080/api/v1/yetfa/release",
+    audioEndpoint: "http://localhost:8080/api/v1/yetfa/audio",
   },
   features: {
     dynamicContent: true,
