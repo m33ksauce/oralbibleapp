@@ -1,21 +1,10 @@
-import { Injectable, SecurityContext } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { PlayerState, MakeDefaultState } from 'src/app/interfaces/player-state';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from '../Storage/storage.service';
-<<<<<<< HEAD
-import { initialize } from '@ionic/core';
-<<<<<<< HEAD
-import { take, takeLast } from 'rxjs/operators';
-||||||| parent of ef00614 (Fix autoplay bug)
-=======
-import { initialize } from '@ionic/core';
->>>>>>> ef00614 (Fix autoplay bug)
-||||||| parent of b736d7f (Fix prev/next bug)
-=======
-import { take, takeLast } from 'rxjs/operators';
->>>>>>> b736d7f (Fix prev/next bug)
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
