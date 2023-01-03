@@ -17,6 +17,7 @@ build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 
 prep-all: \
 	prep-yetfa
+	prep-papuan_malay
 
 prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
@@ -34,6 +35,8 @@ cycle-cordova-platform:
 	ionic cordova platform add android
 
 package-yetfa: dist/yetfa.prod.aab
+
+build-papuan_malay: dist/papuan_malay.prod.aab
 
 dist/%.prod.aab: $(bundle_default_file)
 	cp $< $@
