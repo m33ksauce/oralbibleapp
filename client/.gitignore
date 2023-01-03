@@ -40,3 +40,5 @@ crypto/
 /.angular
 
 build.json
+*.obd
+config.xml

@@ -21,7 +21,7 @@ export class Bundle {
         this.addMetadata()
             .then(() => this.addMedia())
             .then(() => this
-                .exportBundle(outputPath || path.join(process.cwd(), "../../sample-media/outputs")));
+                .exportBundle(outputPath || path.resolve("../../bible-media/outputs")));
     }
     
     private async addMetadata() {
