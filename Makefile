@@ -10,6 +10,11 @@ BM_OUTPUTS := $(CURDIR)/bible-media/outputs
 bundle_path := $(CLIENT)/platforms/android/app/build/outputs/bundle/release
 bundle_default_file := $(bundle_path)/app-release.aab
 
+build-all: \
+	build-yetfa
+
+build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
+
 prep-all: \
 	prep-yetfa
 
@@ -22,7 +27,13 @@ prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/config.template.xml $(CLIENT
 		$(CLIENT)/config.template.xml > \
 		$(CLIENT)/config.xml
 
-build-yetfa: dist/yetfa.prod.aab
+# Later, we should make this target ONLY run if something has changed in CLIENT
+cycle-cordova-platform:
+	pushd $(CLIENT) && \
+	ionic cordova platform rm android && \
+	ionic cordova platform add android
+
+package-yetfa: dist/yetfa.prod.aab
 
 dist/%.prod.aab: $(bundle_default_file)
 	cp $< $@
@@ -32,6 +43,7 @@ $(bundle_default_file): $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
 
 
 $(CLIENT)/dist/media/%.bundle.obd: $(BM_OUTPUTS)/%.bundle.obd
+	mkdir -p $(CLIENT)/dist/media/
 	cp $^ $@
 
 $(BM_OUTPUTS)/%.bundle.obd:
