@@ -10,7 +10,6 @@ BM_OUTPUTS := $(CURDIR)/bible-media/outputs
 bundle_path := $(CLIENT)/platforms/android/app/build/outputs/bundle/release
 bundle_default_file := $(bundle_path)/app-release.aab
 
-<<<<<<< HEAD
 build-all: \
 	build-yetfa \
 	build-papuan_malay \
@@ -22,18 +21,6 @@ build-all: \
 	build-bahasa_walak \
 	build-abawiri \
 	build-meyah
-||||||| parent of d57f16b (Add platform cycle for cordova)
-prep-all: \
-	prep-yetfa
-=======
-build-all: \
-	build-yetfa
-
-build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
-
-prep-all: \
-	prep-yetfa
->>>>>>> d57f16b (Add platform cycle for cordova)
 
 build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 
