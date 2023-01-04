@@ -42,3 +42,6 @@ crypto/
 build.json
 *.obd
 config.xml
+
+
+src/environments/environment.prod.ts

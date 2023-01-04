@@ -18,9 +18,10 @@ build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 prep-all: \
 	prep-yetfa
 
-prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/config.template.xml $(CLIENT)/src/*
+prep-%: clean $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/config.template.xml $(CLIENT)/src/*
 	mkdir -p dist/
 	mv $(CLIENT)/dist/media/$*.bundle.obd $(CLIENT)/dist/media/bundle.obd
+	cp $(CLIENT)/src/environments/environment.prod.$*.ts $(CLIENT)/src/environments/environment.prod.ts
 	sed \
 		-e 's/%%VERSION%%/$(APPVERSION)/g' \
 		-e 's/%%TRANSLATION%%/$*/g' \
@@ -52,7 +53,9 @@ $(BM_OUTPUTS)/%.bundle.obd:
 	mv $(@D)/bundle.obd $@
 
 clean:
-	rm -r $(CLIENT)/config.xml $(CLIENT)/dist/media/*.obd
+	rm -r $(CLIENT)/config.xml \
+		$(CLIENT)/dist/media/*.obd \
+		$(CLIENT)/src/environments/environment.prod.ts
 
 clean-all: clean
 	rm -r dist/
