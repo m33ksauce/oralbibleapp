@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  appName: "Awa Ma",
   production: false,
   backend: {
     releaseEndpoint: "http://localhost:8080/api/v1/papuan_malay/release",

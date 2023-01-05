@@ -1,4 +1,5 @@
 export const environment = {
+  appName: "Awa Ma",
   production: true,
   backend: {
     releaseEndpoint: "https://content.oralbible.app/api/v1/yetfa/release",

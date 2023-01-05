@@ -1,4 +1,5 @@
 export const environment = {
+  appName: "Dengar MP",
   production: true,
   backend: {
     releaseEndpoint: "https://content.oralbible.app/api/v1/papuan_malay/release",
