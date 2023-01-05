@@ -18,14 +18,13 @@ build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 prep-all: \
 	prep-yetfa
 
-prep-%: clean $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/config.template.xml $(CLIENT)/src/*
+prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
 	mv $(CLIENT)/dist/media/$*.bundle.obd $(CLIENT)/dist/media/bundle.obd
 	cp $(CLIENT)/src/environments/environment.prod.$*.ts $(CLIENT)/src/environments/environment.prod.ts
 	sed \
 		-e 's/%%VERSION%%/$(APPVERSION)/g' \
-		-e 's/%%TRANSLATION%%/$*/g' \
-		$(CLIENT)/config.template.xml > \
+		$(CLIENT)/config/config.$*.xml > \
 		$(CLIENT)/config.xml
 
 # Later, we should make this target ONLY run if something has changed in CLIENT
@@ -58,7 +57,7 @@ clean:
 		$(CLIENT)/src/environments/environment.prod.ts
 
 clean-all: clean
-	rm -r dist/
+	rm -r dist/ $(BM_OUTPUTS)/
 
 .PRECIOUS: $(BM_OUTPUTS)/%.bundle.obd
 .PHONY: yetfa clean clean-all
