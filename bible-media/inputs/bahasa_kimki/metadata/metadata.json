@@ -1,0 +1,103 @@
+{
+    "Version": "0.0.1",
+    "Categories": [
+        {
+            "type": 1,
+            "name": "Cerita",
+            "children": [
+                {
+                    "type": 2,
+                    "name": "CERITA 01 Af Aya Aplik Nubto- PENCIPTAAN LAKI-LAKI V2YK",
+                    "audioTargetId": "ddba05b1-788d-4074-b5ca-6b4e9768bbce"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 02 Af Aya Ma Giam Nubto-PENCIPTAAN PEREMPUAN",
+                    "audioTargetId": "25de6536-ec9a-4b87-8432-210c15357409"
+                },
+                {
+                    "type": 2,
+                    "name": "Cerita 03 Aplik Yaran Nubli-Kejatuhan",
+                    "audioTargetId": "ec7b1f1b-b2a7-4c7e-be96-db165700bfbe"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 04 Af Aya Aplik Laisko-ALLAH CARI MANUSIA",
+                    "audioTargetId": "201d40d3-39d1-4476-9acc-ae690e2801ba"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 05 Af Aya Ma Aplik Lilmukitkum Nubsu-ALLAH MENGHUKUM",
+                    "audioTargetId": "d92c0f72-04c5-4544-bd77-b192705fd5e6"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 06 Af Aya Abrahammi Mitainto-JANJI KEPADA ABRAHAM",
+                    "audioTargetId": "c45b5181-dda9-4bd5-919e-44186bc5bf73"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 07 Yesaya Af Aya Taintmumikuntainko-NUBUATAN YESAYA",
+                    "audioTargetId": "5fb7cbfe-6428-4c27-9504-f5d1360df19a"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 08 Yesus Kitolimu- KELAHIRAN YESUS",
+                    "audioTargetId": "39245e91-300f-4fc9-8416-b6b91ee273b8"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 09 Yesus Nazaret Miako-NAZARET",
+                    "audioTargetId": "6a586151-b900-4aef-8a79-356d70cad638"
+                },
+                {
+                    "type": 2,
+                    "name": "CERITA 10 Yesus Kal Bikutamu Ap Asto ORANG LUMPUH",
+                    "audioTargetId": "b9e76e54-931d-40a7-85ed-6cad8264fdf7"
+                }
+            ]
+        }
+    ],
+    "Audio": [
+        {
+            "id": "ddba05b1-788d-4074-b5ca-6b4e9768bbce",
+            "file": "audio/Cerita/CERITA 01 Af Aya Aplik Nubto- PENCIPTAAN LAKI-LAKI V2YK.mp3"
+        },
+        {
+            "id": "25de6536-ec9a-4b87-8432-210c15357409",
+            "file": "audio/Cerita/CERITA 02 Af Aya Ma Giam Nubto-PENCIPTAAN PEREMPUAN.mp3"
+        },
+        {
+            "id": "201d40d3-39d1-4476-9acc-ae690e2801ba",
+            "file": "audio/Cerita/CERITA 04 Af Aya Aplik Laisko-ALLAH CARI MANUSIA.mp3"
+        },
+        {
+            "id": "d92c0f72-04c5-4544-bd77-b192705fd5e6",
+            "file": "audio/Cerita/CERITA 05 Af Aya Ma Aplik Lilmukitkum Nubsu-ALLAH MENGHUKUM.mp3"
+        },
+        {
+            "id": "c45b5181-dda9-4bd5-919e-44186bc5bf73",
+            "file": "audio/Cerita/CERITA 06 Af Aya Abrahammi Mitainto-JANJI KEPADA ABRAHAM.mp3"
+        },
+        {
+            "id": "5fb7cbfe-6428-4c27-9504-f5d1360df19a",
+            "file": "audio/Cerita/CERITA 07 Yesaya Af Aya Taintmumikuntainko-NUBUATAN YESAYA.mp3"
+        },
+        {
+            "id": "39245e91-300f-4fc9-8416-b6b91ee273b8",
+            "file": "audio/Cerita/CERITA 08 Yesus Kitolimu- KELAHIRAN YESUS.mp3"
+        },
+        {
+            "id": "6a586151-b900-4aef-8a79-356d70cad638",
+            "file": "audio/Cerita/CERITA 09 Yesus Nazaret Miako-NAZARET.mp3"
+        },
+        {
+            "id": "b9e76e54-931d-40a7-85ed-6cad8264fdf7",
+            "file": "audio/Cerita/CERITA 10 Yesus Kal Bikutamu Ap Asto ORANG LUMPUH.mp3"
+        },
+        {
+            "id": "ec7b1f1b-b2a7-4c7e-be96-db165700bfbe",
+            "file": "audio/Cerita/Cerita 03 Aplik Yaran Nubli-Kejatuhan.mp3"
+        }
+    ]
+}
