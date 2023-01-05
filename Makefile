@@ -11,9 +11,12 @@ bundle_path := $(CLIENT)/platforms/android/app/build/outputs/bundle/release
 bundle_default_file := $(bundle_path)/app-release.aab
 
 build-all: \
-	build-yetfa
+	build-yetfa \
+	build-papuan_malay
 
 build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
+
+build-papuan_malay: prep-papuan_malay cycle-cordova-platform package-papuan_malay
 
 prep-all: \
 	prep-yetfa
@@ -36,7 +39,7 @@ cycle-cordova-platform:
 
 package-yetfa: dist/yetfa.prod.aab
 
-build-papuan_malay: dist/papuan_malay.prod.aab
+package-papuan_malay: dist/papuan_malay.prod.aab
 
 dist/%.prod.aab: $(bundle_default_file)
 	cp $< $@
