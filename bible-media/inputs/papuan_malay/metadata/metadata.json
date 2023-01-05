@@ -1,0 +1,421 @@
+{
+  "Version": "0.0.1",
+  "Categories": [
+    {
+      "type": 1,
+      "name": "Perjanjian Lama",
+      "children": [
+        {
+          "type": 1,
+          "name": "Kejadian",
+          "children": [
+            {
+              "type": 1,
+              "name": "Kejadian 1",
+              "children": [
+                {
+                  "type": 2,
+                  "name": "kejadian 1_1",
+                  "audioTargetId": "c660b308-4f71-498a-abd2-c15b0adeaa2f"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_2",
+                  "audioTargetId": "13ab40fa-4114-45a0-8f4b-3acffabbe183"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_3",
+                  "audioTargetId": "4c30efab-0f65-407d-9df6-f445c2a8bd1c"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_4",
+                  "audioTargetId": "6a55ce89-b9df-49fd-acfc-b79e4112a297"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_5",
+                  "audioTargetId": "460a14cf-0c22-4d75-9e32-f94ec0dc96ff"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_6",
+                  "audioTargetId": "5c409618-e5d5-4df4-9dfe-23438c15ed0f"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_7",
+                  "audioTargetId": "67b35871-9d58-4541-9ae4-57649b932908"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_8",
+                  "audioTargetId": "32713602-1132-411a-8bd6-bfa46f35b6df"
+                },
+                {
+                  "type": 2,
+                  "name": "kejadian 1_9",
+                  "audioTargetId": "490aa3e8-7418-4898-ac64-5a402248827a"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "name": "Perjanjian Baru",
+      "children": [
+        {
+          "type": 1,
+          "name": "Lukas",
+          "children": [
+            {
+              "type": 1,
+              "name": "Lukas 1",
+              "children": [
+                {
+                  "type": 2,
+                  "name": "Lukas 1_1",
+                  "audioTargetId": "a1bdfd0b-71c6-44a1-a2e7-3fcf707a6b6b"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_2",
+                  "audioTargetId": "f72c8810-f849-4e55-bd66-4ed80f3e9e7f"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_3",
+                  "audioTargetId": "60b54f4c-f950-4e01-bb59-196d9ea04f96"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_4",
+                  "audioTargetId": "eca5a576-db6a-4441-a3d2-05f33b0f0e19"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_5",
+                  "audioTargetId": "d1e64b49-870c-49f5-b9c9-503c2a699e48"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_6",
+                  "audioTargetId": "ca92a1eb-d8a3-4a4b-9671-34a83eb921ba"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_7",
+                  "audioTargetId": "9215f8b1-6664-4b2d-88e6-e6c9947beae2"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_8",
+                  "audioTargetId": "b72166b6-ceaa-415c-bd77-d1909a1317d1"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_9",
+                  "audioTargetId": "7439170e-4156-4e04-be38-915a833e8fe7"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_10",
+                  "audioTargetId": "ae6f3807-1957-473f-8d65-085ebf72dee6"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_11",
+                  "audioTargetId": "5d70ad69-6d86-4ef1-bb3b-89266bebc0eb"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_12",
+                  "audioTargetId": "4408d2a1-49af-485b-b3a9-13ac7f5ba32b"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_13",
+                  "audioTargetId": "b8571e0b-6fb1-4a50-a0d5-4277b7bdb46d"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_14",
+                  "audioTargetId": "4a068894-d56f-476e-91ad-acaf60efed82"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_15",
+                  "audioTargetId": "aeb330ce-f6c3-47af-963e-aca555423850"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_16",
+                  "audioTargetId": "82842453-bc12-40e5-92c5-487e53e5528e"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_17",
+                  "audioTargetId": "918d4282-ef51-4947-88fc-31e05948d924"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_18",
+                  "audioTargetId": "afe3046d-9562-4db4-be8c-ebdff7bd96b7"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_19",
+                  "audioTargetId": "26e020ce-322a-4431-84b0-790b03599cc5"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_20",
+                  "audioTargetId": "c8eeb313-3619-4684-886c-bae5da463373"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_21",
+                  "audioTargetId": "1b2b9768-dd52-43d7-82b6-bc36867a485f"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_22",
+                  "audioTargetId": "7d2d7625-6556-43ee-bd48-970ddb723e9c"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_23",
+                  "audioTargetId": "63ea101e-efd8-4504-a5ff-7702b39ec444"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_24",
+                  "audioTargetId": "59f2f88c-4ad8-4a7e-ba10-a05a6650eae5"
+                },
+                {
+                  "type": 2,
+                  "name": "Lukas 1_25",
+                  "audioTargetId": "8e7246e7-46b9-4ca5-8b5b-51d878b7d38b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": 1,
+          "name": "1 Timotius",
+          "children": [
+            {
+              "type": 1,
+              "name": "1 Timotius 1",
+              "children": [
+                {
+                  "type": 2,
+                  "name": "1 Timotius 1_1",
+                  "audioTargetId": "02f5a95b-6cc8-4f22-bec6-4c786c28b0fb"
+                },
+                {
+                  "type": 2,
+                  "name": "1 Timotius 1_2",
+                  "audioTargetId": "f6a15e51-0cb9-4478-a8ba-f647df36b168"
+                },
+                {
+                  "type": 2,
+                  "name": "1 Timotius 1_3",
+                  "audioTargetId": "d7ae19f8-77cb-44da-ba33-2cedb9c00384"
+                },
+                {
+                  "type": 2,
+                  "name": "1 Timotius 1_4",
+                  "audioTargetId": "0ab98092-710b-4f52-822c-1777d8599a9b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "name": "Lagu",
+      "children": [
+        {
+          "type": 2,
+          "name": "1. Indah pada waktuNya",
+          "audioTargetId": "84ea494f-2f42-4602-aef1-b3424ad3c217"
+        },
+        {
+          "type": 2,
+          "name": "2. Ko Khusus Ko Perkasa",
+          "audioTargetId": "74cdac6f-feb1-43b0-b3ac-c478021fdfd2"
+        }
+      ]
+    }
+  ],
+  "Audio": [
+    {
+      "id": "84ea494f-2f42-4602-aef1-b3424ad3c217",
+      "file": "audio/Lagu (Songs)/1. Indah pada waktuNya.mp3"
+    },
+    {
+      "id": "74cdac6f-feb1-43b0-b3ac-c478021fdfd2",
+      "file": "audio/Lagu (Songs)/2. Ko Khusus Ko Perkasa.mp3"
+    },
+    {
+      "id": "02f5a95b-6cc8-4f22-bec6-4c786c28b0fb",
+      "file": "audio/Perjanjian Baru (New Testament)/1 Timotius/1 Timotius 1/1 Timotius 1_1.mp3"
+    },
+    {
+      "id": "f6a15e51-0cb9-4478-a8ba-f647df36b168",
+      "file": "audio/Perjanjian Baru (New Testament)/1 Timotius/1 Timotius 1/1 Timotius 1_2.mp3"
+    },
+    {
+      "id": "d7ae19f8-77cb-44da-ba33-2cedb9c00384",
+      "file": "audio/Perjanjian Baru (New Testament)/1 Timotius/1 Timotius 1/1 Timotius 1_3.mp3"
+    },
+    {
+      "id": "0ab98092-710b-4f52-822c-1777d8599a9b",
+      "file": "audio/Perjanjian Baru (New Testament)/1 Timotius/1 Timotius 1/1 Timotius 1_4.mp3"
+    },
+    {
+      "id": "a1bdfd0b-71c6-44a1-a2e7-3fcf707a6b6b",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_1.mp3"
+    },
+    {
+      "id": "ae6f3807-1957-473f-8d65-085ebf72dee6",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_10.mp3"
+    },
+    {
+      "id": "5d70ad69-6d86-4ef1-bb3b-89266bebc0eb",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_11.mp3"
+    },
+    {
+      "id": "4408d2a1-49af-485b-b3a9-13ac7f5ba32b",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_12.mp3"
+    },
+    {
+      "id": "b8571e0b-6fb1-4a50-a0d5-4277b7bdb46d",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_13.mp3"
+    },
+    {
+      "id": "4a068894-d56f-476e-91ad-acaf60efed82",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_14.mp3"
+    },
+    {
+      "id": "aeb330ce-f6c3-47af-963e-aca555423850",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_15.mp3"
+    },
+    {
+      "id": "82842453-bc12-40e5-92c5-487e53e5528e",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_16.mp3"
+    },
+    {
+      "id": "918d4282-ef51-4947-88fc-31e05948d924",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_17.mp3"
+    },
+    {
+      "id": "afe3046d-9562-4db4-be8c-ebdff7bd96b7",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_18.mp3"
+    },
+    {
+      "id": "26e020ce-322a-4431-84b0-790b03599cc5",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_19.mp3"
+    },
+    {
+      "id": "f72c8810-f849-4e55-bd66-4ed80f3e9e7f",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_2.mp3"
+    },
+    {
+      "id": "c8eeb313-3619-4684-886c-bae5da463373",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_20.mp3"
+    },
+    {
+      "id": "1b2b9768-dd52-43d7-82b6-bc36867a485f",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_21.mp3"
+    },
+    {
+      "id": "7d2d7625-6556-43ee-bd48-970ddb723e9c",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_22.mp3"
+    },
+    {
+      "id": "63ea101e-efd8-4504-a5ff-7702b39ec444",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_23.mp3"
+    },
+    {
+      "id": "59f2f88c-4ad8-4a7e-ba10-a05a6650eae5",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_24.mp3"
+    },
+    {
+      "id": "8e7246e7-46b9-4ca5-8b5b-51d878b7d38b",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_25.mp3"
+    },
+    {
+      "id": "60b54f4c-f950-4e01-bb59-196d9ea04f96",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_3.mp3"
+    },
+    {
+      "id": "eca5a576-db6a-4441-a3d2-05f33b0f0e19",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_4.mp3"
+    },
+    {
+      "id": "d1e64b49-870c-49f5-b9c9-503c2a699e48",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_5.mp3"
+    },
+    {
+      "id": "ca92a1eb-d8a3-4a4b-9671-34a83eb921ba",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_6.mp3"
+    },
+    {
+      "id": "9215f8b1-6664-4b2d-88e6-e6c9947beae2",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_7.mp3"
+    },
+    {
+      "id": "b72166b6-ceaa-415c-bd77-d1909a1317d1",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_8.mp3"
+    },
+    {
+      "id": "7439170e-4156-4e04-be38-915a833e8fe7",
+      "file": "audio/Perjanjian Baru (New Testament)/Lukas (Luke)/Lukas 1/Lukas 1_9.mp3"
+    },
+    {
+      "id": "c660b308-4f71-498a-abd2-c15b0adeaa2f",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_1.mp3"
+    },
+    {
+      "id": "13ab40fa-4114-45a0-8f4b-3acffabbe183",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_2.mp3"
+    },
+    {
+      "id": "4c30efab-0f65-407d-9df6-f445c2a8bd1c",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_3.mp3"
+    },
+    {
+      "id": "6a55ce89-b9df-49fd-acfc-b79e4112a297",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_4.mp3"
+    },
+    {
+      "id": "460a14cf-0c22-4d75-9e32-f94ec0dc96ff",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_5.mp3"
+    },
+    {
+      "id": "5c409618-e5d5-4df4-9dfe-23438c15ed0f",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_6.mp3"
+    },
+    {
+      "id": "67b35871-9d58-4541-9ae4-57649b932908",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_7.mp3"
+    },
+    {
+      "id": "32713602-1132-411a-8bd6-bfa46f35b6df",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_8.mp3"
+    },
+    {
+      "id": "490aa3e8-7418-4898-ac64-5a402248827a",
+      "file": "audio/Perjanjian Lama (Old Testament)/Kejadian (Genesis)/Kejadian 1/kejadian 1_9.mp3"
+    }
+  ]
+}

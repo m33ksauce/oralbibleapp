@@ -11,12 +11,16 @@ bundle_path := $(CLIENT)/platforms/android/app/build/outputs/bundle/release
 bundle_default_file := $(bundle_path)/app-release.aab
 
 build-all: \
-	build-yetfa
+	build-yetfa \
+	build-papuan_malay
 
 build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 
+build-papuan_malay: prep-papuan_malay cycle-cordova-platform package-papuan_malay
+
 prep-all: \
 	prep-yetfa
+	prep-papuan_malay
 
 prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
@@ -35,12 +39,11 @@ cycle-cordova-platform:
 
 package-yetfa: dist/yetfa.prod.aab
 
-dist/%.prod.aab: $(bundle_default_file)
-	cp $< $@
+package-papuan_malay: dist/papuan_malay.prod.aab
 
-$(bundle_default_file): $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
-	pushd $(CLIENT) && npm run package-prod
-
+dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
+	pushd $(CLIENT) && npm run package-prod 
+	cp $(bundle_default_file) $@
 
 $(CLIENT)/dist/media/%.bundle.obd: $(BM_OUTPUTS)/%.bundle.obd
 	mkdir -p $(CLIENT)/dist/media/
@@ -52,12 +55,13 @@ $(BM_OUTPUTS)/%.bundle.obd:
 	mv $(@D)/bundle.obd $@
 
 clean:
-	rm -r $(CLIENT)/config.xml \
+	-rm -r $(CLIENT)/config.xml \
 		$(CLIENT)/dist/media/*.obd \
-		$(CLIENT)/src/environments/environment.prod.ts
+		$(CLIENT)/src/environments/environment.prod.ts \
+		$(bundle_default_file)
 
 clean-all: clean
-	rm -r dist/ $(BM_OUTPUTS)/
+	-rm -r dist/ $(BM_OUTPUTS)/
 
 .PRECIOUS: $(BM_OUTPUTS)/%.bundle.obd
 .PHONY: yetfa clean clean-all
