@@ -12,15 +12,19 @@ bundle_default_file := $(bundle_path)/app-release.aab
 
 build-all: \
 	build-yetfa \
-	build-papuan_malay
+	build-papuan_malay \
+	build-tangko
 
 build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 
 build-papuan_malay: prep-papuan_malay cycle-cordova-platform package-papuan_malay
 
+build-tangko: prep-tangko cycle-cordova-platform package-tangko
+
 prep-all: \
-	prep-yetfa
-	prep-papuan_malay
+	prep-yetfa \
+	prep-papuan_malay \
+	prep-tangko
 
 prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
@@ -40,6 +44,8 @@ cycle-cordova-platform:
 package-yetfa: dist/yetfa.prod.aab
 
 package-papuan_malay: dist/papuan_malay.prod.aab
+
+package-tangko: dist/tangko.prod.aab
 
 dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
 	pushd $(CLIENT) && npm run package-prod 
