@@ -6,12 +6,12 @@ export const environment = {
   appName: "Awa Ma",
   production: false,
   backend: {
-    releaseEndpoint: "http://localhost:8080/api/v1/papuan_malay/release",
-    audioEndpoint: "http://localhost:8080/api/v1/papuan_malay/audio",
+    releaseEndpoint: "http://localhost:8080/api/v1/yetfa/release",
+    audioEndpoint: "http://localhost:8080/api/v1/yetfa/audio",
   },
   features: {
     dynamicContent: true,
-    bluetoothUpdate: false,
+    bluetoothUpdate: true,
     mediaCanCollapseWhenPlaying: true,
   }
 };

@@ -37,6 +37,10 @@ export class UpdatePage implements OnInit {
       .pipe(map(stat => this.mapUpdateStatus(stat)));
   }
 
+  checkBluetoothUpdate() {
+
+  }
+
   mapUpdateStatus(status: UpdateStatus) {
     switch(status) {
       case UpdateStatus.READY: {
