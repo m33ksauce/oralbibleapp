@@ -14,7 +14,11 @@ build-all: \
 	build-yetfa \
 	build-papuan_malay \
 	build-tangko \
-	build-bahasa_kimki
+	build-bahasa_kimki \
+	build-bahasa_dou \
+	build-bahasa_fayu \
+	build-bahasa_sikari \
+	build-bahasa_walak
 
 build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 
@@ -24,11 +28,23 @@ build-tangko: prep-tangko cycle-cordova-platform package-tangko
 
 build-bahasa_kimki: prep-bahasa_kimki cycle-cordova-platform package-bahasa_kimki
 
+build-bahasa_dou: prep-bahasa_dou cycle-cordova-platform package-bahasa_dou
+
+build-bahasa_fayu: prep-bahasa_fayu cycle-cordova-platform package-bahasa_fayu
+
+build-bahasa_sikari: prep-bahasa_sikari cycle-cordova-platform package-bahasa_sikari
+
+build-bahasa_walak: prep-bahasa_walak cycle-cordova-platform package-bahasa_walak
+
 prep-all: \
 	prep-yetfa \
 	prep-papuan_malay \
 	prep-tangko \
-	prep-bahasa_kimki
+	prep-bahasa_kimki \
+	prep-bahasa_dou \
+	prep-bahasa_fayu \
+	prep-bahasa_sikari \
+	prep-bahasa_walak
 
 prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
@@ -52,6 +68,14 @@ package-papuan_malay: dist/papuan_malay.prod.aab
 package-tangko: dist/tangko.prod.aab
 
 package-bahasa_kimki: dist/bahasa_kimki.prod.aab
+
+package-bahasa_dou: dist/bahasa_dou.prod.aab
+
+package-bahasa_fayu: dist/bahasa_fayu.prod.aab
+
+package-bahasa_sikari: dist/bahasa_sikari.prod.aab
+
+package-bahasa_walak: dist/bahasa_walak.prod.aab
 
 dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
 	pushd $(CLIENT) && npm run package-prod 

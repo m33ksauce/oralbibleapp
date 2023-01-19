@@ -1,103 +1,176 @@
 {
     "Version": "0.0.1",
     "Categories": [
-        {
-            "type": 1,
-            "name": "Cerita",
-            "children": [
-                {
-                    "type": 2,
-                    "name": "CERITA 01 Af Aya Aplik Nubto- PENCIPTAAN LAKI-LAKI V2YK",
-                    "audioTargetId": "ddba05b1-788d-4074-b5ca-6b4e9768bbce"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 02 Af Aya Ma Giam Nubto-PENCIPTAAN PEREMPUAN",
-                    "audioTargetId": "25de6536-ec9a-4b87-8432-210c15357409"
-                },
-                {
-                    "type": 2,
-                    "name": "Cerita 03 Aplik Yaran Nubli-Kejatuhan",
-                    "audioTargetId": "ec7b1f1b-b2a7-4c7e-be96-db165700bfbe"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 04 Af Aya Aplik Laisko-ALLAH CARI MANUSIA",
-                    "audioTargetId": "201d40d3-39d1-4476-9acc-ae690e2801ba"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 05 Af Aya Ma Aplik Lilmukitkum Nubsu-ALLAH MENGHUKUM",
-                    "audioTargetId": "d92c0f72-04c5-4544-bd77-b192705fd5e6"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 06 Af Aya Abrahammi Mitainto-JANJI KEPADA ABRAHAM",
-                    "audioTargetId": "c45b5181-dda9-4bd5-919e-44186bc5bf73"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 07 Yesaya Af Aya Taintmumikuntainko-NUBUATAN YESAYA",
-                    "audioTargetId": "5fb7cbfe-6428-4c27-9504-f5d1360df19a"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 08 Yesus Kitolimu- KELAHIRAN YESUS",
-                    "audioTargetId": "39245e91-300f-4fc9-8416-b6b91ee273b8"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 09 Yesus Nazaret Miako-NAZARET",
-                    "audioTargetId": "6a586151-b900-4aef-8a79-356d70cad638"
-                },
-                {
-                    "type": 2,
-                    "name": "CERITA 10 Yesus Kal Bikutamu Ap Asto ORANG LUMPUH",
-                    "audioTargetId": "b9e76e54-931d-40a7-85ed-6cad8264fdf7"
-                }
-            ]
-        }
+      {
+        "type": 1,
+        "name": "Cerita Alkitab",
+        "children": [
+          {
+            "type": 2,
+            "name": "01 Af Aya Aplik Nubto- PENCIPTAAN LAKI-LAKI V2YK",
+            "audioTargetId": "e2556ea4fdd7dcc6551b66dd7309996f"
+          },
+          {
+            "type": 2,
+            "name": "02 Af Aya Ma Giam Nubto-PENCIPTAAN PEREMPUAN",
+            "audioTargetId": "0c19771e09706c172ed1e13ebe710b2b"
+          },
+          {
+            "type": 2,
+            "name": "03 Aplik Yaran Nubli-Kejatuhan",
+            "audioTargetId": "e9ea4896483bb9de916dd73577c0eb1f"
+          },
+          {
+            "type": 2,
+            "name": "04 Af Aya Aplik Laisko-ALLAH CARI MANUSIA",
+            "audioTargetId": "762031690845187b0d29d43e3c5767a9"
+          },
+          {
+            "type": 2,
+            "name": "05 Af Aya Ma Aplik Lilmukitkum Nubsu-ALLAH MENGHUKUM",
+            "audioTargetId": "6139a6c04fc4aa385af7ec1028517479"
+          },
+          {
+            "type": 2,
+            "name": "06 Af Aya Abrahammi Mitainto-JANJI KEPADA ABRAHAM",
+            "audioTargetId": "d5cc9fdf68c8333977519c546d70ce04"
+          },
+          {
+            "type": 2,
+            "name": "07 Yesaya Af Aya Taintmumikuntainko-NUBUATAN YESAYA",
+            "audioTargetId": "c9017982cd5d0bd69c4ad2147a24e183"
+          },
+          {
+            "type": 2,
+            "name": "08 Yesus Kitolimu- KELAHIRAN YESUS",
+            "audioTargetId": "c5dd32d1fc76d06a758766968a7ee3d4"
+          },
+          {
+            "type": 2,
+            "name": "09 Yesus Nazaret Miako-NAZARET",
+            "audioTargetId": "cf647217e7126dfda691f6e2a40af184"
+          },
+          {
+            "type": 2,
+            "name": "10 Yesus Kal Bikutamu Ap Asto ORANG LUMPUH",
+            "audioTargetId": "b93ad143df5be60392b7ea8e8a652d3b"
+          },
+          {
+            "type": 2,
+            "name": "11 Syam Buil JALA BESAR",
+            "audioTargetId": "1231856625d946ef8d27e492c4300764"
+          },
+          {
+            "type": 2,
+            "name": "13 Yesus Aimu Kula Apsi Suyokinolum Nenkofblo-KERASUKAN",
+            "audioTargetId": "1e5ac8a4955bdf2317aa52e06d79288f"
+          },
+          {
+            "type": 2,
+            "name": "14 Yesus Lazarus Kasih Nubtotiesra-LAZARUS",
+            "audioTargetId": "2f5dc36250645070aa77036cec5ed1cc"
+          },
+          {
+            "type": 2,
+            "name": "15 Yesus Naenu Taplitunublo- YESUS DIADILI",
+            "audioTargetId": "c6ac95cfa1dd832149029bbc64e60a6e"
+          },
+          {
+            "type": 2,
+            "name": "16 Yesus Ka Weya Subontoli-PENYALIBAN YESUS",
+            "audioTargetId": "ec1d0bc9bea8f9552691f89b2b943a55"
+          },
+          {
+            "type": 2,
+            "name": "17 Yesus Nisol Esra- KEBANGKITAN YESUS",
+            "audioTargetId": "c40fa35b6c2a669646fc858470929289"
+          },
+          {
+            "type": 2,
+            "name": "18 Yesus Pim Oklan Waab-KENAIKAN",
+            "audioTargetId": "013d9f5db7bc6635165e4171d7da6c62"
+          },
+          {
+            "type": 2,
+            "name": "19 Af Aya Ma As Af Aya Kula Bah-ROH KUDUS V2FM",
+            "audioTargetId": "d187af87cf1f7556cd00e4dfe6e9c458"
+          }
+        ]
+      }
     ],
     "Audio": [
-        {
-            "id": "ddba05b1-788d-4074-b5ca-6b4e9768bbce",
-            "file": "audio/Cerita/CERITA 01 Af Aya Aplik Nubto- PENCIPTAAN LAKI-LAKI V2YK.mp3"
-        },
-        {
-            "id": "25de6536-ec9a-4b87-8432-210c15357409",
-            "file": "audio/Cerita/CERITA 02 Af Aya Ma Giam Nubto-PENCIPTAAN PEREMPUAN.mp3"
-        },
-        {
-            "id": "201d40d3-39d1-4476-9acc-ae690e2801ba",
-            "file": "audio/Cerita/CERITA 04 Af Aya Aplik Laisko-ALLAH CARI MANUSIA.mp3"
-        },
-        {
-            "id": "d92c0f72-04c5-4544-bd77-b192705fd5e6",
-            "file": "audio/Cerita/CERITA 05 Af Aya Ma Aplik Lilmukitkum Nubsu-ALLAH MENGHUKUM.mp3"
-        },
-        {
-            "id": "c45b5181-dda9-4bd5-919e-44186bc5bf73",
-            "file": "audio/Cerita/CERITA 06 Af Aya Abrahammi Mitainto-JANJI KEPADA ABRAHAM.mp3"
-        },
-        {
-            "id": "5fb7cbfe-6428-4c27-9504-f5d1360df19a",
-            "file": "audio/Cerita/CERITA 07 Yesaya Af Aya Taintmumikuntainko-NUBUATAN YESAYA.mp3"
-        },
-        {
-            "id": "39245e91-300f-4fc9-8416-b6b91ee273b8",
-            "file": "audio/Cerita/CERITA 08 Yesus Kitolimu- KELAHIRAN YESUS.mp3"
-        },
-        {
-            "id": "6a586151-b900-4aef-8a79-356d70cad638",
-            "file": "audio/Cerita/CERITA 09 Yesus Nazaret Miako-NAZARET.mp3"
-        },
-        {
-            "id": "b9e76e54-931d-40a7-85ed-6cad8264fdf7",
-            "file": "audio/Cerita/CERITA 10 Yesus Kal Bikutamu Ap Asto ORANG LUMPUH.mp3"
-        },
-        {
-            "id": "ec7b1f1b-b2a7-4c7e-be96-db165700bfbe",
-            "file": "audio/Cerita/Cerita 03 Aplik Yaran Nubli-Kejatuhan.mp3"
-        }
+      {
+        "id": "e2556ea4fdd7dcc6551b66dd7309996f",
+        "file": "audio/Cerita Alkitab/01 Af Aya Aplik Nubto- PENCIPTAAN LAKI-LAKI V2YK.mp3"
+      },
+      {
+        "id": "0c19771e09706c172ed1e13ebe710b2b",
+        "file": "audio/Cerita Alkitab/02 Af Aya Ma Giam Nubto-PENCIPTAAN PEREMPUAN.mp3"
+      },
+      {
+        "id": "e9ea4896483bb9de916dd73577c0eb1f",
+        "file": "audio/Cerita Alkitab/03 Aplik Yaran Nubli-Kejatuhan.mp3"
+      },
+      {
+        "id": "762031690845187b0d29d43e3c5767a9",
+        "file": "audio/Cerita Alkitab/04 Af Aya Aplik Laisko-ALLAH CARI MANUSIA.mp3"
+      },
+      {
+        "id": "6139a6c04fc4aa385af7ec1028517479",
+        "file": "audio/Cerita Alkitab/05 Af Aya Ma Aplik Lilmukitkum Nubsu-ALLAH MENGHUKUM.mp3"
+      },
+      {
+        "id": "d5cc9fdf68c8333977519c546d70ce04",
+        "file": "audio/Cerita Alkitab/06 Af Aya Abrahammi Mitainto-JANJI KEPADA ABRAHAM.mp3"
+      },
+      {
+        "id": "c9017982cd5d0bd69c4ad2147a24e183",
+        "file": "audio/Cerita Alkitab/07 Yesaya Af Aya Taintmumikuntainko-NUBUATAN YESAYA.mp3"
+      },
+      {
+        "id": "c5dd32d1fc76d06a758766968a7ee3d4",
+        "file": "audio/Cerita Alkitab/08 Yesus Kitolimu- KELAHIRAN YESUS.mp3"
+      },
+      {
+        "id": "cf647217e7126dfda691f6e2a40af184",
+        "file": "audio/Cerita Alkitab/09 Yesus Nazaret Miako-NAZARET.mp3"
+      },
+      {
+        "id": "b93ad143df5be60392b7ea8e8a652d3b",
+        "file": "audio/Cerita Alkitab/10 Yesus Kal Bikutamu Ap Asto ORANG LUMPUH.mp3"
+      },
+      {
+        "id": "1231856625d946ef8d27e492c4300764",
+        "file": "audio/Cerita Alkitab/11 Syam Buil JALA BESAR.mp3"
+      },
+      {
+        "id": "1e5ac8a4955bdf2317aa52e06d79288f",
+        "file": "audio/Cerita Alkitab/13 Yesus Aimu Kula Apsi Suyokinolum Nenkofblo-KERASUKAN.mp3"
+      },
+      {
+        "id": "2f5dc36250645070aa77036cec5ed1cc",
+        "file": "audio/Cerita Alkitab/14 Yesus Lazarus Kasih Nubtotiesra-LAZARUS.mp3"
+      },
+      {
+        "id": "c6ac95cfa1dd832149029bbc64e60a6e",
+        "file": "audio/Cerita Alkitab/15 Yesus Naenu Taplitunublo- YESUS DIADILI.mp3"
+      },
+      {
+        "id": "ec1d0bc9bea8f9552691f89b2b943a55",
+        "file": "audio/Cerita Alkitab/16 Yesus Ka Weya Subontoli-PENYALIBAN YESUS.mp3"
+      },
+      {
+        "id": "c40fa35b6c2a669646fc858470929289",
+        "file": "audio/Cerita Alkitab/17 Yesus Nisol Esra- KEBANGKITAN YESUS.mp3"
+      },
+      {
+        "id": "013d9f5db7bc6635165e4171d7da6c62",
+        "file": "audio/Cerita Alkitab/18 Yesus Pim Oklan Waab-KENAIKAN.mp3"
+      },
+      {
+        "id": "d187af87cf1f7556cd00e4dfe6e9c458",
+        "file": "audio/Cerita Alkitab/19 Af Aya Ma As Af Aya Kula Bah-ROH KUDUS V2FM.mp3"
+      }
     ]
-}
+  }
+  

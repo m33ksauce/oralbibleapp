@@ -1,0 +1,76 @@
+{
+  "Version": "0.0.1",
+  "Categories": [
+    {
+      "type": 1,
+      "name": "Cerita Alkitab",
+      "children": [
+        {
+          "type": 2,
+          "name": "01 Penciptaan Dunia",
+          "audioTargetId": "01f0608c9654a246f37172d5fd417e50"
+        },
+        {
+          "type": 2,
+          "name": "02 Dua Pohon",
+          "audioTargetId": "4069603000841fc7bd0e9736e4ea9f2c"
+        },
+        {
+          "type": 2,
+          "name": "04 Yesus Menenangkan Badai",
+          "audioTargetId": "7fa98ce69cfb01f7f50a5f516fc6de1d"
+        },
+        {
+          "type": 2,
+          "name": "05 Yesus Diadili",
+          "audioTargetId": "ce2cb6f402f989163b68130b7c4f74e6"
+        },
+        {
+          "type": 2,
+          "name": "06 Yesus Disalibkan",
+          "audioTargetId": "efc793326650fe29348272c3f867c23b"
+        },
+        {
+          "type": 2,
+          "name": "07 Yesus Bangkit",
+          "audioTargetId": "cc43b5ae1c6252bb545aa50349a2eb89"
+        },
+        {
+          "type": 2,
+          "name": "08 Roh Kudus Turun",
+          "audioTargetId": "cf21b8e5c38febc14168e7fb80822aff"
+        }
+      ]
+    }
+  ],
+  "Audio": [
+    {
+      "id": "01f0608c9654a246f37172d5fd417e50",
+      "file": "audio/Cerita Alkitab/01 Penciptaan Dunia.mp3"
+    },
+    {
+      "id": "4069603000841fc7bd0e9736e4ea9f2c",
+      "file": "audio/Cerita Alkitab/02 Dua Pohon.mp3"
+    },
+    {
+      "id": "7fa98ce69cfb01f7f50a5f516fc6de1d",
+      "file": "audio/Cerita Alkitab/04 Yesus Menenangkan Badai.mp3"
+    },
+    {
+      "id": "ce2cb6f402f989163b68130b7c4f74e6",
+      "file": "audio/Cerita Alkitab/05 Yesus Diadili.mp3"
+    },
+    {
+      "id": "efc793326650fe29348272c3f867c23b",
+      "file": "audio/Cerita Alkitab/06 Yesus Disalibkan.mp3"
+    },
+    {
+      "id": "cc43b5ae1c6252bb545aa50349a2eb89",
+      "file": "audio/Cerita Alkitab/07 Yesus Bangkit.mp3"
+    },
+    {
+      "id": "cf21b8e5c38febc14168e7fb80822aff",
+      "file": "audio/Cerita Alkitab/08 Roh Kudus Turun.mp3"
+    }
+  ]
+}
