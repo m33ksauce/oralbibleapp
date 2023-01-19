@@ -1,0 +1,274 @@
+{
+  "Version": "0.0.1",
+  "Categories": [
+    {
+      "type": 1,
+      "name": "Cerita Alkitab",
+      "children": [
+        {
+          "type": 2,
+          "name": "01 Penciptaan Laki-Laki",
+          "audioTargetId": "c601c8fdb3917ac22c3e35d4f08b0514"
+        },
+        {
+          "type": 2,
+          "name": "02 Penciptaan perempuan",
+          "audioTargetId": "cc6f4d45e2353b44ea85c4770eb5f416"
+        },
+        {
+          "type": 2,
+          "name": "03 Manusia melawan Firman Allah",
+          "audioTargetId": "17df8d145f67878ff9734bccbda81471"
+        },
+        {
+          "type": 2,
+          "name": "04 Tuhan Allah Memberi Hukuman",
+          "audioTargetId": "735a9f9141c1410be19bc477fcc5a386"
+        },
+        {
+          "type": 2,
+          "name": "05 Janji Tuhan kepada abraham",
+          "audioTargetId": "317e6fb285eb22768864b4f297bdbf48"
+        },
+        {
+          "type": 2,
+          "name": "06 Mimpi Yusuf",
+          "audioTargetId": "96054a0bd493e3c00740b1560dfd6543"
+        },
+        {
+          "type": 2,
+          "name": "07 Yusuf Digoda Istri Potifar",
+          "audioTargetId": "2b5a7408858816798575bb74c8f691ab"
+        },
+        {
+          "type": 2,
+          "name": "08 Yusuf Dipenjara 2",
+          "audioTargetId": "e097dd62934f77082d5ef9792639cb8d"
+        },
+        {
+          "type": 2,
+          "name": "08 Yusuf Dipenjara",
+          "audioTargetId": "1884032377d29b3171ad96e181854c0b"
+        },
+        {
+          "type": 2,
+          "name": "09 Yusuf menjadi wakil firaun",
+          "audioTargetId": "86840d9bf4ef381b3c53432187996d49"
+        },
+        {
+          "type": 2,
+          "name": "10 Yusuf bertemu keluarga",
+          "audioTargetId": "649a8a8bdd5d88dc2ada0c9f9ffc0bfa"
+        },
+        {
+          "type": 2,
+          "name": "11 Nubuatan Yesaya",
+          "audioTargetId": "a4555a451b37f6a8d1a5a5a21c53d2d9"
+        },
+        {
+          "type": 2,
+          "name": "12 Kelahiran Yesus",
+          "audioTargetId": "ba3f32fb23e6334c6932d714e267abb6"
+        },
+        {
+          "type": 2,
+          "name": "13 Yesus Menggenapi Janji Kitab Yesaya",
+          "audioTargetId": "5b2996d7671056c14b83ba83cfd71c54"
+        },
+        {
+          "type": 2,
+          "name": "14 Yesus Menyembuhkan Orang Lumpuh",
+          "audioTargetId": "8f158bb6657fc89388cae4dcac00f3e8"
+        },
+        {
+          "type": 2,
+          "name": "15 Yesus menenangkan badai",
+          "audioTargetId": "6d84a73b28155e78b9d7a91641cb03fe"
+        },
+        {
+          "type": 2,
+          "name": "16 Orang kerasukan",
+          "audioTargetId": "96f251373b19880ac94a15a6ee6ea99a"
+        },
+        {
+          "type": 2,
+          "name": "17 Orang kaya bodoh",
+          "audioTargetId": "87a7fa31ed39a96df2689267581bf185"
+        },
+        {
+          "type": 2,
+          "name": "18 Orang yang melawan Firman Tuhan",
+          "audioTargetId": "249d8fe1aaeadda1535b0aa2fa215ab9"
+        },
+        {
+          "type": 2,
+          "name": "19 Jala Besar",
+          "audioTargetId": "1042eacd6582c7c1c636c124b6353fe0"
+        },
+        {
+          "type": 2,
+          "name": "20 Lazarus hidup kembali",
+          "audioTargetId": "75984cf729a11984e760013ea7207728"
+        },
+        {
+          "type": 2,
+          "name": "21 Yesus Dijatuhi Hukuman Mati",
+          "audioTargetId": "bb9a381d17a90f77fe8bff463b86d5fe"
+        },
+        {
+          "type": 2,
+          "name": "22 Penyaliban Yesus",
+          "audioTargetId": "7d57ac94845d15da4ff24e629493ba47"
+        },
+        {
+          "type": 2,
+          "name": "23 Yesus bangkit",
+          "audioTargetId": "788027b8b0f31160cde2c21e0abf8a56"
+        },
+        {
+          "type": 2,
+          "name": "24 RohKudus",
+          "audioTargetId": "9761132a956ee37bffe8093b8966b98a"
+        },
+        {
+          "type": 2,
+          "name": "25 Orang Banyak Percaya Kepada Yesus00086400",
+          "audioTargetId": "330e95f7b0375150fba98a68d0703743"
+        },
+        {
+          "type": 2,
+          "name": "26 Orang percaya diberea",
+          "audioTargetId": "42d078f6adeeecf08bf699468798e914"
+        },
+        {
+          "type": 2,
+          "name": "27 Tujuh Orang Ahli Nujum",
+          "audioTargetId": "40daecc2e54c591c1cb10abc4d44d52b"
+        },
+        {
+          "type": 2,
+          "name": "28 Orang percaya tinggal bersama Allah",
+          "audioTargetId": "dcdd4e6518b25abbf744a0d942ee4c8d"
+        }
+      ]
+    }
+  ],
+  "Audio": [
+    {
+      "id": "c601c8fdb3917ac22c3e35d4f08b0514",
+      "file": "audio/Cerita Alkitab/01 Penciptaan Laki-Laki.mp3"
+    },
+    {
+      "id": "cc6f4d45e2353b44ea85c4770eb5f416",
+      "file": "audio/Cerita Alkitab/02 Penciptaan perempuan.mp3"
+    },
+    {
+      "id": "17df8d145f67878ff9734bccbda81471",
+      "file": "audio/Cerita Alkitab/03 Manusia melawan Firman Allah.mp3"
+    },
+    {
+      "id": "735a9f9141c1410be19bc477fcc5a386",
+      "file": "audio/Cerita Alkitab/04 Tuhan Allah Memberi Hukuman.mp3"
+    },
+    {
+      "id": "317e6fb285eb22768864b4f297bdbf48",
+      "file": "audio/Cerita Alkitab/05 Janji Tuhan kepada abraham.mp3"
+    },
+    {
+      "id": "96054a0bd493e3c00740b1560dfd6543",
+      "file": "audio/Cerita Alkitab/06 Mimpi Yusuf.mp3"
+    },
+    {
+      "id": "2b5a7408858816798575bb74c8f691ab",
+      "file": "audio/Cerita Alkitab/07 Yusuf Digoda Istri Potifar.mp3"
+    },
+    {
+      "id": "e097dd62934f77082d5ef9792639cb8d",
+      "file": "audio/Cerita Alkitab/08 Yusuf Dipenjara 2.mp3"
+    },
+    {
+      "id": "1884032377d29b3171ad96e181854c0b",
+      "file": "audio/Cerita Alkitab/08 Yusuf Dipenjara.mp3"
+    },
+    {
+      "id": "86840d9bf4ef381b3c53432187996d49",
+      "file": "audio/Cerita Alkitab/09 Yusuf menjadi wakil firaun.mp3"
+    },
+    {
+      "id": "649a8a8bdd5d88dc2ada0c9f9ffc0bfa",
+      "file": "audio/Cerita Alkitab/10 Yusuf bertemu keluarga.mp3"
+    },
+    {
+      "id": "a4555a451b37f6a8d1a5a5a21c53d2d9",
+      "file": "audio/Cerita Alkitab/11 Nubuatan Yesaya.mp3"
+    },
+    {
+      "id": "ba3f32fb23e6334c6932d714e267abb6",
+      "file": "audio/Cerita Alkitab/12 Kelahiran Yesus.mp3"
+    },
+    {
+      "id": "5b2996d7671056c14b83ba83cfd71c54",
+      "file": "audio/Cerita Alkitab/13 Yesus Menggenapi Janji Kitab Yesaya.mp3"
+    },
+    {
+      "id": "8f158bb6657fc89388cae4dcac00f3e8",
+      "file": "audio/Cerita Alkitab/14 Yesus Menyembuhkan Orang Lumpuh.mp3"
+    },
+    {
+      "id": "6d84a73b28155e78b9d7a91641cb03fe",
+      "file": "audio/Cerita Alkitab/15 Yesus menenangkan badai.mp3"
+    },
+    {
+      "id": "96f251373b19880ac94a15a6ee6ea99a",
+      "file": "audio/Cerita Alkitab/16 Orang kerasukan.mp3"
+    },
+    {
+      "id": "87a7fa31ed39a96df2689267581bf185",
+      "file": "audio/Cerita Alkitab/17 Orang kaya bodoh.mp3"
+    },
+    {
+      "id": "249d8fe1aaeadda1535b0aa2fa215ab9",
+      "file": "audio/Cerita Alkitab/18 Orang yang melawan Firman Tuhan.mp3"
+    },
+    {
+      "id": "1042eacd6582c7c1c636c124b6353fe0",
+      "file": "audio/Cerita Alkitab/19 Jala Besar.mp3"
+    },
+    {
+      "id": "75984cf729a11984e760013ea7207728",
+      "file": "audio/Cerita Alkitab/20 Lazarus hidup kembali.mp3"
+    },
+    {
+      "id": "bb9a381d17a90f77fe8bff463b86d5fe",
+      "file": "audio/Cerita Alkitab/21 Yesus Dijatuhi Hukuman Mati.mp3"
+    },
+    {
+      "id": "7d57ac94845d15da4ff24e629493ba47",
+      "file": "audio/Cerita Alkitab/22 Penyaliban Yesus.mp3"
+    },
+    {
+      "id": "788027b8b0f31160cde2c21e0abf8a56",
+      "file": "audio/Cerita Alkitab/23 Yesus bangkit.mp3"
+    },
+    {
+      "id": "9761132a956ee37bffe8093b8966b98a",
+      "file": "audio/Cerita Alkitab/24 RohKudus.mp3"
+    },
+    {
+      "id": "330e95f7b0375150fba98a68d0703743",
+      "file": "audio/Cerita Alkitab/25 Orang Banyak Percaya Kepada Yesus00086400.mp3"
+    },
+    {
+      "id": "42d078f6adeeecf08bf699468798e914",
+      "file": "audio/Cerita Alkitab/26 Orang percaya diberea.mp3"
+    },
+    {
+      "id": "40daecc2e54c591c1cb10abc4d44d52b",
+      "file": "audio/Cerita Alkitab/27 Tujuh Orang Ahli Nujum.mp3"
+    },
+    {
+      "id": "dcdd4e6518b25abbf744a0d942ee4c8d",
+      "file": "audio/Cerita Alkitab/28 Orang percaya tinggal bersama Allah.mp3"
+    }
+  ]
+}
