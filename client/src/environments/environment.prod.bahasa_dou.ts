@@ -1,5 +1,5 @@
 export const environment = {
-  appName: "Af Aya Mi",
+  appName: "Cerita Alkitab Bahasa Dou",
   production: true,
   backend: {
     releaseEndpoint: "https://content.oralbible.app/api/v1/bahasa_dou/release",

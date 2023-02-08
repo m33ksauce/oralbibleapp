@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.oralbibleapp.client.bahasa_walak" version="%%VERSION%%" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Af Aya Mi</name>
+    <name>Cerita Alkitab Bahasa Walak</name>
     <description>The OpenOralBible Client for Walak Scripture</description>
     <author email="chris@meekhouse.org">OpenOralBible</author>
     <content src="index.html" />
