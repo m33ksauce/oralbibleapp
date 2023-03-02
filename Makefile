@@ -18,7 +18,8 @@ build-all: \
 	build-bahasa_dou \
 	build-bahasa_fayu \
 	build-bahasa_sikari \
-	build-bahasa_walak
+	build-bahasa_walak \
+	build-abawiri
 
 build-yetfa: prep-yetfa cycle-cordova-platform package-yetfa
 
@@ -36,6 +37,8 @@ build-bahasa_sikari: prep-bahasa_sikari cycle-cordova-platform package-bahasa_si
 
 build-bahasa_walak: prep-bahasa_walak cycle-cordova-platform package-bahasa_walak
 
+build-abawiri: prep-abawiri cycle-cordova-platform package-abawiri
+
 prep-all: \
 	prep-yetfa \
 	prep-papuan_malay \
@@ -44,7 +47,8 @@ prep-all: \
 	prep-bahasa_dou \
 	prep-bahasa_fayu \
 	prep-bahasa_sikari \
-	prep-bahasa_walak
+	prep-bahasa_walak \
+	prep-abawiri
 
 prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
@@ -76,6 +80,8 @@ package-bahasa_fayu: dist/bahasa_fayu.prod.aab
 package-bahasa_sikari: dist/bahasa_sikari.prod.aab
 
 package-bahasa_walak: dist/bahasa_walak.prod.aab
+
+package-abawiri: dist/abawiri.prod.aab
 
 dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
 	pushd $(CLIENT) && npm run package-prod 

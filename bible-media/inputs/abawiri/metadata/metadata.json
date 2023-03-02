@@ -1,0 +1,173 @@
+{
+    "Version": "0.0.1",
+    "Categories": [
+      {
+        "type": 1,
+        "name": "💬 Cerita Alkitab",
+        "children": [
+          {
+            "type": 2,
+            "name": "01 Lagu Cerita Penciptaan",
+            "audioTargetId": "70ebff0b6823e6e98d0f2347bae8f4b5"
+          },
+          {
+            "type": 2,
+            "name": "02 Penciptaan Perempuan",
+            "audioTargetId": "9490f46886623757c1aea61833b645a7"
+          },
+          {
+            "type": 2,
+            "name": "03 Manusia Jatuh Dalam Dosa",
+            "audioTargetId": "c15f3eca03510656cb2fe7062f72c824"
+          },
+          {
+            "type": 2,
+            "name": "04 Manusia Dihukum",
+            "audioTargetId": "3460c2b00271b5526ba0d36c3d562007"
+          },
+          {
+            "type": 2,
+            "name": "05 Janji kepada Abraham",
+            "audioTargetId": "ddb951a3bfc242eae8c5bc4c7ecd1364"
+          },
+          {
+            "type": 2,
+            "name": "06 Hiskia dan Sanherib",
+            "audioTargetId": "212761e0461b3f9b33efbd77a51f0d14"
+          },
+          {
+            "type": 2,
+            "name": "07 Nubuatan Yesaya",
+            "audioTargetId": "6c9cc549050b88b97ba34492518b7b83"
+          },
+          {
+            "type": 2,
+            "name": "08 Kelahiran Yesus",
+            "audioTargetId": "627cf1773ec9614ede0fc1abd17a19c8"
+          },
+          {
+            "type": 2,
+            "name": "09 Yesus Mengajar Di Kamp. Halaman",
+            "audioTargetId": "24e6c919fabd0cf2d82462ac1fee6135"
+          },
+          {
+            "type": 2,
+            "name": "10 Yesus Menyembuhkan Orang Lumpuh",
+            "audioTargetId": "8b17e8aec2b64541734dc0fa9320a35b"
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "🎸 Lagu",
+        "children": [
+          {
+            "type": 2,
+            "name": "Alla debi bo",
+            "audioTargetId": "400d627881d332c171178b931b3bd101"
+          },
+          {
+            "type": 2,
+            "name": "Alla du bo deria gwre",
+            "audioTargetId": "1a58e304524213e881acbefc08533c87"
+          },
+          {
+            "type": 2,
+            "name": "Si ee",
+            "audioTargetId": "294b26569c26580638a318bdec8c5cf9"
+          },
+          {
+            "type": 2,
+            "name": "Yerusalem twore",
+            "audioTargetId": "e939d61274485ea780a402cdbb680b25"
+          },
+          {
+            "type": 2,
+            "name": "Yesus bo Alla debi",
+            "audioTargetId": "d9dd10f91abbe271c3dc639caa3e0040"
+          },
+          {
+            "type": 2,
+            "name": "Yesus deria",
+            "audioTargetId": "e0672b49f3c74503153fda7e6522e7ca"
+          },
+          {
+            "type": 2,
+            "name": "Yesus toru bo",
+            "audioTargetId": "40aa70a5b2d6d48d4b9544b62f9fe5b9"
+          }
+        ]
+      }
+    ],
+    "Audio": [
+      {
+        "id": "70ebff0b6823e6e98d0f2347bae8f4b5",
+        "file": "audio/Cerita Alkitab/01 Lagu Cerita Penciptaan.mp3"
+      },
+      {
+        "id": "9490f46886623757c1aea61833b645a7",
+        "file": "audio/Cerita Alkitab/02 Penciptaan Perempuan.mp3"
+      },
+      {
+        "id": "c15f3eca03510656cb2fe7062f72c824",
+        "file": "audio/Cerita Alkitab/03 Manusia Jatuh Dalam Dosa.mp3"
+      },
+      {
+        "id": "3460c2b00271b5526ba0d36c3d562007",
+        "file": "audio/Cerita Alkitab/04 Manusia Dihukum.mp3"
+      },
+      {
+        "id": "ddb951a3bfc242eae8c5bc4c7ecd1364",
+        "file": "audio/Cerita Alkitab/05 Janji kepada Abraham.mp3"
+      },
+      {
+        "id": "212761e0461b3f9b33efbd77a51f0d14",
+        "file": "audio/Cerita Alkitab/06 Hiskia dan Sanherib.mp3"
+      },
+      {
+        "id": "6c9cc549050b88b97ba34492518b7b83",
+        "file": "audio/Cerita Alkitab/07 Nubuatan Yesaya.mp3"
+      },
+      {
+        "id": "627cf1773ec9614ede0fc1abd17a19c8",
+        "file": "audio/Cerita Alkitab/08 Kelahiran Yesus.mp3"
+      },
+      {
+        "id": "24e6c919fabd0cf2d82462ac1fee6135",
+        "file": "audio/Cerita Alkitab/09 Yesus Mengajar Di Kamp. Halaman.mp3"
+      },
+      {
+        "id": "8b17e8aec2b64541734dc0fa9320a35b",
+        "file": "audio/Cerita Alkitab/10 Yesus Menyembuhkan Orang Lumpuh.mp3"
+      },
+      {
+        "id": "400d627881d332c171178b931b3bd101",
+        "file": "audio/Lagu/Alla debi bo.mp3"
+      },
+      {
+        "id": "1a58e304524213e881acbefc08533c87",
+        "file": "audio/Lagu/Alla du bo deria gwre.mp3"
+      },
+      {
+        "id": "294b26569c26580638a318bdec8c5cf9",
+        "file": "audio/Lagu/Si ee.mp3"
+      },
+      {
+        "id": "e939d61274485ea780a402cdbb680b25",
+        "file": "audio/Lagu/Yerusalem twore.mp3"
+      },
+      {
+        "id": "d9dd10f91abbe271c3dc639caa3e0040",
+        "file": "audio/Lagu/Yesus bo Alla debi.mp3"
+      },
+      {
+        "id": "e0672b49f3c74503153fda7e6522e7ca",
+        "file": "audio/Lagu/Yesus deria.mp3"
+      },
+      {
+        "id": "40aa70a5b2d6d48d4b9544b62f9fe5b9",
+        "file": "audio/Lagu/Yesus toru bo.mp3"
+      }
+    ]
+  }
+  

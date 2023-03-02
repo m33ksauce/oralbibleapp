@@ -45,7 +45,7 @@ export class StorageService {
             readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, bundle.Metadata));
             readyActions.push(this._storage.set(StorageKeys.Version, bundle.Metadata.Version))
             for (var m of bundle.Media) {
-              readyActions.push(this._storage.set(`media-${m.target}`, m.data))
+              this._storage.set(`media-${m.target}`, m.data)
             }
             Promise.all(readyActions).then(
               () => this.isReady = true,
