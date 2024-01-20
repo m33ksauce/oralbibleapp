@@ -1,3 +1,5 @@
 # Mac specific
 .DS_Store
 dist/
+# Need to ignore bible-media temporarily so we can shrink the repo
+bible-media/
