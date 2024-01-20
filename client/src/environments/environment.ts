@@ -2,11 +2,26 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// export const environment = {
+//   appName: "Dengar MP",
+//   production: false,
+//   backend: {
+//     releaseEndpoint: "http://localhost:8080/api/v1/papuan_malay/release",
+//     audioEndpoint: "http://localhost:8080/api/v1/papuan_malay/audio",
+//   },
+//   features: {
+//     dynamicContent: true,
+//     bluetoothUpdate: false,
+//     mediaCanCollapseWhenPlaying: true,
+//   }
+// };
+
 export const environment = {
-  production: false,
+  appName: "Awa Ma",
+  production: true,
   backend: {
-    releaseEndpoint: "http://localhost:8080/api/v1/release",
-    audioEndpoint: "http://localhost:8080/api/v1/audio",
+    releaseEndpoint: "https://content.oralbible.app/api/v1/yetfa/release",
+    audioEndpoint: "https://content.oralbible.app/api/v1/yetfa/audio",
   },
   features: {
     dynamicContent: true,
@@ -14,6 +29,8 @@ export const environment = {
     mediaCanCollapseWhenPlaying: true,
   }
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file

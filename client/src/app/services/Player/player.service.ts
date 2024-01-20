@@ -4,6 +4,8 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from '../Storage/storage.service';
+import { initialize } from '@ionic/core';
+import { take, takeLast } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,7 @@ export class PlayerService {
     "timeupdate",
   ]
 
+  private initialized = false;
   private state: PlayerState = MakeDefaultState();
 
   private stateSubject: BehaviorSubject<PlayerState> =
@@ -61,9 +64,24 @@ export class PlayerService {
     this.stateSubject.next(this.state);
   }
 
-  loadMedia(media, title, index) {
+
+  initializePlayer() {
+    const handler = (event: Event) => {
+      this.updateState(event);
+    }
+
+    this.addEvents(this.player, this.playerEvents, handler);
+    this.addEvents(this.player, ["ended"], (e) => {
+      this.eventSubject.next(e);
+    });
+
+    this.initialized = true;
+  }
+
+  async load(media, title, index) {
+
     return new Promise<void>((resolve, reject) => {
-      this.storage.getKey<any>(`media-${media}`).subscribe(
+      this.storage.getKey<any>(`media-${media}`).pipe(take(1)).subscribe(
         (d) => {
           try {
             var blob = new Blob([d["buffer"]], { type: "audio/mpeg" });
@@ -75,15 +93,10 @@ export class PlayerService {
             this.clearState();
             this.state.mediaTitle = title;
             this.state.index = index;
+            this.state.currentTime = 0;
 
-            const handler = (event: Event) => {
-              this.updateState(event);
-            }
-
-            this.addEvents(this.player, this.playerEvents, handler);
-            this.addEvents(this.player, ["ended"], (e) => {
-              this.eventSubject.next(e);
-            });
+            if (this.initialized == false) this.initializePlayer();
+            
             this.currentlyPlayingSubject.next(media)
             console.log("Finished loading")
             resolve();
@@ -104,7 +117,7 @@ export class PlayerService {
 
   play() {
     try {
-      this.player.play();
+      return this.player.play();
     } catch (e) {
       console.log(`Couldn't play: ${e}`)
     }
@@ -112,7 +125,7 @@ export class PlayerService {
 
   pause() {
     try {
-      this.player.pause();
+      return this.player.pause();
     } catch (e) {
       console.log(`Couldn't pause: ${e}`)
     }

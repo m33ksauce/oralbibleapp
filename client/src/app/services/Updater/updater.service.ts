@@ -6,9 +6,9 @@ import { StorageKeys } from '../Storage/storageKeys';
 import { UpdateMethods, UpdateProvider } from './update-provider';
 import { WebUpdateProvider } from './web-update-provider';
 import * as semver from 'semver';
-import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
-import { Observable, Subscriber, Subscription } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { AudioMetadata, AudioFile } from 'src/app/interfaces/audio-metadata';
+import { defer, from, observable, Observable } from 'rxjs';
+import { finalize, first, map, mergeAll } from 'rxjs/operators';
 import { Buffer } from "buffer";
 import { UpdateStatus, UpdateStatusProvider } from './update-status';
 
@@ -73,27 +73,23 @@ export class UpdaterService extends UpdateStatusProvider {
   private async syncStageMedia(md: AudioMetadata) {
     console.log("Starting update sync")
     this.SetStatus(UpdateStatus.UPDATING, "Starting update")
-    let curr = 0;
     const audio = md.Audio;
-    const total = audio.length;
-    let promises = [];
 
-    for (let item of audio) {
-      promises.push(this.syncMedia(item.id).then(() => {
-        this.SetStatus(UpdateStatus.UPDATING, `Syncing ${++curr}/${total}`)
-      }))
-    }
+    let obs = audio
+      .map(item => defer(() => 
+        this.syncMedia(item.id))
+      );
 
-    Promise.all(promises).then(
-      async () => {
+    from(obs)
+    .pipe(
+      mergeAll(5),
+      finalize(async () => {
         if (await this.isStageMediaReady) {
           console.log("Finished syncing")
-          return this.finalizeUpdate();
+              return this.finalizeUpdate();
         }
-      })
-      .catch(() => {
-        this.SetStatus(UpdateStatus.FAILED, "Couldn't sync all media")
-      })
+      }))
+    .subscribe()
   }
 
   private syncMedia(id: string): Promise<void> {

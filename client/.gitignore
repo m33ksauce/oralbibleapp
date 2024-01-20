@@ -40,3 +40,8 @@ crypto/
 /.angular
 
 build.json
+*.obd
+config.xml
+
+
+src/environments/environment.prod.ts

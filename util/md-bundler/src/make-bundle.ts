@@ -21,8 +21,8 @@ if (outputPathArg == undefined || outputPathArg === "") {
     process.exit(1);
 }
 
-let inputPath = path.join(process.cwd(), inputPathArg);
-let outputPath = path.join(process.cwd(), outputPathArg);
+let inputPath = path.resolve(inputPathArg);
+let outputPath = path.resolve(outputPathArg);
 
 var bundler = new Bundle();
 

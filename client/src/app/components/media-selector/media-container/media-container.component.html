@@ -4,7 +4,7 @@
         <h1>
           <ion-icon *ngIf="!expanded" name="chevron-forward-outline"></ion-icon>
           <ion-icon *ngIf="expanded" name="chevron-down-outline"></ion-icon>
-          {{item.name}}
+          <span [class]="classes">{{item.name}}</span>
         </h1>
       </ion-label>
     </ion-item-divider>

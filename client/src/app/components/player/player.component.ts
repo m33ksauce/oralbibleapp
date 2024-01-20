@@ -52,14 +52,19 @@ export class PlayerComponent implements OnInit {
     // TODO: Emit an error dialog
     try {
       console.log("Playing previous");
-      if (this.playerState.currentTime > 2) {
-        this.player.seek(0);
+      let restart = this.playerState.currentTime > 2;
+
+      this.player.pause();
+      this.player.seek(0);
+
+      if (restart) {  
+        this.player.play();
         return;
       }
+
       var currentId = this.player.getCurrentlyPlaying().getValue();
       var prev = this.metadata.getPrevMediaById(currentId);
-      this.player.loadMedia(prev.audioTargetId, prev.name, prev.index)
-        .then(() => this.play())
+      this.player.load(prev.audioTargetId, prev.name, prev.index)
         .catch(() => console.log("Couldn't load previous media"));
     } catch (e) {
       console.log("Could not play previous - ", e);
@@ -71,7 +76,7 @@ export class PlayerComponent implements OnInit {
     try {
       var currentId = this.player.getCurrentlyPlaying().getValue();
       var nxt = this.metadata.getNextMediaById(currentId);
-      this.player.loadMedia(nxt.audioTargetId, nxt.name, nxt.index)
+      this.player.load(nxt.audioTargetId, nxt.name, nxt.index)
         .then(() => this.play())
         .catch(() => console.log("Couldn't load next media"));
     } catch(e) {

@@ -16,9 +16,13 @@ export class MediaContainerComponent implements OnInit, AfterViewInit {
   @ViewChildren(MediaContainerComponent) childCats: Array<MediaContainerComponent>;
   @ViewChildren(MediaItemComponent) childMedia: Array<MediaItemComponent>;
 
+  public classes: string = "";
+
   constructor(public renderer: Renderer2) { }
 
-  ngOnInit() {  }
+  ngOnInit() {
+    if (!this.item.hasChildren()) this.classes += " no-content"
+  }
 
   ngAfterViewInit() {
     this.collapse();

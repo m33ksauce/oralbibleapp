@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './services/Storage/storage.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,6 @@ export class AppComponent {
   }
 
   initializeDB() {
-    return this.storage.setKey<string>("app-name", "Awa Ma");
+    return this.storage.setKey<string>("app-name", environment.appName);
   }
 }

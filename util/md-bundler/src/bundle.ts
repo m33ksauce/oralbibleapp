@@ -21,7 +21,7 @@ export class Bundle {
         this.addMetadata()
             .then(() => this.addMedia())
             .then(() => this
-                .exportBundle(outputPath || path.join(process.cwd(), "../../sample-media/outputs")));
+                .exportBundle(outputPath || path.resolve("../../bible-media/outputs")));
     }
     
     private async addMetadata() {
@@ -37,7 +37,7 @@ export class Bundle {
 
         return Promise.all(audios.map(audio => {
             console.log("writing audio")
-            return readFile(path.join(this.bundleInputPaths, '/', audio.file))
+            return readFile(path.resolve(path.join(this.bundleInputPaths, '/', audio.file)))
                 .then(dataBuf => {
                     this.bundle.Media.push({
                         target: audio.id,

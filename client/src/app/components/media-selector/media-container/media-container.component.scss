@@ -2,3 +2,11 @@ media-container > ion-item-group {
     padding-left: 10px;
     // background-color: var(--ion-color-primary);
 }
+
+.no-content {
+    color: rgb(193,193,193) !important;
+}
+
+ion-label {
+    color: rgb(125,125,125) !important;
+}

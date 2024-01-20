@@ -8,14 +8,14 @@ const config: CapacitorConfig = {
   cordova: {
     preferences: {
       ScrollEnabled: 'false',
-      'android-minSdkVersion': '19',
+      'android-minSdkVersion': '23',
       BackupWebStorage: 'none',
       SplashMaintainAspectRatio: 'true',
       FadeSplashScreenDuration: '300',
       SplashShowOnlyFirstTime: 'false',
       SplashScreen: 'screen',
       SplashScreenDelay: '3000',
-      'android-targetSdkVersion': '30'
+      'android-targetSdkVersion': '33'
     }
   }
 };
