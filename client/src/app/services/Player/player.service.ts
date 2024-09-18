@@ -1,11 +1,10 @@
-import { Injectable, SecurityContext } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { PlayerState, MakeDefaultState } from 'src/app/interfaces/player-state';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StorageService } from '../Storage/storage.service';
-import { initialize } from '@ionic/core';
-import { take, takeLast } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -96,6 +95,15 @@ export class PlayerService {
             this.state.currentTime = 0;
 
             if (this.initialized == false) this.initializePlayer();
+
+            const handler = (event: Event) => {
+              this.updateState(event);
+            }
+
+            this.addEvents(this.player, this.playerEvents, handler);
+            this.addEvents(this.player, ["ended"], (e) => {
+              this.eventSubject.next(e);
+            });
             
             this.currentlyPlayingSubject.next(media)
             console.log("Finished loading")
