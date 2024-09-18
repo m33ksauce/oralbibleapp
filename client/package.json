@@ -108,8 +108,6 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-ionic-webview": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   }
 }
