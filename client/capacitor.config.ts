@@ -1,21 +1,20 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'OpenOralBibleClient',
+  appId: 'com.oralbibleapp.yetfa',
+  appName: 'Awa Ma Oral Bible',
   webDir: 'www',
-  bundledWebRuntime: false,
   cordova: {
     preferences: {
       ScrollEnabled: 'false',
-      'android-minSdkVersion': '23',
+      'android-minSdkVersion': '26',
       BackupWebStorage: 'none',
       SplashMaintainAspectRatio: 'true',
       FadeSplashScreenDuration: '300',
       SplashShowOnlyFirstTime: 'false',
       SplashScreen: 'screen',
       SplashScreenDelay: '3000',
-      'android-targetSdkVersion': '33'
+      'android-targetSdkVersion': '34'
     }
   }
 };
