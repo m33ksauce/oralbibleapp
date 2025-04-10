@@ -5,9 +5,10 @@ import { StorageKeys } from 'src/app/services/Storage/storageKeys';
 import { UpdatePage } from '../update/update.page';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.page.html',
-  styleUrls: ['./main.page.scss'],
+    selector: 'app-main',
+    templateUrl: './main.page.html',
+    styleUrls: ['./main.page.scss'],
+    standalone: false
 })
 export class MainPage implements OnInit {
   AppName: string = "Bible App";

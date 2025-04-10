@@ -12,9 +12,10 @@ const states = {
   PAUSED: 'paused'
 }
 @Component({
-  selector: 'bible-player',
-  templateUrl: './player.component.html',
-  styleUrls: ['./player.component.scss'],
+    selector: 'bible-player',
+    templateUrl: './player.component.html',
+    styleUrls: ['./player.component.scss'],
+    standalone: false
 })
 
 export class PlayerComponent implements OnInit {

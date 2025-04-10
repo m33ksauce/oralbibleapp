@@ -6,9 +6,10 @@ import { MetadataService } from 'src/app/services/Metadata/metadata.service';
 import { PlayerService } from 'src/app/services/Player/player.service';
 
 @Component({
-  selector: 'media-item',
-  templateUrl: './media-item.component.html',
-  styleUrls: ['./media-item.component.scss'],
+    selector: 'media-item',
+    templateUrl: './media-item.component.html',
+    styleUrls: ['./media-item.component.scss'],
+    standalone: false
 })
 export class MediaItemComponent implements OnInit, AfterViewInit {
   @Input() item: MediaListItem;

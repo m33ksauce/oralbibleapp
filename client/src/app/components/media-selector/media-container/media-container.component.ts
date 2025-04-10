@@ -5,9 +5,10 @@ import { environment } from 'src/environments/environment';
 import { MediaItemComponent } from '../media-item/media-item.component';
 
 @Component({
-  selector: 'media-container',
-  templateUrl: './media-container.component.html',
-  styleUrls: ['./media-container.component.scss'],
+    selector: 'media-container',
+    templateUrl: './media-container.component.html',
+    styleUrls: ['./media-container.component.scss'],
+    standalone: false
 })
 export class MediaContainerComponent implements OnInit, AfterViewInit {
   @Input() item: MediaListItem;

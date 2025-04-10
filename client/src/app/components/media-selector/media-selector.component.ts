@@ -4,9 +4,10 @@ import { MediaListItem } from 'src/app/models/MediaListItem';
 import { MetadataService } from 'src/app/services/Metadata/metadata.service';
 
 @Component({
-  selector: 'media-selector',
-  templateUrl: './media-selector.component.html',
-  styleUrls: ['./media-selector.component.scss'],
+    selector: 'media-selector',
+    templateUrl: './media-selector.component.html',
+    styleUrls: ['./media-selector.component.scss'],
+    standalone: false
 })
 export class MediaSelectorComponent implements OnInit {
   catalog: Observable<MediaListItem[]>;
