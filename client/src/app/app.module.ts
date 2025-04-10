@@ -11,30 +11,24 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { StorageService } from './services/Storage/storage.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-@NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    IonicStorageModule.forRoot({
-      name: '__obadb',
-      driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
-    }),
-    HttpClientModule,
-    FontAwesomeModule,
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    StorageService,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [AppComponent],
+    entryComponents: [],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        IonicStorageModule.forRoot({
+            name: '__obadb',
+            driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
+        }),
+        FontAwesomeModule], providers: [
+        StatusBar,
+        SplashScreen,
+        StorageService,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
