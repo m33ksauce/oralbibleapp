@@ -45,3 +45,5 @@ config.xml
 
 
 src/environments/environment.prod.ts
+android
+capacitor.config.ts
