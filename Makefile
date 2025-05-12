@@ -102,6 +102,11 @@ $(BM_OUTPUTS)/%.bundle.obd:
 	pushd $(MD_BUNDLER) && npm run make -- $(BM_INPUTS)/$*/ $(@D)
 	mv $(@D)/bundle.obd $@
 
+set-version:
+	@echo "Setting app version to $(VERSION) and versionCode to $(VERSION_CODE)"
+	sed -i '' "s/versionCode [0-9]+/versionCode $(VERSION_CODE)/" client/android/app/build.gradle
+	sed -i '' "s/versionName \"[^\"]*\"/versionName \"$(shell echo $(VERSION) | sed 's/[\/&]/\\&/g')\"/" client/android/app/build.gradle
+
 clean:
 	-rm -r $(CLIENT)/config.xml \
 		$(CLIENT)/dist/media/*.obd \

@@ -18,7 +18,7 @@
     <ion-card-content>
       <ion-button style="vertical-align: middle;" (click)="checkWebUpdate()">Update</ion-button>
       <fa-icon [class]="(updateStatusIndicator | async).classes"
-        [spin]="(updateStatusIndicator | async).spinAnimation"
+        [animation]="(updateStatusIndicator | async)"
         style="vertical-align: middle; margin-left: .25em;"
         *ngIf="updateStatusIndicator | async"
         [icon]="(updateStatusIndicator | async).icon"></fa-icon>
