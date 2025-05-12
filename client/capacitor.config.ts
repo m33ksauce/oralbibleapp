@@ -1,16 +1,15 @@
 import type { CapacitorConfig } from '@capacitor/cli';
-import * as path from 'path';
 
 const config: CapacitorConfig = {
-  appId: 'com.oralbibleapp.yetfa',
-  appName: 'Awa Ma Oral Bible',
+  appId: process.env.APP_ID || 'com.oralbibleapp.yetfa',
+  appName: process.env.APP_NAME || 'Awa Ma Oral Bible',
   webDir: 'www/browser',
   android: {
     buildOptions: {
       releaseType: 'AAB',
-      keystorePath: process.env.KEYSTORE_FILE || path.resolve(__dirname, 'crypto/release/oba-yetfa.keystore'),
-      keystorePassword: process.env.KEYSTORE_PASSWORD || 'H0w Sh@ll Th3y H3@r?',
-      keystoreAlias: process.env.KEYSTORE_ALIAS || 'oba-yetfa',
+      keystorePath: process.env.KEYSTORE_FILE,
+      keystorePassword: process.env.KEYSTORE_PASSWORD,
+      keystoreAlias: process.env.KEYSTORE_ALIAS,
       signingType: 'apksigner',
     }
   }

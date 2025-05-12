@@ -58,10 +58,6 @@ prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
 	mv $(CLIENT)/dist/media/$*.bundle.obd $(CLIENT)/dist/media/bundle.obd
 	cp $(CLIENT)/src/environments/environment.prod.$*.ts $(CLIENT)/src/environments/environment.prod.ts
-	sed \
-		-e 's/%%VERSION%%/$(APPVERSION)/g' \
-		$(CLIENT)/config/config.$*.xml > \
-		$(CLIENT)/config.xml
 
 # Later, we should make this target ONLY run if something has changed in CLIENT
 cycle-cordova-platform:
@@ -89,7 +85,7 @@ package-abawiri: dist/abawiri.prod.aab
 
 package-meyah: dist/meyah.prod.aab
 
-dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd $(CLIENT)/config.xml
+dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd
 	pushd $(CLIENT) && npm run package-prod 
 	cp $(bundle_default_file) $@
 
@@ -104,11 +100,11 @@ $(BM_OUTPUTS)/%.bundle.obd:
 
 set-version:
 	@echo "Setting app version to $(VERSION) and versionCode to $(VERSION_CODE)"
-	sed -E -i '' "s/(versionCode )[0-9]{1,}/\1$(VERSION_CODE)/" client/android/app/build.gradle
+	sed -i '' "s/versionCode [0-9]+/versionCode $(VERSION_CODE)/" client/android/app/build.gradle
 	sed -i '' "s/versionName \"[^\"]*\"/versionName \"$(shell echo $(VERSION) | sed 's/[\/&]/\\&/g')\"/" client/android/app/build.gradle
 
 clean:
-	-rm -r $(CLIENT)/config.xml \
+	-rm -r \
 		$(CLIENT)/dist/media/*.obd \
 		$(CLIENT)/src/environments/environment.prod.ts \
 		$(bundle_default_file)
