@@ -104,7 +104,7 @@ $(BM_OUTPUTS)/%.bundle.obd:
 
 set-version:
 	@echo "Setting app version to $(VERSION) and versionCode to $(VERSION_CODE)"
-	sed -i '' "s/versionCode [0-9]+/versionCode $(VERSION_CODE)/" client/android/app/build.gradle
+	sed -E -i '' "s/(versionCode )[0-9]{1,}/\1$(VERSION_CODE)/" client/android/app/build.gradle
 	sed -i '' "s/versionName \"[^\"]*\"/versionName \"$(shell echo $(VERSION) | sed 's/[\/&]/\\&/g')\"/" client/android/app/build.gradle
 
 clean:
