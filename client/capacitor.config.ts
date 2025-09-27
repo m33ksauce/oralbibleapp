@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: process.env.APP_ID || 'com.oralbibleapp.yetfa',
+  appId: process.env.APP_ID || 'com.oralbibleapp.yetfa2',
   appName: process.env.APP_NAME || 'Awa Ma Oral Bible',
   webDir: 'www/browser',
   android: {

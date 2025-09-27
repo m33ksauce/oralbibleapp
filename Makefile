@@ -86,7 +86,8 @@ package-abawiri: dist/abawiri.prod.aab
 package-meyah: dist/meyah.prod.aab
 
 dist/%.prod.aab: $(CLIENT)/dist/media/bundle.obd
-	pushd $(CLIENT) && npm run package-prod 
+	@echo "Building release with Gradle"
+	cd $(CLIENT)/platforms/android && ./gradlew assembleRelease && ./gradlew bundleRelease
 	cp $(bundle_default_file) $@
 
 $(CLIENT)/dist/media/%.bundle.obd: $(BM_OUTPUTS)/%.bundle.obd
