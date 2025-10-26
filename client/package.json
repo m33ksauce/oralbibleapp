@@ -12,7 +12,15 @@
     "watchtest": "ng test --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "ci-test": "ng test --watch false --browsers ChromeHeadless"
+    "ci-test": "ng test --watch false --browsers ChromeHeadless",
+    "project:create": "node scripts/cli.js create",
+    "project:list": "node scripts/cli.js list",
+    "project:switch": "node scripts/cli.js switch",
+    "project:build": "node scripts/cli.js build",
+    "project:build-all": "node scripts/cli.js build-all",
+    "project:setup": "node scripts/cli.js setup",
+    "project:clean": "node scripts/cli.js clean",
+    "dev": "node scripts/cli.js switch $PROJECT && ionic serve"
   },
   "private": true,
   "dependencies": {
