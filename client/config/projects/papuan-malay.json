@@ -1,16 +1,16 @@
 {
   "app": {
-    "id": "com.oralbibleapp.yetfa2",
-    "name": "Awa Ma",
-    "description": "The OpenOralBible Client for Yetfa Scripture",
+    "id": "com.oralbibleapp.papuanmalay",
+    "name": "Papuan Malay",
+    "description": "OpenOralBible Client for Papuan Malay",
     "version": "1.0.0",
-    "versionCode": 107
+    "versionCode": 1
   },
   "translation": {
-    "key": "yetfa",
+    "key": "example",
     "backend": {
-      "releaseEndpoint": "https://content.oralbible.app/api/v1/yetfa/release",
-      "audioEndpoint": "https://content.oralbible.app/api/v1/yetfa/audio"
+      "releaseEndpoint": "https://content.oralbible.app/api/v1/example/release",
+      "audioEndpoint": "https://content.oralbible.app/api/v1/example/audio"
     }
   },
   "features": {
