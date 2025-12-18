@@ -57,11 +57,24 @@ prep-all: \
 prep-%: $(CLIENT)/dist/media/%.bundle.obd $(CLIENT)/src/*
 	mkdir -p dist/
 	mv $(CLIENT)/dist/media/$*.bundle.obd $(CLIENT)/dist/media/bundle.obd
-	cp $(CLIENT)/src/environments/environment.prod.$*.ts $(CLIENT)/src/environments/environment.prod.ts
-	sed \
-		-e 's/%%VERSION%%/$(APPVERSION)/g' \
-		$(CLIENT)/config/config.$*.xml > \
-		$(CLIENT)/config.xml
+	@if [ -n "$(VARIANT_JSON)" ]; then \
+		echo "Configuring from VARIANT_JSON=$(VARIANT_JSON)"; \
+		node $(CURDIR)/scripts/configure-inner-repo.js --variant "$(VARIANT_JSON)" --version "$(APPVERSION)"; \
+	elif [ -f "$(CURDIR)/variants/$*.json" ]; then \
+		echo "Configuring from variants/$*.json"; \
+		node $(CURDIR)/scripts/configure-inner-repo.js --variant "$(CURDIR)/variants/$*.json" --version "$(APPVERSION)"; \
+	elif [ -f "$(CLIENT)/src/environments/environment.prod.$*.ts" ] && [ -f "$(CLIENT)/config/config.$*.xml" ]; then \
+		echo "Configuring from legacy client/src/environments/environment.prod.$*.ts + client/config/config.$*.xml"; \
+		cp $(CLIENT)/src/environments/environment.prod.$*.ts $(CLIENT)/src/environments/environment.prod.ts; \
+		sed \
+			-e 's/%%VERSION%%/$(APPVERSION)/g' \
+			$(CLIENT)/config/config.$*.xml > \
+			$(CLIENT)/config.xml; \
+	else \
+		echo "ERROR: No variant config found for '$*'."; \
+		echo "Set VARIANT_JSON=/path/to/$*.json or add variants/$*.json (or restore legacy client/config + env files)."; \
+		exit 1; \
+	fi
 
 # Later, we should make this target ONLY run if something has changed in CLIENT
 cycle-cordova-platform:

@@ -2,8 +2,8 @@ export const environment = {
     appName: "%app-name%",
     production: true,
     backend: {
-      releaseEndpoint: "https://content.oralbible.app/api/v1/%translation-key%/release",
-      audioEndpoint: "https://content.oralbible.app/api/v1/%translation-key%/audio",
+      releaseEndpoint: "%release-endpoint%",
+      audioEndpoint: "%audio-endpoint%",
     },
     features: {
       dynamicContent: true,
