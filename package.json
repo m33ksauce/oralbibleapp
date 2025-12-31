@@ -20,7 +20,14 @@
     "project:build-all": "node scripts/cli.js build-all",
     "project:setup": "node scripts/cli.js setup",
     "project:clean": "node scripts/cli.js clean",
-    "dev": "node scripts/cli.js switch $PROJECT && ionic serve"
+    "dev": "node scripts/cli.js switch $PROJECT && ionic serve",
+    "setup": "node scripts/build.js setup",
+    "package": "node scripts/build.js package",
+    "clean": "node scripts/clean.js",
+    "generate-config": "node scripts/generate-config.js",
+    "update-android": "node scripts/update-android-config.js",
+    "increment-version": "node scripts/increment-version.js",
+    "set-version": "node scripts/set-version.js"
   },
   "private": true,
   "dependencies": {
