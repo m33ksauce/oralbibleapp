@@ -101,7 +101,7 @@ class BuildOrchestrator {
       
       // Bundle media files
       console.log('Bundling media files...');
-      const bundlerPath = path.join(this.rootDir, 'util', 'md-bundler');
+      const bundlerPath = path.join(this.rootDir, '..', '..', 'client', 'util', 'md-bundler');
       const injectPath = path.join(this.rootDir, 'inject');
       const mediaOutputPath = path.join(this.rootDir, 'dist', 'media');
       
@@ -130,9 +130,22 @@ class BuildOrchestrator {
       
       // Build Android project
       console.log('Building Android project...');
+      
+      // Set environment variables for Gradle build
+      const config = this.projectManager.getProjectConfig(projectId);
+      process.env.KEYSTORE_FILE = config.build.keystore.file;
+      process.env.KEYSTORE_PASSWORD = config.build.keystore.password;
+      process.env.KEYSTORE_ALIAS = config.build.keystore.alias;
+      
       execSync('./gradlew assembleRelease && ./gradlew bundleRelease', {
         cwd: path.join(this.rootDir, 'android'),
-        stdio: 'inherit'
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          KEYSTORE_FILE: config.build.keystore.file,
+          KEYSTORE_PASSWORD: config.build.keystore.password,
+          KEYSTORE_ALIAS: config.build.keystore.alias
+        }
       });
       
       // Copy output to project-specific directory

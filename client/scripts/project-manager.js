@@ -80,6 +80,14 @@ class ProjectManager {
         execSync(`rm -rf ${injectPath}`);
       }
       execSync(`cp -r ${contentPath} ${injectPath}`);
+      
+      // Create metadata subdirectory and move metadata.json there
+      const metadataDir = path.join(injectPath, 'metadata');
+      fs.mkdirSync(metadataDir, { recursive: true });
+      const metadataFile = path.join(injectPath, 'metadata.json');
+      if (fs.existsSync(metadataFile)) {
+        fs.renameSync(metadataFile, path.join(metadataDir, 'metadata.json'));
+      }
     }
     
     console.log(`Switched to project: ${projectId}`);

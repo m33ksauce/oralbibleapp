@@ -115,3 +115,4 @@ process.env.KEYSTORE_PASSWORD = appConfig.build.keystore.password;
 process.env.KEYSTORE_ALIAS = appConfig.build.keystore.alias;
 
 console.log('Configuration files generated successfully');
+

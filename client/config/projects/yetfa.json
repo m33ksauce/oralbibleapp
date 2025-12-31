@@ -20,7 +20,7 @@
   },
   "build": {
     "keystore": {
-      "file": "crypto/release/oba-yetfa.keystore",
+      "file": "../crypto/release/oba-yetfa.keystore",
       "alias": "oba-yetfa",
       "password": "${KEYSTORE_PASSWORD}"
     }
