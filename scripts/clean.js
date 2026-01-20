@@ -8,7 +8,7 @@ const ROOT_DIR = path.join(__dirname, '../..');  // Go up from client/scripts to
 const filesToRemove = [
   'client/config.xml',
   'client/src/environments/environment.prod.ts',
-  'client/dist/media/bundle.obd',
+  'client/dist/media',
   'android/app/build/outputs/bundle/release/app-release.aab',
   'android/app/build/outputs/mapping/release/mapping.txt',
   'android/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip',

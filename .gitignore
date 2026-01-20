@@ -43,6 +43,10 @@ build.json
 *.obd
 config.xml
 
+# Project configs and content (per-project; not versioned)
+config/projects/
+content/
+
 
 src/environments/environment.prod.ts
 android

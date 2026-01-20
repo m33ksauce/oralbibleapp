@@ -12,7 +12,7 @@ const ANDROID_DIR = path.join(ROOT_DIR, 'android');
 const BUNDLE_DIR = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'bundle', 'release');
 const CONFIG_DIR = path.join(ROOT_DIR, 'config');
 const SCRIPTS_DIR = path.join(__dirname);  // Current directory (client/scripts)
-const BUNDLER = path.join(CLIENT_DIR, 'util', 'md-bundler');
+// No longer using md-bundler - using bundle-media.js instead
 
 // Files
 const BUNDLE_FILE_RELEASE = path.join(BUNDLE_DIR, 'app-release.aab');
@@ -22,7 +22,7 @@ const CONFIG_FILES = [
   path.join(CLIENT_DIR, 'config.xml'),
   path.join(CLIENT_DIR, 'src', 'environments', 'environment.prod.ts')
 ];
-const MEDIA_BUNDLE = path.join(CLIENT_DIR, 'dist', 'media', 'bundle.obd');
+const MEDIA_BUNDLE = path.join(CLIENT_DIR, 'dist', 'media', 'metadata.json'); // Changed from bundle.obd
 const INJECT_DIR = path.join(ROOT_DIR, 'inject');
 const APP_CONFIG = path.join(CONFIG_DIR, 'app-config.json');
 
@@ -64,9 +64,7 @@ function updateAndroid() {
 // Bundle media files
 function bundleMedia() {
   console.log('Bundling media files...');
-  const mediaOutputDir = path.dirname(MEDIA_BUNDLE);
-  ensureDir(mediaOutputDir);
-  runCommand(`npm run make -- ${INJECT_DIR} ${mediaOutputDir}`, { cwd: BUNDLER });
+  runCommand('node scripts/bundle-media.js', { cwd: CLIENT_DIR });
 }
 
 // Set version from git tags

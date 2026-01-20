@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import bson from 'bson';
 import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject, Subject, Subscriber } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { StorageKeys } from './storageKeys';
@@ -36,17 +35,30 @@ export class StorageService {
   }
 
   private async seedDatabase() {
-    return this.httpClient.get('media/bundle.obd', { "responseType": "arraybuffer" })
+    // Load metadata.json
+    return this.httpClient.get<AudioMetadata>('media/metadata.json')
       .subscribe(
-        (data) => {
+        (metadata) => {
           try {
             var readyActions = [];
-            var bundle = bson.deserialize(data) as MediaBundle;
-            readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, bundle.Metadata));
-            readyActions.push(this._storage.set(StorageKeys.Version, bundle.Metadata.Version))
-            for (var m of bundle.Media) {
-              this._storage.set(`media-${m.target}`, m.data)
+            readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, metadata));
+            readyActions.push(this._storage.set(StorageKeys.Version, metadata.Version));
+            
+            // Load all audio files from metadata
+            if (metadata.Audio && metadata.Audio.length > 0) {
+              metadata.Audio.forEach((audio) => {
+                const audioPromise = this.httpClient.get(`media/${audio.file}`, { responseType: 'arraybuffer' })
+                  .toPromise()
+                  .then((arrayBuffer) => {
+                    return this._storage.set(`media-${audio.id}`, arrayBuffer);
+                  })
+                  .catch((err) => {
+                    console.log(`Failed to load audio file ${audio.file}: ${err}`);
+                  });
+                readyActions.push(audioPromise);
+              });
             }
+            
             Promise.all(readyActions).then(
               () => this.isReady = true,
               (err) => console.log(`Failed to seed DB - could not store metadata: ${err}`));
@@ -55,7 +67,7 @@ export class StorageService {
           }
         },
         (err) => {
-          console.log(`Failed to seed DB - could not open file: ${err}`);
+          console.log(`Failed to seed DB - could not open metadata.json: ${err}`);
         }
       )
   }
@@ -100,17 +112,4 @@ export class StorageService {
   }
 }
 
-class MediaBundle {
-  public Metadata: AudioMetadata;
-  public Media: AudioMedia[];
-
-  constructor() {
-    this.Metadata = { Version: undefined };
-    this.Media = new Array<AudioMedia>()
-  }
-}
-
-interface AudioMedia {
-  target: string
-  data: ArrayBuffer;
-}
+// MediaBundle and AudioMedia interfaces removed - no longer using BSON bundle

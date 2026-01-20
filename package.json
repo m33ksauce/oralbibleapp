@@ -27,7 +27,8 @@
     "generate-config": "node scripts/generate-config.js",
     "update-android": "node scripts/update-android-config.js",
     "increment-version": "node scripts/increment-version.js",
-    "set-version": "node scripts/set-version.js"
+    "set-version": "node scripts/set-version.js",
+    "generate-metadata": "node scripts/generate-metadata.js"
   },
   "private": true,
   "dependencies": {
@@ -58,7 +59,6 @@
     "@ionic/core": "^6.1.10",
     "@ionic/storage": "^4.0.0",
     "@ionic/storage-angular": "^4.0.0",
-    "bson": "^4.6.4",
     "buffer": "^6.0.3",
     "core-js": "^2.6.12",
     "fs": "^0.0.1-security",
