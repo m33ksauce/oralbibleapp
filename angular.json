@@ -33,7 +33,7 @@
                 "output": "./svg"
               },
               {
-                "glob": "**/*.obd",
+                "glob": "**/*",
                 "input": "dist/media",
                 "output": "media"
               }

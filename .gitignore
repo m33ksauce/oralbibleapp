@@ -40,7 +40,6 @@ build.json
 
 /.angular
 
-*.obd
 config.xml
 
 # Project configs and content (per-project; not versioned)

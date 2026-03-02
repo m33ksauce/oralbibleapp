@@ -2,13 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
+const minimist = require('minimist');
 
-// Paths
+// Default paths
 const OUTER_REPO = path.join(__dirname, '../..');
-const INJECT_DIR = path.join(OUTER_REPO, 'inject');
-const METADATA_FILE = path.join(INJECT_DIR, 'metadata', 'metadata.json');
+const DEFAULT_INPUT_DIR = path.join(OUTER_REPO, 'inject');
 const CLIENT_DIR = path.join(__dirname, '..');
-const MEDIA_OUTPUT_DIR = path.join(CLIENT_DIR, 'dist', 'media');
+const DEFAULT_OUTPUT_DIR = path.join(CLIENT_DIR, 'dist', 'media');
 
 // Helper functions
 function ensureDir(dir) {
@@ -22,52 +22,43 @@ function fileExists(file) {
 }
 
 // Load metadata.json - must exist
-function loadMetadata() {
-  if (!fileExists(METADATA_FILE)) {
-    console.error(`ERROR: metadata.json not found at ${METADATA_FILE}`);
+function loadMetadata(metadataFile) {
+  if (!fileExists(metadataFile)) {
+    console.error(`ERROR: metadata.json not found at ${metadataFile}`);
     console.error('       Please create metadata.json or run: npm run generate-metadata');
     process.exit(1);
   }
-  
-  const metadataContent = fs.readFileSync(METADATA_FILE, 'utf8');
+
+  const metadataContent = fs.readFileSync(metadataFile, 'utf8');
   return JSON.parse(metadataContent);
 }
 
-// Copy files from inject/ to dist/media/ based on metadata
-function copyMediaFiles(metadata) {
+// Copy files from input dir to output dir based on metadata
+function copyMediaFiles(metadata, inputDir, outputDir, metadataFile) {
   console.log('Copying media files based on metadata...');
-  
-  // Ensure output directory exists
-  ensureDir(MEDIA_OUTPUT_DIR);
-  
+
+  ensureDir(outputDir);
+
   // Copy metadata.json
-  const destMetadata = path.join(MEDIA_OUTPUT_DIR, 'metadata.json');
-  fs.copyFileSync(METADATA_FILE, destMetadata);
+  const destMetadata = path.join(outputDir, 'metadata.json');
+  fs.copyFileSync(metadataFile, destMetadata);
   console.log('  ✓ Copied metadata.json');
-  
-  // Copy only audio files listed in metadata
+
   if (!metadata.Audio || metadata.Audio.length === 0) {
     console.warn('  ⚠ No audio files listed in metadata');
     return;
   }
-  
-  const audioSource = path.join(INJECT_DIR);
-  const audioDest = path.join(MEDIA_OUTPUT_DIR);
-  
+
   let copiedCount = 0;
   let missingCount = 0;
-  
-  // Copy each audio file listed in metadata, preserving directory structure
+
   metadata.Audio.forEach((audio) => {
-    const sourceFile = path.join(audioSource, audio.file);
-    const destFile = path.join(audioDest, audio.file);
-    
+    const sourceFile = path.join(inputDir, audio.file);
+    const destFile = path.join(outputDir, audio.file);
+
     if (fileExists(sourceFile)) {
-      // Ensure destination directory exists
       const destDir = path.dirname(destFile);
       ensureDir(destDir);
-      
-      // Copy file
       fs.copyFileSync(sourceFile, destFile);
       copiedCount++;
     } else {
@@ -75,7 +66,7 @@ function copyMediaFiles(metadata) {
       missingCount++;
     }
   });
-  
+
   console.log(`  ✓ Copied ${copiedCount} audio files`);
   if (missingCount > 0) {
     console.warn(`  ⚠ ${missingCount} audio files from metadata were not found`);
@@ -83,22 +74,26 @@ function copyMediaFiles(metadata) {
 }
 
 // Main function
-function bundleMedia() {
+function bundleMedia(inputDir, outputDir) {
+  const input = inputDir || DEFAULT_INPUT_DIR;
+  const output = outputDir || DEFAULT_OUTPUT_DIR;
+  const metadataFile = path.join(input, 'metadata', 'metadata.json');
+
   console.log('Bundling media files...');
-  
-  // Load metadata (must exist)
-  const metadata = loadMetadata();
-  
-  // Copy files to dist/media/ based on metadata
-  copyMediaFiles(metadata);
-  
+  console.log(`  Input:  ${input}`);
+  console.log(`  Output: ${output}`);
+
+  const metadata = loadMetadata(metadataFile);
+  copyMediaFiles(metadata, input, output, metadataFile);
+
   console.log('✓ Media bundle complete');
-  console.log(`  Output: ${MEDIA_OUTPUT_DIR}`);
+  console.log(`  Output: ${output}`);
 }
 
 // Run if called directly
 if (require.main === module) {
-  bundleMedia();
+  const args = minimist(process.argv.slice(2));
+  bundleMedia(args.input || null, args.output || null);
 }
 
 module.exports = { bundleMedia };

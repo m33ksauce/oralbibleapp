@@ -28,7 +28,15 @@
     "update-android": "node scripts/update-android-config.js",
     "increment-version": "node scripts/increment-version.js",
     "set-version": "node scripts/set-version.js",
-    "generate-metadata": "node scripts/generate-metadata.js"
+    "generate-metadata": "node scripts/generate-metadata.js",
+    "release:bundle": "node scripts/release-build.js bundle",
+    "release:prep": "node scripts/release-build.js prep",
+    "release:package": "node scripts/release-build.js package",
+    "release:build": "node scripts/release-build.js build",
+    "release:build-all": "node scripts/release-build.js build-all",
+    "release:clean": "node scripts/release-build.js clean",
+    "release:clean-all": "node scripts/release-build.js clean-all",
+    "release:set-version": "node scripts/release-build.js set-version"
   },
   "private": true,
   "dependencies": {

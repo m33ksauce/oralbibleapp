@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const crypto = require('crypto');
+const minimist = require('minimist');
 
 // Generate deterministic UUID from file path
 function generateUUID(filePath) {
@@ -102,40 +103,51 @@ function generateMetadata(audioDir, version = '0.0.0') {
   };
 }
 
-// Main function
+// Default paths
 const OUTER_REPO = path.join(__dirname, '../..');
-const INJECT_DIR = path.join(OUTER_REPO, 'inject');
-const AUDIO_DIR = path.join(INJECT_DIR, 'audio');
-const METADATA_DIR = path.join(INJECT_DIR, 'metadata');
-const METADATA_FILE = path.join(METADATA_DIR, 'metadata.json');
+const DEFAULT_AUDIO_DIR = path.join(OUTER_REPO, 'inject', 'audio');
+const DEFAULT_OUTPUT_FILE = path.join(OUTER_REPO, 'inject', 'metadata', 'metadata.json');
 
-// Get version from git or use default
-let version = '0.0.0';
-try {
-  const gitVersion = execSync('git describe --tags 2>/dev/null || echo ""', { 
-    encoding: 'utf8',
-    cwd: OUTER_REPO 
-  }).trim();
-  if (gitVersion) {
-    version = gitVersion;
+function run(audioDir, outputFile) {
+  // Get version from git or use default
+  let version = '0.0.0';
+  try {
+    const gitVersion = execSync('git describe --tags 2>/dev/null || echo ""', {
+      encoding: 'utf8',
+      cwd: OUTER_REPO
+    }).trim();
+    if (gitVersion) {
+      version = gitVersion;
+    }
+  } catch (e) {
+    // Use default version
   }
-} catch (e) {
-  // Use default version
+
+  console.log('Generating metadata from directory structure...');
+  console.log(`  Audio dir: ${audioDir}`);
+  console.log(`  Output:    ${outputFile}`);
+
+  const metadata = generateMetadata(audioDir, version);
+
+  const outputDir = path.dirname(outputFile);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  fs.writeFileSync(outputFile, JSON.stringify(metadata, null, 2));
+
+  console.log(`✓ Metadata generated: ${outputFile}`);
+  console.log(`  - Version: ${metadata.Version}`);
+  console.log(`  - Categories: ${metadata.Categories.length}`);
+  console.log(`  - Audio files: ${metadata.Audio.length}`);
 }
 
-console.log('Generating metadata from directory structure...');
-const metadata = generateMetadata(AUDIO_DIR, version);
-
-// Ensure metadata directory exists
-if (!fs.existsSync(METADATA_DIR)) {
-  fs.mkdirSync(METADATA_DIR, { recursive: true });
+if (require.main === module) {
+  const args = minimist(process.argv.slice(2));
+  const audioDir = args.audio || DEFAULT_AUDIO_DIR;
+  const outputFile = args.output || DEFAULT_OUTPUT_FILE;
+  run(audioDir, outputFile);
 }
 
-// Write metadata.json
-fs.writeFileSync(METADATA_FILE, JSON.stringify(metadata, null, 2));
-
-console.log(`✓ Metadata generated: ${METADATA_FILE}`);
-console.log(`  - Version: ${metadata.Version}`);
-console.log(`  - Categories: ${metadata.Categories.length}`);
-console.log(`  - Audio files: ${metadata.Audio.length}`);
+module.exports = { generateMetadata, run };
 
