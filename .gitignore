@@ -49,7 +49,6 @@ content/
 
 src/environments/environment.prod.ts
 android
-capacitor.config.ts
 
 
 # Env files
