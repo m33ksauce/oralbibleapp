@@ -27,8 +27,8 @@ const ANDROID_DIR = path.join(OUTER_REPO, 'android');
 const BUNDLE_DEFAULT = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab');
 
 const TRANSLATION_KEYS = [
-  'yetfa', 'papuan_malay', 'tangko', 'bahasa_kimki', 'bahasa_dou',
-  'bahasa_fayu', 'bahasa_sikari', 'bahasa_walak', 'abawiri', 'meyah',
+  'yetfa', 'papuan_malay', 'tangko', 'kimki', 'dou',
+  'fayu', 'sikari', 'walak', 'abawiri', 'meyah',
 ];
 
 function ensureDir(dir) {
@@ -39,10 +39,10 @@ function run(cmd, opts = {}) {
   execSync(cmd, { stdio: 'inherit', cwd: opts.cwd || ROOT, ...opts });
 }
 
-/** Resolve key to folder name under oba-media (config/<x>, content/<x>). */
+/** Resolve key to folder name under oba-media (<key>/config/, <key>/content/). */
 function resolveObaKey(key) {
-  const base = path.join(BM_OBA_MEDIA, 'config', key);
-  const alt = path.join(BM_OBA_MEDIA, 'config', key.replace(/_/g, '-'));
+  const base = path.join(BM_OBA_MEDIA, key, 'config');
+  const alt = path.join(BM_OBA_MEDIA, key.replace(/_/g, '-'), 'config');
   if (fs.existsSync(base)) return key;
   if (fs.existsSync(alt)) return key.replace(/_/g, '-');
   return null;
@@ -56,10 +56,10 @@ function resolveContentDir(key) {
   }
   const obaKey = resolveObaKey(key);
   if (!obaKey) {
-    console.error(`ERROR: No config found for ${key} in ${BM_OBA_MEDIA}/config/`);
+    console.error(`ERROR: No config found for ${key} in ${BM_OBA_MEDIA}/${key}/config/`);
     process.exit(1);
   }
-  const contentDir = path.join(BM_OBA_MEDIA, 'content', obaKey);
+  const contentDir = path.join(BM_OBA_MEDIA, obaKey, 'content');
   if (!fs.existsSync(contentDir)) {
     console.error(`ERROR: Content directory not found: ${contentDir}`);
     process.exit(1);
@@ -102,16 +102,11 @@ function bundle(key) {
   console.log(`✓ Bundled ${key} → ${DIST_MEDIA}`);
 }
 
-/** Copy environment.prod.<key>.ts → environment.prod.ts */
+/** Generate environment.prod.ts from the current app-config.json. */
 function prep(key) {
-  const envKey = path.join(ENV_DIR, `environment.prod.${key}.ts`);
-  const envProd = path.join(ENV_DIR, 'environment.prod.ts');
-  if (fs.existsSync(envKey)) {
-    fs.copyFileSync(envKey, envProd);
-    console.log(`✓ Prep ${key}: environment.prod.ts`);
-  } else {
-    console.warn(`Warning: ${envKey} not found`);
-  }
+  console.log(`Generating environment.prod.ts for ${key}...`);
+  run('node scripts/generate-config.js');
+  console.log(`✓ Prep ${key}: environment.prod.ts`);
 }
 
 /** Angular production build + Capacitor sync. */
@@ -120,6 +115,21 @@ function buildAndSync() {
   run('npm run build -- --configuration=production');
   console.log('Syncing Capacitor Android platform...');
   run('npx cap sync android');
+}
+
+/** Load per-language project.json into the shared app-config.json. */
+function loadProjectConfig(key) {
+  const obaKey = resolveObaKey(key);
+  const projectConfig = path.join(BM_OBA_MEDIA, obaKey, 'config', 'project.json');
+  const appConfigDest = path.join(OUTER_REPO, 'config', 'app-config.json');
+  if (!fs.existsSync(projectConfig)) {
+    console.error(`ERROR: project.json not found for ${key} at ${projectConfig}`);
+    process.exit(1);
+  }
+  ensureDir(path.dirname(appConfigDest));
+  fs.copyFileSync(projectConfig, appConfigDest);
+  const config = JSON.parse(fs.readFileSync(appConfigDest, 'utf8'));
+  console.log(`✓ Loaded config for ${key}: ${config.app.id}`);
 }
 
 /** Update Android config (app id, version, etc.) */
@@ -148,6 +158,7 @@ function packageKey(key) {
 
 /** Full release build for one key. */
 function build(key) {
+  loadProjectConfig(key);
   bundle(key);
   prep(key);
   buildAndSync();
