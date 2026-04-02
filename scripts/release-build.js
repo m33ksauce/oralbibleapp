@@ -75,6 +75,11 @@ function bundle(key) {
   const contentDir = resolveContentDir(key);
   const audioDir = path.join(contentDir, 'audio');
 
+  // Clean previous media to avoid cross-contamination between builds
+  if (fs.existsSync(DIST_MEDIA)) {
+    fs.rmSync(DIST_MEDIA, { recursive: true, force: true });
+  }
+
   // Create a temporary staging directory for this key's metadata
   const stagingDir = path.join(ROOT, 'dist', 'staging', key);
   const metadataDir = path.join(stagingDir, 'metadata');
