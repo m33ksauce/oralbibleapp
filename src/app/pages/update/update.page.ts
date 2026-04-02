@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 interface UpdateStatusIndicatorData {
   icon: IconDefinition,
   classes: string,
-  spinAnimation: boolean
+  animation?: 'spin'
 }
 
 @Component({
@@ -44,28 +44,25 @@ export class UpdatePage implements OnInit {
         return {
           icon: faCircleDown,
           classes: "fa-xl status-orange",
-          spinAnimation: false,
         }
       }
       case UpdateStatus.UPDATING: {
         return {
           icon: faSync,
           classes: "fa-xl status-orange",
-          spinAnimation: true,
+          animation: 'spin' as const,
         }
       }
       case UpdateStatus.SUCCEEDED: {
         return {
           icon: faCircleCheck,
           classes: "fa-xl status-green",
-          spinAnimation: false,
         }
       }
       case UpdateStatus.FAILED: {
         return {
           icon: faCircleXmark,
           classes: "fa-xl status-red",
-          spinAnimation: false,
         }
       }
     }
