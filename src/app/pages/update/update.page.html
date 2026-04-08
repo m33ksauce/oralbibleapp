@@ -17,11 +17,12 @@
     </ion-card-header>
     <ion-card-content>
       <ion-button style="vertical-align: middle;" (click)="checkWebUpdate()">Update</ion-button>
-      <fa-icon [class]="(updateStatusIndicator | async).classes"
-        [animation]="(updateStatusIndicator | async).animation"
-        style="vertical-align: middle; margin-left: .25em;"
-        *ngIf="updateStatusIndicator | async"
-        [icon]="(updateStatusIndicator | async).icon"></fa-icon>
+      <ng-container *ngIf="updateStatusIndicator | async as status">
+        <fa-icon [class]="status.classes"
+          [animation]="status.animation"
+          style="vertical-align: middle; margin-left: .25em;"
+          [icon]="status.icon"></fa-icon>
+      </ng-container>
     </ion-card-content>
   </ion-card>
   <ion-card *ngIf="bluetoothFeatureEnabled">

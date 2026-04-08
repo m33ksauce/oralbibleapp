@@ -18,11 +18,6 @@ const SCRIPTS_DIR = path.join(__dirname);  // Current directory (client/scripts)
 const BUNDLE_FILE_RELEASE = path.join(BUNDLE_DIR, 'app-release.aab');
 const MAPPING_FILE = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'mapping', 'release', 'mapping.txt');
 const NATIVE_DEBUG_SYMBOLS = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'native-debug-symbols', 'release', 'native-debug-symbols.zip');
-const CONFIG_FILES = [
-  path.join(CLIENT_DIR, 'config.xml'),
-  path.join(CLIENT_DIR, 'src', 'environments', 'environment.prod.ts')
-];
-const MEDIA_BUNDLE = path.join(CLIENT_DIR, 'dist', 'media', 'metadata.json'); // Changed from bundle.obd
 const INJECT_DIR = path.join(ROOT_DIR, 'inject');
 const APP_CONFIG = path.join(CONFIG_DIR, 'app-config.json');
 

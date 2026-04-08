@@ -98,13 +98,14 @@ function bundle(key) {
     fs.symlinkSync(audioDir, stagingAudioLink, 'dir');
   }
 
-  console.log(`Bundling media for ${key}...`);
-  run(`node scripts/bundle-media.js --input "${stagingDir}" --output "${DIST_MEDIA}"`);
-
-  // Clean up staging
-  fs.rmSync(path.join(ROOT, 'dist', 'staging'), { recursive: true, force: true });
-
-  console.log(`✓ Bundled ${key} → ${DIST_MEDIA}`);
+  try {
+    console.log(`Bundling media for ${key}...`);
+    run(`node scripts/bundle-media.js --input "${stagingDir}" --output "${DIST_MEDIA}"`);
+    console.log(`✓ Bundled ${key} → ${DIST_MEDIA}`);
+  } finally {
+    // Clean up staging even if bundling fails
+    fs.rmSync(path.join(ROOT, 'dist', 'staging'), { recursive: true, force: true });
+  }
 }
 
 /** Generate environment.prod.ts from the current app-config.json. */

@@ -41,10 +41,13 @@ build.json
 /.angular
 
 config.xml
+bad.bad
 
 # Project configs and content (per-project; not versioned)
 config/projects/
+config/app-config.json
 content/
+inject/
 
 
 src/environments/environment.prod.ts

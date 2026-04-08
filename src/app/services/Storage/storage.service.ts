@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject, Subject, Subscriber } from 'rxjs';
+import { ReplaySubject, firstValueFrom } from 'rxjs';
 import { AudioMetadata } from 'src/app/interfaces/audio-metadata';
 import { StorageKeys } from './storageKeys';
 
@@ -35,41 +35,28 @@ export class StorageService {
   }
 
   private async seedDatabase() {
-    // Load metadata.json
-    return this.httpClient.get<AudioMetadata>('media/metadata.json')
-      .subscribe(
-        (metadata) => {
-          try {
-            var readyActions = [];
-            readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, metadata));
-            readyActions.push(this._storage.set(StorageKeys.Version, metadata.Version));
-            
-            // Load all audio files from metadata
-            if (metadata.Audio && metadata.Audio.length > 0) {
-              metadata.Audio.forEach((audio) => {
-                const audioPromise = this.httpClient.get(`media/${audio.file}`, { responseType: 'arraybuffer' })
-                  .toPromise()
-                  .then((arrayBuffer) => {
-                    return this._storage.set(`media-${audio.id}`, arrayBuffer);
-                  })
-                  .catch((err) => {
-                    console.log(`Failed to load audio file ${audio.file}: ${err}`);
-                  });
-                readyActions.push(audioPromise);
-              });
-            }
-            
-            Promise.all(readyActions).then(
-              () => this.isReady = true,
-              (err) => console.log(`Failed to seed DB - could not store metadata: ${err}`));
-          } catch (e) {
-            console.log(`Failed to seed DB: ${e}`);
-          }
-        },
-        (err) => {
-          console.log(`Failed to seed DB - could not open metadata.json: ${err}`);
+    try {
+      const metadata = await firstValueFrom(this.httpClient.get<AudioMetadata>('media/metadata.json'));
+      const readyActions: Promise<unknown>[] = [];
+      readyActions.push(this._storage.set(StorageKeys.CurrentMetadata, metadata));
+      readyActions.push(this._storage.set(StorageKeys.Version, metadata.Version));
+
+      if (metadata.Audio && metadata.Audio.length > 0) {
+        for (const audio of metadata.Audio) {
+          const audioPromise = firstValueFrom(
+            this.httpClient.get(`media/${audio.file}`, { responseType: 'arraybuffer' })
+          )
+            .then((arrayBuffer) => this._storage.set(`media-${audio.id}`, arrayBuffer))
+            .catch((err) => console.log(`Failed to load audio file ${audio.file}: ${err}`));
+          readyActions.push(audioPromise);
         }
-      )
+      }
+
+      await Promise.all(readyActions);
+      this.isReady = true;
+    } catch (err) {
+      console.log(`Failed to seed DB: ${err}`);
+    }
   }
 
   public getKey<T>(key: string): ReplaySubject<T> {
