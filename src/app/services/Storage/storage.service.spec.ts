@@ -31,7 +31,7 @@ describe('StorageService', () => {
     httpClientSpy.get.and.returnValue(Promise.resolve(testMetadata));
     storageSpy.create.and.callFake(() => Promise.resolve());
     storageSpy.set.and.callFake(() => Promise.resolve());
-    storageSpy.keys.and.returnValue([StorageKeys.Version]);
+    storageSpy.keys.and.returnValue(Promise.resolve([StorageKeys.Version]));
 
     // Act
     service = TestBed.inject(StorageService);
