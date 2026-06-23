@@ -4,9 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
 
-// Default paths
-const OUTER_REPO = path.join(__dirname, '../..');
-const DEFAULT_INPUT_DIR = path.join(OUTER_REPO, 'inject');
+// Default paths (release-build.js passes explicit --input / --output)
 const CLIENT_DIR = path.join(__dirname, '..');
 const DEFAULT_OUTPUT_DIR = path.join(CLIENT_DIR, 'dist', 'media');
 
@@ -75,7 +73,10 @@ function copyMediaFiles(metadata, inputDir, outputDir, metadataFile) {
 
 // Main function
 function bundleMedia(inputDir, outputDir) {
-  const input = inputDir || DEFAULT_INPUT_DIR;
+  if (!inputDir) {
+    throw new Error('bundleMedia requires inputDir');
+  }
+  const input = inputDir;
   const output = outputDir || DEFAULT_OUTPUT_DIR;
   const metadataFile = path.join(input, 'metadata', 'metadata.json');
 
@@ -93,7 +94,12 @@ function bundleMedia(inputDir, outputDir) {
 // Run if called directly
 if (require.main === module) {
   const args = minimist(process.argv.slice(2));
-  bundleMedia(args.input || null, args.output || null);
+  if (!args.input) {
+    console.error('ERROR: --input <dir> is required');
+    console.error('Usage: node scripts/bundle-media.js --input <staging-dir> [--output <dist/media>]');
+    process.exit(1);
+  }
+  bundleMedia(args.input, args.output || null);
 }
 
 module.exports = { bundleMedia };

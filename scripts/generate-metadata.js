@@ -103,10 +103,10 @@ function generateMetadata(audioDir, version = '0.0.0') {
   };
 }
 
-// Default paths
+// Default paths (release-build.js passes explicit --audio / --output)
 const OUTER_REPO = path.join(__dirname, '../..');
-const DEFAULT_AUDIO_DIR = path.join(OUTER_REPO, 'inject', 'audio');
-const DEFAULT_OUTPUT_FILE = path.join(OUTER_REPO, 'inject', 'metadata', 'metadata.json');
+const CLIENT_DIR = path.join(__dirname, '..');
+const DEFAULT_OUTPUT_FILE = path.join(CLIENT_DIR, 'dist', 'staging', 'metadata', 'metadata.json');
 
 function run(audioDir, outputFile) {
   // Get version from git or use default
@@ -144,7 +144,12 @@ function run(audioDir, outputFile) {
 
 if (require.main === module) {
   const args = minimist(process.argv.slice(2));
-  const audioDir = args.audio || DEFAULT_AUDIO_DIR;
+  if (!args.audio) {
+    console.error('ERROR: --audio <dir> is required');
+    console.error('Usage: node scripts/generate-metadata.js --audio <audio-dir> [--output <metadata.json>]');
+    process.exit(1);
+  }
+  const audioDir = args.audio;
   const outputFile = args.output || DEFAULT_OUTPUT_FILE;
   run(audioDir, outputFile);
 }
