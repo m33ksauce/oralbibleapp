@@ -2,18 +2,50 @@
 
 const fs = require('fs');
 const path = require('path');
+const minimist = require('minimist');
+
+const args = minimist(process.argv.slice(2));
+const capacitorOnly = args['capacitor-only'] || args.capacitorOnly;
 
 const REPO_ROOT = path.join(__dirname, '..');
 const appConfigPath = path.join(REPO_ROOT, 'config', 'app-config.json');
 const appConfig = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
-// Generate environment.prod.ts
-const environmentTemplate = `export const environment = {
-    appName: "${appConfig.app.name}",
+function escapeTsString(value) {
+  return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function writeCapacitorConfig() {
+  const capacitorConfig = `import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: '${appConfig.app.id}',
+  appName: '${appConfig.app.name.replace(/'/g, "\\'")}',
+  webDir: 'www/browser',
+  bundledWebRuntime: false
+};
+
+export default config;
+`;
+
+  fs.writeFileSync(path.join(REPO_ROOT, 'capacitor.config.ts'), capacitorConfig);
+}
+
+if (!capacitorOnly) {
+  const environmentTemplate = `export const environment = {
+    appName: "${escapeTsString(appConfig.app.name)}",
     production: true,
     backend: {
-      releaseEndpoint: "${appConfig.translation.backend.releaseEndpoint}",
-      audioEndpoint: "${appConfig.translation.backend.audioEndpoint}",
+      releaseEndpoint: "${escapeTsString(appConfig.translation.backend.releaseEndpoint)}",
+      audioEndpoint: "${escapeTsString(appConfig.translation.backend.audioEndpoint)}",
     },
     features: {
       dynamicContent: ${appConfig.features.dynamicContent},
@@ -22,14 +54,13 @@ const environmentTemplate = `export const environment = {
     }
   };`;
 
-const envPath = path.join(REPO_ROOT, 'src', 'environments', 'environment.prod.ts');
-fs.writeFileSync(envPath, environmentTemplate);
+  const envPath = path.join(REPO_ROOT, 'src', 'environments', 'environment.prod.ts');
+  fs.writeFileSync(envPath, environmentTemplate);
 
-// Generate config.xml
-const configXmlTemplate = `<?xml version='1.0' encoding='utf-8'?>
-<widget id="${appConfig.app.id}" version="${appConfig.app.version}" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>${appConfig.app.name}</name>
-    <description>${appConfig.app.description}</description>
+  const configXmlTemplate = `<?xml version='1.0' encoding='utf-8'?>
+<widget id="${escapeXml(appConfig.app.id)}" version="${escapeXml(appConfig.app.version)}" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>${escapeXml(appConfig.app.name)}</name>
+    <description>${escapeXml(appConfig.app.description)}</description>
     <author email="chris@meekhouse.org">OpenOralBible</author>
     <content src="index.html" />
     <access origin="*" />
@@ -102,22 +133,8 @@ const configXmlTemplate = `<?xml version='1.0' encoding='utf-8'?>
     <plugin name="cordova-sqlite-storage" spec="^5.0.0" />
 </widget>`;
 
-const configPath = path.join(REPO_ROOT, 'config.xml');
-fs.writeFileSync(configPath, configXmlTemplate);
+  fs.writeFileSync(path.join(REPO_ROOT, 'config.xml'), configXmlTemplate);
+}
 
-const capacitorConfig = `import { CapacitorConfig } from '@capacitor/cli';
-
-const config: CapacitorConfig = {
-  appId: '${appConfig.app.id}',
-  appName: '${appConfig.app.name.replace(/'/g, "\\'")}',
-  webDir: 'www/browser',
-  bundledWebRuntime: false
-};
-
-export default config;
-`;
-
-fs.writeFileSync(path.join(REPO_ROOT, 'capacitor.config.ts'), capacitorConfig);
-
+writeCapacitorConfig();
 console.log('Configuration files generated successfully');
-

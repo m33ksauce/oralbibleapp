@@ -74,19 +74,28 @@ function bundle(key) {
   const contentDir = resolveContentDir(key);
   const audioDir = path.join(contentDir, 'audio');
 
-  // Create a temporary staging directory for this key's metadata
+  if (fs.existsSync(DIST_MEDIA)) {
+    fs.rmSync(DIST_MEDIA, { recursive: true, force: true });
+  }
+
   const stagingDir = path.join(ROOT, 'dist', 'staging', key);
   const metadataDir = path.join(stagingDir, 'metadata');
   const metadataFile = path.join(metadataDir, 'metadata.json');
   ensureDir(metadataDir);
 
-  // Generate metadata from the key's audio directory
-  console.log(`Generating metadata for ${key}...`);
-  run(`node scripts/generate-metadata.js --audio "${audioDir}" --output "${metadataFile}"`);
+  const authoredMetadata = [
+    path.join(contentDir, 'metadata', 'metadata.json'),
+    path.join(contentDir, 'metadata.json'),
+  ].find((p) => fs.existsSync(p));
 
-  // Bundle media: copy audio files + metadata into dist/media/
-  // The bundle-media input dir needs metadata/metadata.json and audio files relative to it.
-  // Create a symlink so the staging dir has the audio files accessible.
+  if (authoredMetadata) {
+    console.log(`Using authored metadata for ${key}...`);
+    fs.copyFileSync(authoredMetadata, metadataFile);
+  } else {
+    console.log(`Generating metadata for ${key}...`);
+    run(`node scripts/generate-metadata.js --audio "${audioDir}" --output "${metadataFile}"`);
+  }
+
   const stagingAudioLink = path.join(stagingDir, 'audio');
   if (!fs.existsSync(stagingAudioLink)) {
     fs.symlinkSync(audioDir, stagingAudioLink, 'dir');
@@ -95,7 +104,6 @@ function bundle(key) {
   console.log(`Bundling media for ${key}...`);
   run(`node scripts/bundle-media.js --input "${stagingDir}" --output "${DIST_MEDIA}"`);
 
-  // Clean up staging
   fs.rmSync(path.join(ROOT, 'dist', 'staging'), { recursive: true, force: true });
 
   console.log(`✓ Bundled ${key} → ${DIST_MEDIA}`);
@@ -163,7 +171,7 @@ function prep(key) {
   } else {
     console.warn(`Warning: ${envKey} not found`);
   }
-  run('node scripts/generate-config.js');
+  run('node scripts/generate-config.js --capacitor-only');
 }
 
 /** Angular production build + Capacitor sync. */
@@ -207,8 +215,28 @@ function build(key) {
   packageKey(key);
 }
 
+function listAvailableKeys() {
+  if (!fs.existsSync(BM_OBA_MEDIA)) {
+    return TRANSLATION_KEYS;
+  }
+  return TRANSLATION_KEYS.filter((key) => {
+    const obaKey = resolveObaKey(key);
+    if (!obaKey) return false;
+    return fs.existsSync(path.join(BM_OBA_MEDIA, 'content', obaKey));
+  });
+}
+
 function buildAll() {
-  TRANSLATION_KEYS.forEach((key) => {
+  const available = listAvailableKeys();
+  const skipped = TRANSLATION_KEYS.filter((key) => !available.includes(key));
+  if (skipped.length > 0) {
+    console.warn(`Skipping keys without oba-media content: ${skipped.join(', ')}`);
+  }
+  if (available.length === 0) {
+    console.error('ERROR: No translation keys available in oba-media');
+    process.exit(1);
+  }
+  available.forEach((key) => {
     console.log(`\n--- Build ${key} ---`);
     build(key);
   });

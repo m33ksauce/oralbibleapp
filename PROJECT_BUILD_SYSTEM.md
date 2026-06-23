@@ -15,27 +15,23 @@ The build system is designed to be self-contained within the client repository a
 ## Directory Structure
 
 ```
-client/
 ├── config/
 │   ├── app-config.json              # Active project config (for development)
 │   └── projects/                     # Project configurations
-│       ├── yetfa.json               # Project config example
-│       └── papuan-malay.json        # Another project config
 ├── content/                          # Project-specific content
-│   ├── yetfa/                        # Project content
-│   │   ├── audio/                    # Audio files
-│   │   └── metadata.json            # Navigation structure
-│   └── papuan-malay/                 # Another project content
+│   └── yetfa/
+│       ├── audio/
+│       └── metadata/metadata.json
 ├── scripts/
-│   ├── cli.js                        # Main CLI entry point
-│   ├── project-manager.js            # Project management functions
-│   ├── build-orchestrator.js         # Build orchestration
-│   └── generate-config.js            # Config file generation
-├── util/
-│   └── md-bundler/                   # Media bundling utility
-└── dist/                             # Build outputs
-    ├── yetfa-release.aab
-    └── papuan-malay-release.aab
+│   ├── cli.js
+│   ├── project-manager.js
+│   ├── build-orchestrator.js
+│   ├── release-build.js
+│   ├── bundle-media.js
+│   └── generate-config.js
+└── dist/
+    ├── yetfa.prod.aab               # Release builds (release:build)
+    └── yetfa/                       # Project CLI builds (project:build)
 ```
 
 ## Creating a New Project
@@ -60,7 +56,7 @@ mkdir -p content/papuan-malay/audio
 cp your-audio-files/* content/papuan-malay/audio/
 
 # Update metadata.json with your navigation structure
-# Edit content/papuan-malay/metadata.json
+# Edit content/papuan-malay/metadata/metadata.json
 ```
 
 ### 3. Setup Project for Development
@@ -164,18 +160,16 @@ Each project's content directory should contain:
 
 ```
 content/{project}/
-├── audio/                    # Audio files organized by category
-│   ├── Lukas/               # Book/chapter organization
-│   └── Stories/             # Bible stories
-└── metadata.json            # Navigation structure and audio mapping
+├── audio/
+└── metadata/metadata.json
 ```
 
 ## Build Process
 
 1. **Project Validation** - Check project exists and has required content
 2. **Configuration Switch** - Copy project config to active config
-3. **Config Generation** - Generate environment.prod.ts and config.xml
-4. **Media Bundling** - Bundle audio files and metadata into bundle.obd
+3. **Config Generation** - Generate environment.prod.ts and capacitor.config.ts
+4. **Media Bundling** - Copy audio files and metadata into dist/media/
 5. **Angular Build** - Build the web application
 6. **Capacitor Sync** - Sync web assets to Android project
 7. **Android Build** - Compile and sign the Android AAB
@@ -218,12 +212,23 @@ node scripts/cli.js setup <project-id>
 node scripts/cli.js clean
 ```
 
+## Release Builds (oba-media)
+
+For production AABs per translation key using the sibling `../oba-media` repo:
+
+```bash
+npm run release:build -- yetfa
+npm run release:build-all    # builds keys available in oba-media
+npm run release:bundle -- yetfa
+npm run release:clean
+```
+
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Project not found** - Ensure project exists in `config/projects/`
-2. **Missing content** - Check that `content/{project}/` has audio/ and metadata.json
+2. **Missing content** - Check that `content/{project}/` has `audio/` and `metadata/metadata.json`
 3. **Build failures** - Check that all dependencies are installed (`npm install`)
 4. **Android build issues** - Ensure Android SDK and Gradle are properly configured
 
@@ -236,7 +241,7 @@ Run individual build steps to debug:
 node scripts/generate-config.js
 
 # Bundle media only
-cd util/md-bundler && npm run make -- ../../inject ../../dist/media
+node scripts/bundle-media.js --input inject --output dist/media
 
 # Build Angular only
 ng build --configuration=production

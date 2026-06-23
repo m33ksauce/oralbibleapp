@@ -5,6 +5,24 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+function getKeystoreEnv(rootDir) {
+  const appConfig = JSON.parse(fs.readFileSync(path.join(rootDir, 'config', 'app-config.json'), 'utf8'));
+  const keystoreFile = appConfig.build.keystore.file;
+  const keystorePath = path.isAbsolute(keystoreFile)
+    ? keystoreFile
+    : path.resolve(rootDir, keystoreFile);
+  const rawPassword = appConfig.build.keystore.password;
+  const password = rawPassword && rawPassword.includes('${')
+    ? (process.env.KEYSTORE_PASSWORD || '')
+    : rawPassword;
+  return {
+    ...process.env,
+    KEYSTORE_FILE: fs.existsSync(keystorePath) ? keystorePath : keystoreFile,
+    KEYSTORE_ALIAS: appConfig.build.keystore.alias,
+    KEYSTORE_PASSWORD: password,
+  };
+}
+
 class BuildOrchestrator {
   constructor() {
     this.projectManager = new ProjectManager();
@@ -60,11 +78,9 @@ class BuildOrchestrator {
       console.log(`\n=== Building batch: ${batch.join(', ')} ===`);
 
       const batchPromises = batch.map((projectId) =>
-        this.buildProject(projectId).catch((error) => ({
-          projectId,
-          status: 'failed',
-          error: error.message,
-        }))
+        this.buildProject(projectId)
+          .then((result) => ({ projectId, status: 'success', result }))
+          .catch((error) => ({ projectId, status: 'failed', error: error.message }))
       );
 
       const batchResults = await Promise.all(batchPromises);
@@ -93,6 +109,9 @@ class BuildOrchestrator {
       console.log('Bundling media files...');
       const injectPath = path.join(this.rootDir, 'inject');
       const mediaOutputPath = path.join(this.rootDir, 'dist', 'media');
+      if (fs.existsSync(mediaOutputPath)) {
+        fs.rmSync(mediaOutputPath, { recursive: true, force: true });
+      }
       fs.mkdirSync(mediaOutputPath, { recursive: true });
       execSync(`node scripts/bundle-media.js --input "${injectPath}" --output "${mediaOutputPath}"`, {
         cwd: this.rootDir,
@@ -111,10 +130,17 @@ class BuildOrchestrator {
         stdio: 'inherit',
       });
 
+      console.log('Updating Android configuration...');
+      execSync('node scripts/update-android-config.js', {
+        cwd: this.rootDir,
+        stdio: 'inherit',
+      });
+
       console.log('Building Android project...');
       execSync('./gradlew assembleRelease && ./gradlew bundleRelease', {
         cwd: path.join(this.rootDir, 'android'),
         stdio: 'inherit',
+        env: getKeystoreEnv(this.rootDir),
       });
 
       const projectDistDir = path.join(this.distDir, projectId);

@@ -21,8 +21,9 @@ class ProjectManager {
 
     const contentPath = path.join(this.contentDir, projectId);
     fs.mkdirSync(path.join(contentPath, 'audio'), { recursive: true });
+    fs.mkdirSync(path.join(contentPath, 'metadata'), { recursive: true });
 
-    const metadataPath = path.join(contentPath, 'metadata.json');
+    const metadataPath = path.join(contentPath, 'metadata', 'metadata.json');
     const basicMetadata = {
       Version: '1.0.0',
       Categories: [],
@@ -69,6 +70,13 @@ class ProjectManager {
         execSync(`rm -rf ${injectPath}`);
       }
       execSync(`cp -r ${contentPath} ${injectPath}`);
+
+      const flatMetadata = path.join(injectPath, 'metadata.json');
+      const nestedMetadata = path.join(injectPath, 'metadata', 'metadata.json');
+      if (fs.existsSync(flatMetadata) && !fs.existsSync(nestedMetadata)) {
+        fs.mkdirSync(path.join(injectPath, 'metadata'), { recursive: true });
+        fs.copyFileSync(flatMetadata, nestedMetadata);
+      }
     }
 
     console.log(`Switched to project: ${projectId}`);
@@ -76,10 +84,11 @@ class ProjectManager {
 
   validateProject(projectId) {
     const contentPath = path.join(this.contentDir, projectId);
-    const metadataPath = path.join(contentPath, 'metadata.json');
+    const metadataPath = path.join(contentPath, 'metadata', 'metadata.json');
+    const legacyMetadataPath = path.join(contentPath, 'metadata.json');
     const audioPath = path.join(contentPath, 'audio');
 
-    if (!fs.existsSync(metadataPath)) {
+    if (!fs.existsSync(metadataPath) && !fs.existsSync(legacyMetadataPath)) {
       console.warn(`Project ${projectId} missing metadata.json`);
       return false;
     }
