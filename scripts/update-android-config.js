@@ -176,19 +176,31 @@ public class MainActivity extends BridgeActivity {}
 const stringsXmlPath = path.join(OUTER_REPO, 'android', 'app', 'src', 'main', 'res', 'values', 'strings.xml');
 if (fs.existsSync(stringsXmlPath)) {
   let stringsXml = fs.readFileSync(stringsXmlPath, 'utf8');
-  
+  const appName = appConfig.app.name;
+
   // Update package_name
   stringsXml = stringsXml.replace(
     /<string name="package_name">[^<]+<\/string>/,
     `<string name="package_name">${appId}</string>`
   );
-  
+
   // Update custom_url_scheme
   stringsXml = stringsXml.replace(
     /<string name="custom_url_scheme">[^<]+<\/string>/,
     `<string name="custom_url_scheme">${appId}</string>`
   );
-  
+
+  // Keep launcher label in sync with per-language app name
+  stringsXml = stringsXml.replace(
+    /<string name="app_name">[^<]+<\/string>/,
+    `<string name="app_name">${appName}</string>`
+  );
+
+  stringsXml = stringsXml.replace(
+    /<string name="title_activity_main">[^<]+<\/string>/,
+    `<string name="title_activity_main">${appName}</string>`
+  );
+
   fs.writeFileSync(stringsXmlPath, stringsXml);
 }
 
