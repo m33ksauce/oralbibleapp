@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Compare each client/dist/<key>.prod.aab against oba-media/<key>/content/audio
+ * Compare each client/dist/<key>.prod.aab against bundled baseline metadata
  * and sanity-check bundled JS for API paths + stray language keys.
  *
  * Usage: node scripts/verify-dist-aabs.js
@@ -14,6 +14,7 @@ const ROOT = path.join(__dirname, '..');
 const OUTER = path.join(ROOT, '..');
 const BM = path.join(OUTER, 'oba-media');
 const DIST = path.join(ROOT, 'dist');
+const DEFAULT_TOLERANCE_BYTES = 512 * 1024; // 512 KiB
 
 const AUDIO_EXT = /\.(mp3|wav|ogg|m4a)$/i;
 
@@ -30,8 +31,29 @@ function resolveObaKey(key) {
   return null;
 }
 
-/** Paths relative to bundled `public/media/` root: metadata.json + audio/... */
-function expectedMediaPaths(obaKey) {
+function readAabMetadata(aabPath) {
+  try {
+    const raw = execSync(
+      `unzip -p ${JSON.stringify(aabPath)} base/assets/public/media/metadata.json`,
+      { encoding: 'utf8' },
+    );
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/** Paths relative to bundled `public/media/` root from baseline/release metadata. */
+function expectedMediaPathsFromMetadata(metadata) {
+  const out = new Set(['metadata.json']);
+  for (const entry of metadata?.Audio ?? []) {
+    out.add(String(entry.file).replace(/\\/g, '/'));
+  }
+  return { set: out };
+}
+
+/** Legacy fallback: full oba-media content/audio tree. */
+function expectedMediaPathsFullTree(obaKey) {
   const audioRoot = path.join(BM, obaKey, 'content', 'audio');
   if (!fs.existsSync(audioRoot)) {
     return { error: `Missing audio directory: ${audioRoot}` };
@@ -55,9 +77,13 @@ function expectedMediaPaths(obaKey) {
 function listAabMediaPaths(aabPath) {
   const prefix = 'base/assets/public/media/';
   const out = new Set();
+  const sizes = new Map();
   let listing;
   try {
-    listing = execSync(`unzip -Z1 "${aabPath}"`, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 512 });
+    listing = execSync(`unzip -Z1 ${JSON.stringify(aabPath)}`, {
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024 * 512,
+    });
   } catch (e) {
     return { error: `unzip -Z1 failed: ${e.message}` };
   }
@@ -68,20 +94,82 @@ function listAabMediaPaths(aabPath) {
     if (!rel || rel.endsWith('/')) continue;
     out.add(rel.replace(/\\/g, '/'));
   }
-  return { set: out };
+
+  try {
+    const verbose = execSync(`unzip -l ${JSON.stringify(aabPath)}`, {
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024 * 512,
+    });
+    for (const line of verbose.split('\n')) {
+      const m = line.trim().match(/^(\d+)\s+\d{2}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+(.+)$/);
+      if (!m) continue;
+      const entry = m[2].trim();
+      if (!entry.startsWith(prefix)) continue;
+      const rel = entry.slice(prefix.length).replace(/\\/g, '/');
+      sizes.set(rel, Number(m[1]));
+    }
+  } catch {
+    // Size checks are best-effort.
+  }
+
+  return { set: out, sizes };
+}
+
+function verifyBaselineBudget(metadata, got) {
+  const warnings = [];
+  const errors = [];
+  const baseline = metadata?.Baseline;
+  if (!baseline) {
+    return { warnings, errors };
+  }
+
+  const { maxBytes, topLevelIncluded, topLevelTotal, totalBytes: baselineBytes } = baseline;
+  let audioBytes = 0;
+  for (const rel of got.set) {
+    if (rel.startsWith('audio/')) {
+      audioBytes += got.sizes.get(rel) ?? 0;
+    }
+  }
+
+  if (typeof maxBytes === 'number' && audioBytes > maxBytes + DEFAULT_TOLERANCE_BYTES) {
+    errors.push(
+      `Bundled audio size ${audioBytes} exceeds baseline maxBytes ${maxBytes} (+${DEFAULT_TOLERANCE_BYTES} tolerance)`,
+    );
+  }
+
+  if (
+    typeof baselineBytes === 'number'
+    && audioBytes > 0
+    && Math.abs(audioBytes - baselineBytes) > DEFAULT_TOLERANCE_BYTES
+  ) {
+    warnings.push(
+      `Bundled audio size ${audioBytes} differs from baseline totalBytes ${baselineBytes}`,
+    );
+  }
+
+  if (
+    typeof topLevelIncluded === 'number'
+    && typeof topLevelTotal === 'number'
+    && topLevelIncluded < topLevelTotal
+  ) {
+    warnings.push(
+      `Baseline coverage gap: topLevelIncluded ${topLevelIncluded} < topLevelTotal ${topLevelTotal}`,
+    );
+  }
+
+  return { warnings, errors, audioBytes };
 }
 
 /** One zipgrep pass: extract api/v1/<lang>/(release|audio) occurrences from bundled assets. */
 function extractApiPaths(aabPath) {
   let text = '';
   try {
-    // Limit to web JS (avoid scanning hundreds of embedded .mp3 bytes in large bundles).
     text = execSync(
       `zipgrep "api/v1/" ${JSON.stringify(aabPath)} ${JSON.stringify('base/assets/public/*.js')}`,
       {
         encoding: 'utf8',
         maxBuffer: 256 * 1024 * 1024,
-      }
+      },
     );
   } catch (e) {
     if (e.status === 1) {
@@ -119,7 +207,10 @@ function main() {
       continue;
     }
 
-    const exp = expectedMediaPaths(obaKey);
+    const metadata = readAabMetadata(aab);
+    const exp = metadata?.Audio?.length
+      ? expectedMediaPathsFromMetadata(metadata)
+      : expectedMediaPathsFullTree(obaKey);
     if (exp.error) {
       console.error(`ERROR: ${exp.error}`);
       failed = true;
@@ -150,7 +241,20 @@ function main() {
       failed = true;
     }
     if (!missing.length && !extra.length) {
-      console.log('media: OK (paths under base/assets/public/media/ match oba-media content/audio)');
+      const source = metadata?.Audio?.length ? 'baseline metadata.json' : 'oba-media content/audio';
+      console.log(`media: OK (paths under base/assets/public/media/ match ${source})`);
+    }
+
+    if (metadata) {
+      const budget = verifyBaselineBudget(metadata, got);
+      for (const warning of budget.warnings) console.warn(`  ⚠ ${warning}`);
+      for (const error of budget.errors) {
+        console.error(`ERROR: ${error}`);
+        failed = true;
+      }
+      if (budget.audioBytes) {
+        console.log(`baseline: ${budget.audioBytes} audio bytes in AAB`);
+      }
     }
 
     const { pairs, langs } = extractApiPaths(aab);
@@ -172,9 +276,11 @@ function main() {
     }
 
     const cap = JSON.parse(
-      execSync(`unzip -p "${aab}" base/assets/capacitor.config.json`, { encoding: 'utf8' })
+      execSync(`unzip -p ${JSON.stringify(aab)} base/assets/capacitor.config.json`, { encoding: 'utf8' }),
     );
-    const wantId = JSON.parse(fs.readFileSync(path.join(BM, obaKey, 'config', 'project.json'), 'utf8')).app.id;
+    const wantId = JSON.parse(
+      fs.readFileSync(path.join(BM, obaKey, 'config', 'project.json'), 'utf8'),
+    ).app.id;
     if (cap.appId !== wantId) {
       console.error(`ERROR: capacitor appId mismatch: got ${cap.appId}, want ${wantId}`);
       failed = true;
