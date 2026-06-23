@@ -3,9 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// Load app configuration from outer repo
-const OUTER_REPO = path.join(__dirname, '../..');  // Go up from client/scripts to outer repo
-const appConfigPath = path.join(OUTER_REPO, 'config', 'app-config.json');
+const REPO_ROOT = path.join(__dirname, '..');
+const appConfigPath = path.join(REPO_ROOT, 'config', 'app-config.json');
 const appConfig = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
 // Generate environment.prod.ts
@@ -23,9 +22,7 @@ const environmentTemplate = `export const environment = {
     }
   };`;
 
-// Write environment file (in client/src/environments/)
-const CLIENT_DIR = path.join(__dirname, '..');  // client/ (parent of scripts/, now IS the code)
-const envPath = path.join(CLIENT_DIR, 'src', 'environments', 'environment.prod.ts');
+const envPath = path.join(REPO_ROOT, 'src', 'environments', 'environment.prod.ts');
 fs.writeFileSync(envPath, environmentTemplate);
 
 // Generate config.xml
@@ -105,9 +102,22 @@ const configXmlTemplate = `<?xml version='1.0' encoding='utf-8'?>
     <plugin name="cordova-sqlite-storage" spec="^5.0.0" />
 </widget>`;
 
-// Write config.xml (in client/)
-const configPath = path.join(CLIENT_DIR, 'config.xml');
+const configPath = path.join(REPO_ROOT, 'config.xml');
 fs.writeFileSync(configPath, configXmlTemplate);
+
+const capacitorConfig = `import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: '${appConfig.app.id}',
+  appName: '${appConfig.app.name.replace(/'/g, "\\'")}',
+  webDir: 'www/browser',
+  bundledWebRuntime: false
+};
+
+export default config;
+`;
+
+fs.writeFileSync(path.join(REPO_ROOT, 'capacitor.config.ts'), capacitorConfig);
 
 console.log('Configuration files generated successfully');
 

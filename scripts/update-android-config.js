@@ -3,13 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 
-// Load app configuration from outer repo
-const OUTER_REPO = path.join(__dirname, '../..');  // Go up from client/scripts to outer repo
-const appConfigPath = path.join(OUTER_REPO, 'config', 'app-config.json');
+const REPO_ROOT = path.join(__dirname, '..');
+const appConfigPath = path.join(REPO_ROOT, 'config', 'app-config.json');
 const appConfig = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
-// Path to Android build.gradle in outer repo
-const buildGradlePath = path.join(OUTER_REPO, 'android', 'app', 'build.gradle');
+const buildGradlePath = path.join(REPO_ROOT, 'android', 'app', 'build.gradle');
 
 if (!fs.existsSync(buildGradlePath)) {
   console.error('Android build.gradle not found at:', buildGradlePath);
@@ -86,7 +84,7 @@ if (buildGradle.includes('buildTypes') && buildGradle.includes('signingConfigs')
 fs.writeFileSync(buildGradlePath, buildGradle);
 
 // Update MainActivity.java package and directory structure
-const javaSrcDir = path.join(OUTER_REPO, 'android', 'app', 'src', 'main', 'java');
+const javaSrcDir = path.join(REPO_ROOT, 'android', 'app', 'src', 'main', 'java');
 const appId = appConfig.app.id;
 const packagePath = appId.replace(/\./g, '/');
 const newMainActivityDir = path.join(javaSrcDir, packagePath);
@@ -173,7 +171,7 @@ public class MainActivity extends BridgeActivity {}
 }
 
 // Update strings.xml
-const stringsXmlPath = path.join(OUTER_REPO, 'android', 'app', 'src', 'main', 'res', 'values', 'strings.xml');
+const stringsXmlPath = path.join(REPO_ROOT, 'android', 'app', 'src', 'main', 'res', 'values', 'strings.xml');
 if (fs.existsSync(stringsXmlPath)) {
   let stringsXml = fs.readFileSync(stringsXmlPath, 'utf8');
   

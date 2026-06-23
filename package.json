@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ionic serve",
-    "start-emulator": "ionic cordova run android",
+    "start-emulator": "npx cap run android",
     "build": "ng build",
     "test": "ng test",
     "watchtest": "ng test --watch",

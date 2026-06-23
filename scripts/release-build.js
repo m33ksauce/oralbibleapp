@@ -19,11 +19,10 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..');
-const OUTER_REPO = path.join(ROOT, '..');
-const BM_OBA_MEDIA = path.join(OUTER_REPO, 'oba-media');
+const BM_OBA_MEDIA = path.join(ROOT, '..', 'oba-media');
 const DIST_MEDIA = path.join(ROOT, 'dist', 'media');
 const ENV_DIR = path.join(ROOT, 'src', 'environments');
-const ANDROID_DIR = path.join(OUTER_REPO, 'android');
+const ANDROID_DIR = path.join(ROOT, 'android');
 const BUNDLE_DEFAULT = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab');
 
 const TRANSLATION_KEYS = [
@@ -102,8 +101,60 @@ function bundle(key) {
   console.log(`✓ Bundled ${key} → ${DIST_MEDIA}`);
 }
 
+function getKeystoreEnv() {
+  const appConfig = JSON.parse(fs.readFileSync(path.join(ROOT, 'config', 'app-config.json'), 'utf8'));
+  const keystoreFile = appConfig.build.keystore.file;
+  const keystorePath = path.isAbsolute(keystoreFile)
+    ? keystoreFile
+    : path.resolve(ROOT, keystoreFile);
+  const rawPassword = appConfig.build.keystore.password;
+  const password = rawPassword && rawPassword.includes('${')
+    ? (process.env.KEYSTORE_PASSWORD || '')
+    : rawPassword;
+  return {
+    ...process.env,
+    KEYSTORE_FILE: fs.existsSync(keystorePath) ? keystorePath : keystoreFile,
+    KEYSTORE_ALIAS: appConfig.build.keystore.alias,
+    KEYSTORE_PASSWORD: password,
+  };
+}
+
+/** Merge oba-media per-key app-config into local config for release builds. */
+function syncAppConfig(key) {
+  if (!fs.existsSync(BM_OBA_MEDIA)) return;
+  const obaKey = resolveObaKey(key);
+  if (!obaKey) return;
+  const obaConfigPath = path.join(BM_OBA_MEDIA, 'config', obaKey, 'app-config.json');
+  if (!fs.existsSync(obaConfigPath)) return;
+
+  const obaConfig = JSON.parse(fs.readFileSync(obaConfigPath, 'utf8'));
+  const localConfigPath = path.join(ROOT, 'config', 'app-config.json');
+  const localConfig = fs.existsSync(localConfigPath)
+    ? JSON.parse(fs.readFileSync(localConfigPath, 'utf8'))
+    : {};
+
+  const merged = {
+    ...obaConfig,
+    app: {
+      ...obaConfig.app,
+      version: localConfig.app?.version || '1.0.0',
+      versionCode: localConfig.app?.versionCode || 1,
+    },
+    build: localConfig.build || {
+      keystore: {
+        file: 'crypto/release/oba-yetfa.keystore',
+        alias: 'oba-yetfa',
+        password: '${KEYSTORE_PASSWORD}',
+      },
+    },
+  };
+  merged.translation = { ...obaConfig.translation, key };
+  fs.writeFileSync(localConfigPath, JSON.stringify(merged, null, 2));
+}
+
 /** Copy environment.prod.<key>.ts → environment.prod.ts */
 function prep(key) {
+  syncAppConfig(key);
   const envKey = path.join(ENV_DIR, `environment.prod.${key}.ts`);
   const envProd = path.join(ENV_DIR, 'environment.prod.ts');
   if (fs.existsSync(envKey)) {
@@ -112,6 +163,7 @@ function prep(key) {
   } else {
     console.warn(`Warning: ${envKey} not found`);
   }
+  run('node scripts/generate-config.js');
 }
 
 /** Angular production build + Capacitor sync. */
@@ -134,7 +186,7 @@ function packageKey(key) {
     console.error(`ERROR: ${ANDROID_DIR} not found. Run cap sync first.`);
     process.exit(1);
   }
-  run('./gradlew assembleRelease && ./gradlew bundleRelease', { cwd: ANDROID_DIR });
+  run('./gradlew assembleRelease && ./gradlew bundleRelease', { cwd: ANDROID_DIR, env: getKeystoreEnv() });
   const aabDest = path.join(ROOT, 'dist', `${key}.prod.aab`);
   ensureDir(path.join(ROOT, 'dist'));
   if (fs.existsSync(BUNDLE_DEFAULT)) {

@@ -1,6 +1,6 @@
 {
   "app": {
-    "id": "com.oralbibleapp.yetfa2",
+    "id": "com.oralbibleapp.yetfa",
     "name": "Awa Ma",
     "description": "The OpenOralBible Client for Yetfa Scripture",
     "version": "1.0.0",
@@ -20,7 +20,7 @@
   },
   "build": {
     "keystore": {
-      "file": "../crypto/release/oba-yetfa.keystore",
+      "file": "crypto/release/oba-yetfa.keystore",
       "alias": "oba-yetfa",
       "password": "${KEYSTORE_PASSWORD}"
     }

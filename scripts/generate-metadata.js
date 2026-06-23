@@ -104,9 +104,9 @@ function generateMetadata(audioDir, version = '0.0.0') {
 }
 
 // Default paths
-const OUTER_REPO = path.join(__dirname, '../..');
-const DEFAULT_AUDIO_DIR = path.join(OUTER_REPO, 'inject', 'audio');
-const DEFAULT_OUTPUT_FILE = path.join(OUTER_REPO, 'inject', 'metadata', 'metadata.json');
+const REPO_ROOT = path.join(__dirname, '..');
+const DEFAULT_AUDIO_DIR = path.join(REPO_ROOT, 'inject', 'audio');
+const DEFAULT_OUTPUT_FILE = path.join(REPO_ROOT, 'inject', 'metadata', 'metadata.json');
 
 function run(audioDir, outputFile) {
   // Get version from git or use default
@@ -114,7 +114,7 @@ function run(audioDir, outputFile) {
   try {
     const gitVersion = execSync('git describe --tags 2>/dev/null || echo ""', {
       encoding: 'utf8',
-      cwd: OUTER_REPO
+      cwd: REPO_ROOT
     }).trim();
     if (gitVersion) {
       version = gitVersion;

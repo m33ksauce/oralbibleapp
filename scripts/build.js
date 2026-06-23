@@ -5,9 +5,9 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // Paths
-const ROOT_DIR = path.join(__dirname, '../..');  // Go up from client/scripts to outer repo
+const ROOT_DIR = path.join(__dirname, '..');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
-const CLIENT_DIR = path.join(__dirname, '..');  // client/ (submodule root, now IS the code)
+const CLIENT_DIR = ROOT_DIR;
 const ANDROID_DIR = path.join(ROOT_DIR, 'android');
 const BUNDLE_DIR = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'bundle', 'release');
 const CONFIG_DIR = path.join(ROOT_DIR, 'config');
@@ -112,10 +112,15 @@ function getKeystoreConfig() {
     ? keystoreFile
     : path.resolve(ROOT_DIR, keystoreFile);
   
+  const rawPassword = config.build.keystore.password;
+  const password = rawPassword && rawPassword.includes('${')
+    ? (process.env.KEYSTORE_PASSWORD || '')
+    : rawPassword;
+
   return {
     file: fs.existsSync(keystorePath) ? keystorePath : keystoreFile,
     alias: config.build.keystore.alias,
-    password: config.build.keystore.password
+    password
   };
 }
 

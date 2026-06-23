@@ -5,8 +5,8 @@ const path = require('path');
 const minimist = require('minimist');
 
 // Default paths
-const OUTER_REPO = path.join(__dirname, '../..');
-const DEFAULT_INPUT_DIR = path.join(OUTER_REPO, 'inject');
+const REPO_ROOT = path.join(__dirname, '..');
+const DEFAULT_INPUT_DIR = path.join(REPO_ROOT, 'inject');
 const CLIENT_DIR = path.join(__dirname, '..');
 const DEFAULT_OUTPUT_DIR = path.join(CLIENT_DIR, 'dist', 'media');
 

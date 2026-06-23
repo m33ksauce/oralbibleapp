@@ -3,12 +3,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT_DIR = path.join(__dirname, '../..');  // Go up from client/scripts to outer repo
+const ROOT_DIR = path.join(__dirname, '..');
 
 const filesToRemove = [
-  'client/config.xml',
-  'client/src/environments/environment.prod.ts',
-  'client/dist/media',
+  'config.xml',
+  'capacitor.config.ts',
+  'src/environments/environment.prod.ts',
+  'dist/media',
   'android/app/build/outputs/bundle/release/app-release.aab',
   'android/app/build/outputs/mapping/release/mapping.txt',
   'android/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip',

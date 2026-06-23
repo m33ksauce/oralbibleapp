@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const OUTER_REPO = path.join(__dirname, '../..');  // Go up from client/scripts to outer repo
-const APP_CONFIG = path.join(OUTER_REPO, 'config', 'app-config.json');
+const REPO_ROOT = path.join(__dirname, '..');
+const APP_CONFIG = path.join(REPO_ROOT, 'config', 'app-config.json');
 
 console.log('Incrementing versionCode');
 
