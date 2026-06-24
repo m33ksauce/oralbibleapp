@@ -1,0 +1,7 @@
+{
+  "name": "OpenOralBibleClient",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
