@@ -6,21 +6,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ionic serve",
-    "start-emulator": "ionic cordova run android",
+    "start-emulator": "npx cap run android",
     "build": "ng build",
     "test": "ng test",
     "watchtest": "ng test --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "ci-test": "ng test --watch false --browsers ChromeHeadless",
-    "project:create": "node scripts/cli.js create",
-    "project:list": "node scripts/cli.js list",
-    "project:switch": "node scripts/cli.js switch",
-    "project:build": "node scripts/cli.js build",
-    "project:build-all": "node scripts/cli.js build-all",
-    "project:setup": "node scripts/cli.js setup",
-    "project:clean": "node scripts/cli.js clean",
-    "dev": "node scripts/cli.js switch $PROJECT && ionic serve",
     "setup": "node scripts/build.js setup",
     "package": "node scripts/build.js package",
     "clean": "node scripts/clean.js",
@@ -36,7 +28,9 @@
     "release:build-all": "node scripts/release-build.js build-all",
     "release:clean": "node scripts/release-build.js clean",
     "release:clean-all": "node scripts/release-build.js clean-all",
-    "release:set-version": "node scripts/release-build.js set-version"
+    "release:set-version": "node scripts/release-build.js set-version",
+    "language:create": "node scripts/create-language.js",
+    "verify:dist-aabs": "node scripts/verify-dist-aabs.js"
   },
   "private": true,
   "dependencies": {

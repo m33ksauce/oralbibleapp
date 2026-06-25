@@ -5,7 +5,7 @@
  *
  * Commands:
  *   bundle <key>     Generate metadata and copy media files for one translation
- *   prep <key>       Copy environment.prod.<key>.ts → environment.prod.ts
+ *   prep <key>       Generate environment.prod.ts from app-config.json
  *   package <key>    Run Gradle bundleRelease and copy AAB to dist/<key>.prod.aab
  *   build <key>      bundle → prep → Angular build → cap sync → updateAndroid → package
  *   build-all        build for every translation key
@@ -86,9 +86,18 @@ function bundle(key) {
   const metadataFile = path.join(metadataDir, 'metadata.json');
   ensureDir(metadataDir);
 
-  // Generate metadata from the key's audio directory
-  console.log(`Generating metadata for ${key}...`);
-  run(`node scripts/generate-metadata.js --audio "${audioDir}" --output "${metadataFile}"`);
+  const authoredMetadata = [
+    path.join(contentDir, 'metadata', 'metadata.json'),
+    path.join(contentDir, 'metadata.json'),
+  ].find((p) => fs.existsSync(p));
+
+  if (authoredMetadata) {
+    console.log(`Using authored metadata for ${key}...`);
+    fs.copyFileSync(authoredMetadata, metadataFile);
+  } else {
+    console.log(`Generating metadata for ${key}...`);
+    run(`node scripts/generate-metadata.js --audio "${audioDir}" --output "${metadataFile}"`);
+  }
 
   // Bundle media: copy audio files + metadata into dist/media/
   // The bundle-media input dir needs metadata/metadata.json and audio files relative to it.
@@ -110,6 +119,7 @@ function bundle(key) {
 
 /** Generate environment.prod.ts from the current app-config.json. */
 function prep(key) {
+  loadProjectConfig(key);
   console.log(`Generating environment.prod.ts for ${key}...`);
   run('node scripts/generate-config.js');
   console.log(`✓ Prep ${key}: environment.prod.ts`);
@@ -138,6 +148,25 @@ function loadProjectConfig(key) {
   console.log(`✓ Loaded config for ${key}: ${config.app.id}`);
 }
 
+function getKeystoreEnv() {
+  const appConfigPath = path.join(OUTER_REPO, 'config', 'app-config.json');
+  const appConfig = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
+  const keystoreFile = appConfig.build.keystore.file;
+  const keystorePath = path.isAbsolute(keystoreFile)
+    ? keystoreFile
+    : path.resolve(ROOT, keystoreFile);
+  const rawPassword = appConfig.build.keystore.password;
+  const password = rawPassword && rawPassword.includes('${')
+    ? (process.env.KEYSTORE_PASSWORD || '')
+    : rawPassword;
+  return {
+    ...process.env,
+    KEYSTORE_FILE: fs.existsSync(keystorePath) ? keystorePath : keystoreFile,
+    KEYSTORE_ALIAS: appConfig.build.keystore.alias,
+    KEYSTORE_PASSWORD: password,
+  };
+}
+
 /** Update Android config (app id, version, etc.) */
 function updateAndroid() {
   console.log('Updating Android configuration...');
@@ -150,7 +179,7 @@ function packageKey(key) {
     console.error(`ERROR: ${ANDROID_DIR} not found. Run cap sync first.`);
     process.exit(1);
   }
-  run('./gradlew assembleRelease && ./gradlew bundleRelease', { cwd: ANDROID_DIR });
+  run('./gradlew assembleRelease && ./gradlew bundleRelease', { cwd: ANDROID_DIR, env: getKeystoreEnv() });
   const aabDest = path.join(ROOT, 'dist', `${key}.prod.aab`);
   ensureDir(path.join(ROOT, 'dist'));
   if (fs.existsSync(BUNDLE_DEFAULT)) {
@@ -164,7 +193,6 @@ function packageKey(key) {
 
 /** Full release build for one key. */
 function build(key) {
-  loadProjectConfig(key);
   bundle(key);
   prep(key);
   buildAndSync();
@@ -172,8 +200,28 @@ function build(key) {
   packageKey(key);
 }
 
+function listAvailableKeys() {
+  if (!fs.existsSync(BM_OBA_MEDIA)) {
+    return TRANSLATION_KEYS;
+  }
+  return TRANSLATION_KEYS.filter((key) => {
+    const obaKey = resolveObaKey(key);
+    if (!obaKey) return false;
+    return fs.existsSync(path.join(BM_OBA_MEDIA, obaKey, 'content'));
+  });
+}
+
 function buildAll() {
-  TRANSLATION_KEYS.forEach((key) => {
+  const available = listAvailableKeys();
+  const skipped = TRANSLATION_KEYS.filter((key) => !available.includes(key));
+  if (skipped.length > 0) {
+    console.warn(`Skipping keys without oba-media content: ${skipped.join(', ')}`);
+  }
+  if (available.length === 0) {
+    console.error('ERROR: No translation keys with oba-media content found.');
+    process.exit(1);
+  }
+  available.forEach((key) => {
     console.log(`\n--- Build ${key} ---`);
     build(key);
   });
@@ -238,6 +286,7 @@ switch (cmd) {
     break;
   case 'package':
     if (!key) { console.error('Usage: node release-build.js package <key>'); process.exit(1); }
+    loadProjectConfig(key);
     packageKey(key);
     break;
   case 'build':
