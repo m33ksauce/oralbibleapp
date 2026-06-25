@@ -51,7 +51,7 @@ inject/
 
 
 src/environments/environment.prod.ts
-android
+/android
 capacitor.config.ts
 
 
