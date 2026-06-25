@@ -17,11 +17,17 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const {
+  resolveObaKey,
+  resolveContentDir: obaContentDir,
+  resolveProjectConfigSource,
+} = require('./oba-media-paths');
 
 const ROOT = path.join(__dirname, '..');
 const OUTER_REPO = path.join(ROOT, '..');
 const BM_OBA_MEDIA = path.join(OUTER_REPO, 'oba-media');
 const DIST_MEDIA = path.join(ROOT, 'dist', 'media');
+const DEFAULT_BASELINE_URL = process.env.BASELINE_API_URL || 'https://content.oralbible.app';
 const ENV_DIR = path.join(ROOT, 'src', 'environments');
 const ANDROID_DIR = path.join(OUTER_REPO, 'android');
 const BUNDLE_DEFAULT = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab');
@@ -39,13 +45,17 @@ function run(cmd, opts = {}) {
   execSync(cmd, { stdio: 'inherit', cwd: opts.cwd || ROOT, ...opts });
 }
 
-/** Resolve key to folder name under oba-media (<key>/config/, <key>/content/). */
-function resolveObaKey(key) {
-  const base = path.join(BM_OBA_MEDIA, key, 'config');
-  const alt = path.join(BM_OBA_MEDIA, key.replace(/_/g, '-'), 'config');
-  if (fs.existsSync(base)) return key;
-  if (fs.existsSync(alt)) return key.replace(/_/g, '-');
-  return null;
+function runCapture(cmd) {
+  return execSync(cmd, { stdio: 'pipe', encoding: 'utf8', cwd: ROOT });
+}
+
+function isBaselineApiUnavailable(output) {
+  return /GET .* failed: HTTP|ENOTFOUND|ECONNREFUSED|ETIMEDOUT|fetch failed/i.test(output);
+}
+
+/** Resolve key to folder name under oba-media. */
+function resolveObaKeyForBuild(key) {
+  return resolveObaKey(BM_OBA_MEDIA, key);
 }
 
 /** Find content directory for a translation key in oba-media. */
@@ -54,54 +64,85 @@ function resolveContentDir(key) {
     console.error(`ERROR: oba-media not found at ${BM_OBA_MEDIA}`);
     process.exit(1);
   }
-  const obaKey = resolveObaKey(key);
+  const obaKey = resolveObaKeyForBuild(key);
   if (!obaKey) {
-    console.error(`ERROR: No config found for ${key} in ${BM_OBA_MEDIA}/${key}/config/`);
+    console.error(`ERROR: No config found for ${key} under ${BM_OBA_MEDIA}`);
     process.exit(1);
   }
-  const contentDir = path.join(BM_OBA_MEDIA, obaKey, 'content');
-  if (!fs.existsSync(contentDir)) {
-    console.error(`ERROR: Content directory not found: ${contentDir}`);
+  const contentDir = obaContentDir(BM_OBA_MEDIA, obaKey);
+  if (!contentDir) {
+    console.error(`ERROR: Content directory not found for ${key}`);
     process.exit(1);
   }
   return contentDir;
 }
 
+function warnBaselineCoverage(metadataFile) {
+  if (!fs.existsSync(metadataFile)) return;
+  const metadata = JSON.parse(fs.readFileSync(metadataFile, 'utf8'));
+  const baseline = metadata.Baseline;
+  if (!baseline) return;
+
+  const { topLevelIncluded, topLevelTotal } = baseline;
+  if (
+    typeof topLevelIncluded === 'number'
+    && typeof topLevelTotal === 'number'
+    && topLevelIncluded < topLevelTotal
+  ) {
+    console.warn(
+      `⚠ Baseline coverage gap for release bundle: ${topLevelIncluded}/${topLevelTotal} top-level categories included`,
+    );
+    if (baseline.excludedTopLevel?.length) {
+      console.warn(`  Excluded: ${baseline.excludedTopLevel.join(', ')}`);
+    }
+  }
+}
+
 /**
- * Generate metadata from the key's content dir, then bundle media into dist/media/.
- * Uses generate-metadata.js and bundle-media.js with explicit paths.
+ * Fetch published baseline metadata, map to local audio paths, bundle into dist/media/.
  */
 function bundle(key) {
   const contentDir = resolveContentDir(key);
   const audioDir = path.join(contentDir, 'audio');
 
-  // Clean previous media to avoid cross-contamination between builds
   if (fs.existsSync(DIST_MEDIA)) {
     fs.rmSync(DIST_MEDIA, { recursive: true, force: true });
   }
 
-  // Create a temporary staging directory for this key's metadata
   const stagingDir = path.join(ROOT, 'dist', 'staging', key);
   const metadataDir = path.join(stagingDir, 'metadata');
   const metadataFile = path.join(metadataDir, 'metadata.json');
   ensureDir(metadataDir);
 
+  const baselineFile = process.env.BASELINE_FILE || '';
+  const baselineFileArg = baselineFile ? ` --baseline-file "${baselineFile}"` : '';
   const authoredMetadata = [
     path.join(contentDir, 'metadata', 'metadata.json'),
     path.join(contentDir, 'metadata.json'),
   ].find((p) => fs.existsSync(p));
 
-  if (authoredMetadata) {
-    console.log(`Using authored metadata for ${key}...`);
-    fs.copyFileSync(authoredMetadata, metadataFile);
-  } else {
-    console.log(`Generating metadata for ${key}...`);
-    run(`node scripts/generate-metadata.js --audio "${audioDir}" --output "${metadataFile}"`);
+  try {
+    console.log(`Generating baseline metadata for ${key}...`);
+    runCapture(
+      `node scripts/generate-baseline-metadata.js --translation ${key} --audio "${audioDir}" --output "${metadataFile}" --base-url ${DEFAULT_BASELINE_URL}${baselineFileArg}`,
+    );
+    warnBaselineCoverage(metadataFile);
+  } catch (e) {
+    const output = `${e.stdout || ''}${e.stderr || ''}${e.message || ''}`;
+    if (baselineFile || !isBaselineApiUnavailable(output)) {
+      if (e.stdout) process.stdout.write(e.stdout);
+      if (e.stderr) process.stderr.write(e.stderr);
+      throw e;
+    }
+    if (authoredMetadata) {
+      console.warn(`Baseline API unavailable; using authored metadata for ${key}...`);
+      fs.copyFileSync(authoredMetadata, metadataFile);
+    } else {
+      console.warn(`Baseline API unavailable; generating full-tree metadata for ${key}...`);
+      run(`node scripts/generate-metadata.js --audio "${audioDir}" --output "${metadataFile}"`);
+    }
   }
 
-  // Bundle media: copy audio files + metadata into dist/media/
-  // The bundle-media input dir needs metadata/metadata.json and audio files relative to it.
-  // Create a symlink so the staging dir has the audio files accessible.
   const stagingAudioLink = path.join(stagingDir, 'audio');
   if (!fs.existsSync(stagingAudioLink)) {
     fs.symlinkSync(audioDir, stagingAudioLink, 'dir');
@@ -112,7 +153,6 @@ function bundle(key) {
     run(`node scripts/bundle-media.js --input "${stagingDir}" --output "${DIST_MEDIA}"`);
     console.log(`✓ Bundled ${key} → ${DIST_MEDIA}`);
   } finally {
-    // Clean up staging even if bundling fails
     fs.rmSync(path.join(ROOT, 'dist', 'staging'), { recursive: true, force: true });
   }
 }
@@ -135,17 +175,20 @@ function buildAndSync() {
 
 /** Load per-language project.json into the shared app-config.json. */
 function loadProjectConfig(key) {
-  const obaKey = resolveObaKey(key);
-  const projectConfig = path.join(BM_OBA_MEDIA, obaKey, 'config', 'project.json');
-  const appConfigDest = path.join(OUTER_REPO, 'config', 'app-config.json');
-  if (!fs.existsSync(projectConfig)) {
-    console.error(`ERROR: project.json not found for ${key} at ${projectConfig}`);
+  const resolved = resolveProjectConfigSource(BM_OBA_MEDIA, key);
+  if (!resolved) {
+    console.error(`ERROR: No project.json or app-config.json found for ${key} under ${BM_OBA_MEDIA}`);
     process.exit(1);
   }
+  const appConfigDest = path.join(OUTER_REPO, 'config', 'app-config.json');
   ensureDir(path.dirname(appConfigDest));
-  fs.copyFileSync(projectConfig, appConfigDest);
+  if (resolved.mergedConfig) {
+    fs.writeFileSync(appConfigDest, JSON.stringify(resolved.mergedConfig, null, 2));
+  } else {
+    fs.copyFileSync(resolved.sourcePath, appConfigDest);
+  }
   const config = JSON.parse(fs.readFileSync(appConfigDest, 'utf8'));
-  console.log(`✓ Loaded config for ${key}: ${config.app.id}`);
+  console.log(`✓ Loaded config for ${key}: ${config.app?.id || '(no app.id)'}`);
 }
 
 function getKeystoreEnv() {
@@ -205,9 +248,9 @@ function listAvailableKeys() {
     return TRANSLATION_KEYS;
   }
   return TRANSLATION_KEYS.filter((key) => {
-    const obaKey = resolveObaKey(key);
+    const obaKey = resolveObaKeyForBuild(key);
     if (!obaKey) return false;
-    return fs.existsSync(path.join(BM_OBA_MEDIA, obaKey, 'content'));
+    return Boolean(obaContentDir(BM_OBA_MEDIA, obaKey));
   });
 }
 

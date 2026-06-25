@@ -1,0 +1,51 @@
+{
+  "Version": "0.1.6-10-gfab22ae",
+  "Categories": [
+    {
+      "type": 1,
+      "name": "Lukas",
+      "children": [
+        { "type": 2, "name": "Lukas 1:1-4", "audioTargetId": "589941fe-d828-8ae6-837e-9d1edffc0336" },
+        { "type": 2, "name": "Lukas 2:41", "audioTargetId": "70cf83ba-0811-0a0a-10fb-d0c09fccffd9" },
+        { "type": 2, "name": "Lukas 2:42", "audioTargetId": "0a0d0db5-1646-120b-c087-01a3b05be562" },
+        { "type": 2, "name": "Lukas 2:43", "audioTargetId": "9a21ba81-73b2-8e3b-060e-26730c840a99" },
+        { "type": 2, "name": "Lukas 4:1", "audioTargetId": "842ef82a-5b00-279d-8907-242c4255810d" },
+        { "type": 2, "name": "Lukas 4:2", "audioTargetId": "b9b7f75d-3fda-9c5e-8f1f-141dc4078e2c" },
+        { "type": 2, "name": "Lukas 4:3", "audioTargetId": "9e0883f5-504b-c2fd-1156-82bc00a47d66" },
+        { "type": 2, "name": "Lukas 4:4", "audioTargetId": "c3cb632f-78b9-1cde-7673-9c0f2c1a4f27" }
+      ]
+    },
+    {
+      "type": 1,
+      "name": "Stories",
+      "children": [
+        { "type": 2, "name": "39 Keturunan Roh Tuhan", "audioTargetId": "c62a61e4-642a-812b-e820-833df6424ff5" },
+        { "type": 2, "name": "40 Persekutuan", "audioTargetId": "3c8bfa73-c9f1-24e7-6789-7341de852d7b" }
+      ]
+    }
+  ],
+  "Audio": [
+    { "id": "589941fe-d828-8ae6-837e-9d1edffc0336", "file": "Lukas 1:1-4" },
+    { "id": "70cf83ba-0811-0a0a-10fb-d0c09fccffd9", "file": "Lukas 2:41" },
+    { "id": "0a0d0db5-1646-120b-c087-01a3b05be562", "file": "Lukas 2:42" },
+    { "id": "9a21ba81-73b2-8e3b-060e-26730c840a99", "file": "Lukas 2:43" },
+    { "id": "842ef82a-5b00-279d-8907-242c4255810d", "file": "Lukas 4:1" },
+    { "id": "b9b7f75d-3fda-9c5e-8f1f-141dc4078e2c", "file": "Lukas 4:2" },
+    { "id": "9e0883f5-504b-c2fd-1156-82bc00a47d66", "file": "Lukas 4:3" },
+    { "id": "c3cb632f-78b9-1cde-7673-9c0f2c1a4f27", "file": "Lukas 4:4" },
+    { "id": "c62a61e4-642a-812b-e820-833df6424ff5", "file": "39 Keturunan Roh Tuhan" },
+    { "id": "3c8bfa73-c9f1-24e7-6789-7341de852d7b", "file": "40 Persekutuan" }
+  ],
+  "Baseline": {
+    "maxBytes": 52428800,
+    "totalBytes": 6000000,
+    "topLevelIncluded": 2,
+    "topLevelTotal": 2,
+    "includedCount": 10,
+    "excludedCount": 0,
+    "excludedTopLevel": [],
+    "strategy": "breadth-first",
+    "releaseVersion": "0.1.6-10-gfab22ae",
+    "generatedAt": "2026-01-01T00:00:00.000Z"
+  }
+}

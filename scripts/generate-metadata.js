@@ -154,5 +154,5 @@ if (require.main === module) {
   run(audioDir, outputFile);
 }
 
-module.exports = { generateMetadata, run };
+module.exports = { generateMetadata, run, generateUUID, parseFileName };
 
