@@ -17,6 +17,11 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const {
+  resolveObaKey,
+  resolveContentDir: obaContentDir,
+  resolveProjectConfigSource,
+} = require('./oba-media-paths');
 
 const ROOT = path.join(__dirname, '..');
 const OUTER_REPO = path.join(ROOT, '..');
@@ -40,13 +45,17 @@ function run(cmd, opts = {}) {
   execSync(cmd, { stdio: 'inherit', cwd: opts.cwd || ROOT, ...opts });
 }
 
-/** Resolve key to folder name under oba-media (<key>/config/, <key>/content/). */
-function resolveObaKey(key) {
-  const base = path.join(BM_OBA_MEDIA, key, 'config');
-  const alt = path.join(BM_OBA_MEDIA, key.replace(/_/g, '-'), 'config');
-  if (fs.existsSync(base)) return key;
-  if (fs.existsSync(alt)) return key.replace(/_/g, '-');
-  return null;
+function runCapture(cmd) {
+  return execSync(cmd, { stdio: 'pipe', encoding: 'utf8', cwd: ROOT });
+}
+
+function isBaselineApiUnavailable(output) {
+  return /GET .* failed: HTTP|ENOTFOUND|ECONNREFUSED|ETIMEDOUT|fetch failed/i.test(output);
+}
+
+/** Resolve key to folder name under oba-media. */
+function resolveObaKeyForBuild(key) {
+  return resolveObaKey(BM_OBA_MEDIA, key);
 }
 
 /** Find content directory for a translation key in oba-media. */
@@ -55,14 +64,14 @@ function resolveContentDir(key) {
     console.error(`ERROR: oba-media not found at ${BM_OBA_MEDIA}`);
     process.exit(1);
   }
-  const obaKey = resolveObaKey(key);
+  const obaKey = resolveObaKeyForBuild(key);
   if (!obaKey) {
-    console.error(`ERROR: No config found for ${key} in ${BM_OBA_MEDIA}/${key}/config/`);
+    console.error(`ERROR: No config found for ${key} under ${BM_OBA_MEDIA}`);
     process.exit(1);
   }
-  const contentDir = path.join(BM_OBA_MEDIA, obaKey, 'content');
-  if (!fs.existsSync(contentDir)) {
-    console.error(`ERROR: Content directory not found: ${contentDir}`);
+  const contentDir = obaContentDir(BM_OBA_MEDIA, obaKey);
+  if (!contentDir) {
+    console.error(`ERROR: Content directory not found for ${key}`);
     process.exit(1);
   }
   return contentDir;
@@ -114,12 +123,17 @@ function bundle(key) {
 
   try {
     console.log(`Generating baseline metadata for ${key}...`);
-    run(
+    runCapture(
       `node scripts/generate-baseline-metadata.js --translation ${key} --audio "${audioDir}" --output "${metadataFile}" --base-url ${DEFAULT_BASELINE_URL}${baselineFileArg}`,
     );
     warnBaselineCoverage(metadataFile);
   } catch (e) {
-    if (baselineFile) throw e;
+    const output = `${e.stdout || ''}${e.stderr || ''}${e.message || ''}`;
+    if (baselineFile || !isBaselineApiUnavailable(output)) {
+      if (e.stdout) process.stdout.write(e.stdout);
+      if (e.stderr) process.stderr.write(e.stderr);
+      throw e;
+    }
     if (authoredMetadata) {
       console.warn(`Baseline API unavailable; using authored metadata for ${key}...`);
       fs.copyFileSync(authoredMetadata, metadataFile);
@@ -161,17 +175,16 @@ function buildAndSync() {
 
 /** Load per-language project.json into the shared app-config.json. */
 function loadProjectConfig(key) {
-  const obaKey = resolveObaKey(key);
-  const projectConfig = path.join(BM_OBA_MEDIA, obaKey, 'config', 'project.json');
-  const appConfigDest = path.join(OUTER_REPO, 'config', 'app-config.json');
-  if (!fs.existsSync(projectConfig)) {
-    console.error(`ERROR: project.json not found for ${key} at ${projectConfig}`);
+  const resolved = resolveProjectConfigSource(BM_OBA_MEDIA, key);
+  if (!resolved) {
+    console.error(`ERROR: No project.json or app-config.json found for ${key} under ${BM_OBA_MEDIA}`);
     process.exit(1);
   }
+  const appConfigDest = path.join(OUTER_REPO, 'config', 'app-config.json');
   ensureDir(path.dirname(appConfigDest));
-  fs.copyFileSync(projectConfig, appConfigDest);
+  fs.copyFileSync(resolved.sourcePath, appConfigDest);
   const config = JSON.parse(fs.readFileSync(appConfigDest, 'utf8'));
-  console.log(`✓ Loaded config for ${key}: ${config.app.id}`);
+  console.log(`✓ Loaded config for ${key}: ${config.app?.id || '(no app.id)'}`);
 }
 
 function getKeystoreEnv() {
@@ -231,9 +244,9 @@ function listAvailableKeys() {
     return TRANSLATION_KEYS;
   }
   return TRANSLATION_KEYS.filter((key) => {
-    const obaKey = resolveObaKey(key);
+    const obaKey = resolveObaKeyForBuild(key);
     if (!obaKey) return false;
-    return fs.existsSync(path.join(BM_OBA_MEDIA, obaKey, 'content'));
+    return Boolean(obaContentDir(BM_OBA_MEDIA, obaKey));
   });
 }
 

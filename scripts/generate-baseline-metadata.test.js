@@ -6,12 +6,13 @@ const { mapBaselineToBundleMetadata, resolveAudioPath, buildAudioIndex } = requi
 const baseline = require('./fixtures/yetfa-baseline.json');
 
 const audioDir = path.join(__dirname, '..', '..', 'oba-media', 'content', 'yetfa', 'audio');
+const contentDir = path.join(__dirname, '..', '..', 'oba-media', 'content', 'yetfa');
 if (!require('fs').existsSync(audioDir)) {
   console.log('⊘ generate-baseline-metadata tests skipped (oba-media content not present)');
   process.exit(0);
 }
 
-const metadata = mapBaselineToBundleMetadata(baseline, audioDir);
+const metadata = mapBaselineToBundleMetadata(baseline, audioDir, contentDir);
 
 assert.strictEqual(metadata.Audio.length, 10);
 assert.ok(metadata.Audio.every((a) => a.file.startsWith('audio/')));

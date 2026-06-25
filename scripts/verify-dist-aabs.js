@@ -9,6 +9,12 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const {
+  resolveObaKey: obaResolveKey,
+  resolveContentDir: obaContentDir,
+  resolveConfigDir,
+  readAppId,
+} = require('./oba-media-paths');
 
 const ROOT = path.join(__dirname, '..');
 const OUTER = path.join(ROOT, '..');
@@ -24,11 +30,7 @@ function die(msg) {
 }
 
 function resolveObaKey(key) {
-  const base = path.join(BM, key, 'config');
-  const alt = path.join(BM, key.replace(/_/g, '-'), 'config');
-  if (fs.existsSync(base)) return key;
-  if (fs.existsSync(alt)) return key.replace(/_/g, '-');
-  return null;
+  return obaResolveKey(BM, key);
 }
 
 function readAabMetadata(aabPath) {
@@ -54,7 +56,11 @@ function expectedMediaPathsFromMetadata(metadata) {
 
 /** Legacy fallback: full oba-media content/audio tree. */
 function expectedMediaPathsFullTree(obaKey) {
-  const audioRoot = path.join(BM, obaKey, 'content', 'audio');
+  const contentDir = obaContentDir(BM, obaKey);
+  if (!contentDir) {
+    return { error: `Missing content directory for ${obaKey}` };
+  }
+  const audioRoot = path.join(contentDir, 'audio');
   if (!fs.existsSync(audioRoot)) {
     return { error: `Missing audio directory: ${audioRoot}` };
   }
@@ -101,7 +107,7 @@ function listAabMediaPaths(aabPath) {
       maxBuffer: 1024 * 1024 * 512,
     });
     for (const line of verbose.split('\n')) {
-      const m = line.trim().match(/^(\d+)\s+\d{2}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+(.+)$/);
+      const m = line.trim().match(/^\s*(\d+)\s+\S+\s+\S+\s+(.+)$/);
       if (!m) continue;
       const entry = m[2].trim();
       if (!entry.startsWith(prefix)) continue;
@@ -278,10 +284,12 @@ function main() {
     const cap = JSON.parse(
       execSync(`unzip -p ${JSON.stringify(aab)} base/assets/capacitor.config.json`, { encoding: 'utf8' }),
     );
-    const wantId = JSON.parse(
-      fs.readFileSync(path.join(BM, obaKey, 'config', 'project.json'), 'utf8'),
-    ).app.id;
-    if (cap.appId !== wantId) {
+    const resolvedConfigDir = resolveConfigDir(BM, obaKey);
+    const wantId = resolvedConfigDir ? readAppId(resolvedConfigDir) : null;
+    if (!wantId) {
+      console.error(`ERROR: app.id not found in project.json or app-config.json for ${key}`);
+      failed = true;
+    } else if (cap.appId !== wantId) {
       console.error(`ERROR: capacitor appId mismatch: got ${cap.appId}, want ${wantId}`);
       failed = true;
     } else {

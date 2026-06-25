@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const http = require('http');
+const crypto = require('crypto');
 const minimist = require('minimist');
 const { generateUUID, parseFileName } = require('./generate-metadata');
 
@@ -38,10 +39,35 @@ function fetchJson(url) {
 }
 
 /** Build { byId, byIdNoDashes, byDisplayName } → relative path under staging root. */
-function buildAudioIndex(audioDir) {
+function buildAudioIndex(audioDir, contentDir = null) {
   const byId = new Map();
   const byIdNoDashes = new Map();
   const byDisplayName = new Map();
+
+  function addEntry(id, filePath, displayName) {
+    if (id) {
+      byId.set(id, filePath);
+      byIdNoDashes.set(String(id).replace(/-/g, ''), filePath);
+    }
+    if (displayName && !byDisplayName.has(displayName)) {
+      byDisplayName.set(displayName, filePath);
+    }
+  }
+
+  const authoredMetadataPaths = contentDir
+    ? [
+      path.join(contentDir, 'metadata.json'),
+      path.join(contentDir, 'metadata', 'metadata.json'),
+    ]
+    : [];
+
+  for (const metadataPath of authoredMetadataPaths) {
+    if (!fs.existsSync(metadataPath)) continue;
+    const authored = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+    for (const entry of authored.Audio ?? []) {
+      addEntry(entry.id, entry.file, path.basename(entry.file, path.extname(entry.file)).replace(/_/g, ':'));
+    }
+  }
 
   function walk(dir, basePath = '') {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -53,13 +79,11 @@ function buildAudioIndex(audioDir) {
         walk(fullPath, relativePath);
       } else if (entry.isFile() && /\.(mp3|wav|ogg|m4a)$/i.test(entry.name)) {
         const filePath = `audio/${relativePath}`;
-        const id = generateUUID(filePath);
+        const pathId = generateUUID(filePath);
         const displayName = parseFileName(entry.name);
-        byId.set(id, filePath);
-        byIdNoDashes.set(id.replace(/-/g, ''), filePath);
-        if (!byDisplayName.has(displayName)) {
-          byDisplayName.set(displayName, filePath);
-        }
+        const contentId = crypto.createHash('md5').update(fs.readFileSync(fullPath)).digest('hex');
+        addEntry(pathId, filePath, displayName);
+        addEntry(contentId, filePath, displayName);
       }
     }
   }
@@ -85,8 +109,12 @@ function resolveAudioPath(audioEntry, index) {
  * Map baseline API Audio[] (display names) to bundle paths using a local audio index.
  * Returns release-shaped metadata for bundle-media.js.
  */
-function mapBaselineToBundleMetadata(baseline, audioDir) {
-  const index = buildAudioIndex(audioDir);
+function mapBaselineToBundleMetadata(baseline, audioDir, contentDir = null) {
+  if (!baseline?.Audio?.length) {
+    throw new Error('Baseline response has no Audio entries');
+  }
+
+  const index = buildAudioIndex(audioDir, contentDir);
   const missing = [];
   const audio = baseline.Audio.map((entry) => {
     const filePath = resolveAudioPath(entry, index);
@@ -143,7 +171,8 @@ async function run(options) {
   }
 
   const baseline = await fetchBaseline(translation, baseUrl, baselineFile);
-  const metadata = mapBaselineToBundleMetadata(baseline, audioDir);
+  const contentDir = path.dirname(audioDir);
+  const metadata = mapBaselineToBundleMetadata(baseline, audioDir, contentDir);
 
   ensureDir(path.dirname(outputFile));
   fs.writeFileSync(outputFile, JSON.stringify(metadata, null, 2));
