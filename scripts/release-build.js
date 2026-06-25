@@ -182,7 +182,11 @@ function loadProjectConfig(key) {
   }
   const appConfigDest = path.join(OUTER_REPO, 'config', 'app-config.json');
   ensureDir(path.dirname(appConfigDest));
-  fs.copyFileSync(resolved.sourcePath, appConfigDest);
+  if (resolved.mergedConfig) {
+    fs.writeFileSync(appConfigDest, JSON.stringify(resolved.mergedConfig, null, 2));
+  } else {
+    fs.copyFileSync(resolved.sourcePath, appConfigDest);
+  }
   const config = JSON.parse(fs.readFileSync(appConfigDest, 'utf8'));
   console.log(`✓ Loaded config for ${key}: ${config.app?.id || '(no app.id)'}`);
 }

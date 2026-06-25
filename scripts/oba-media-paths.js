@@ -35,7 +35,7 @@ function resolveContentDir(bmRoot, obaKey) {
 }
 
 function readAppId(configDir) {
-  for (const file of ['project.json', 'app-config.json']) {
+  for (const file of ['app-config.json', 'project.json']) {
     const configPath = path.join(configDir, file);
     if (!fs.existsSync(configPath)) continue;
     const data = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -51,11 +51,27 @@ function resolveProjectConfigSource(bmRoot, key) {
   if (!configDir) return null;
 
   const projectConfig = path.join(configDir, 'project.json');
-  if (fs.existsSync(projectConfig)) {
+  const appConfig = path.join(configDir, 'app-config.json');
+  const hasAppConfig = fs.existsSync(appConfig);
+  const hasProjectConfig = fs.existsSync(projectConfig);
+
+  if (hasAppConfig) {
+    const appData = JSON.parse(fs.readFileSync(appConfig, 'utf8'));
+    if (appData.app?.id) {
+      if (hasProjectConfig) {
+        const projectData = JSON.parse(fs.readFileSync(projectConfig, 'utf8'));
+        if (projectData.baseline) {
+          appData.baseline = projectData.baseline;
+        }
+      }
+      return { obaKey, configDir, sourcePath: appConfig, mergedConfig: appData };
+    }
+  }
+
+  if (hasProjectConfig) {
     return { obaKey, configDir, sourcePath: projectConfig };
   }
-  const appConfig = path.join(configDir, 'app-config.json');
-  if (fs.existsSync(appConfig)) {
+  if (hasAppConfig) {
     return { obaKey, configDir, sourcePath: appConfig };
   }
   return null;
