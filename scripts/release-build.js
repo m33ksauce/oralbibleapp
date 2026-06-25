@@ -119,6 +119,7 @@ function bundle(key) {
 
 /** Generate environment.prod.ts from the current app-config.json. */
 function prep(key) {
+  loadProjectConfig(key);
   console.log(`Generating environment.prod.ts for ${key}...`);
   run('node scripts/generate-config.js');
   console.log(`✓ Prep ${key}: environment.prod.ts`);
@@ -192,7 +193,6 @@ function packageKey(key) {
 
 /** Full release build for one key. */
 function build(key) {
-  loadProjectConfig(key);
   bundle(key);
   prep(key);
   buildAndSync();
@@ -286,6 +286,7 @@ switch (cmd) {
     break;
   case 'package':
     if (!key) { console.error('Usage: node release-build.js package <key>'); process.exit(1); }
+    loadProjectConfig(key);
     packageKey(key);
     break;
   case 'build':
